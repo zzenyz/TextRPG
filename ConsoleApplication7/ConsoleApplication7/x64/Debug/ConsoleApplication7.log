@@ -1,0 +1,13 @@
+﻿  items.c
+C:\Users\KGA\source\repos\ConsoleApplication7(1)\ConsoleApplication7\ConsoleApplication7\items.c(16,10): warning C4566: 유니버설 문자 이름 '\U0001F6D2'(으)로 표현되는 문자는 현재 코드 페이지(949)에서 표현할 수 없습니다.
+C:\Users\KGA\source\repos\ConsoleApplication7(1)\ConsoleApplication7\ConsoleApplication7\items.c(34,3): warning C4013: 'Sleep'이(가) 정의되지 않았습니다. extern은 int형을 반환하는 것으로 간주합니다.
+C:\Users\KGA\source\repos\ConsoleApplication7(1)\ConsoleApplication7\ConsoleApplication7\items.c(73,11): warning C4566: 유니버설 문자 이름 '\U0001F9FE'(으)로 표현되는 문자는 현재 코드 페이지(949)에서 표현할 수 없습니다.
+C:\Users\KGA\source\repos\ConsoleApplication7(1)\ConsoleApplication7\ConsoleApplication7\items.c(103,26): error C2065: 'equipmentListCount': 선언되지 않은 식별자입니다.
+C:\Users\KGA\source\repos\ConsoleApplication7(1)\ConsoleApplication7\ConsoleApplication7\items.c(137,3): error C2181: if와 짝을 이루지 않는 잘못된 else문입니다.
+C:\Users\KGA\source\repos\ConsoleApplication7(1)\ConsoleApplication7\ConsoleApplication7\items.c(140,4): warning C4013: 'clearScreen'이(가) 정의되지 않았습니다. extern은 int형을 반환하는 것으로 간주합니다.
+C:\Users\KGA\source\repos\ConsoleApplication7(1)\ConsoleApplication7\ConsoleApplication7\items.c(141,4): error C2043: break가 잘못되었습니다.
+C:\Users\KGA\source\repos\ConsoleApplication7(1)\ConsoleApplication7\ConsoleApplication7\items.c(149,1): error C2059: 구문 오류: '}'
+C:\Users\KGA\source\repos\ConsoleApplication7(1)\ConsoleApplication7\ConsoleApplication7\items.c(190,3): warning C4013: 'system'이(가) 정의되지 않았습니다. extern은 int형을 반환하는 것으로 간주합니다.
+C:\Users\KGA\source\repos\ConsoleApplication7(1)\ConsoleApplication7\ConsoleApplication7\items.c(212,3): error C4996: 'scanf': This function or variable may be unsafe. Consider using scanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Users\KGA\source\repos\ConsoleApplication7(1)\ConsoleApplication7\ConsoleApplication7\items.c(259,19): warning C4013: 'rand'이(가) 정의되지 않았습니다. extern은 int형을 반환하는 것으로 간주합니다.
+C:\Users\KGA\source\repos\ConsoleApplication7(1)\ConsoleApplication7\ConsoleApplication7\items.c(266,11): warning C4566: 유니버설 문자 이름 '\U0001F381'(으)로 표현되는 문자는 현재 코드 페이지(949)에서 표현할 수 없습니다.
