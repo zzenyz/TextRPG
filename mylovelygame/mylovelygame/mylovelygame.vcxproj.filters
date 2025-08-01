@@ -45,6 +45,18 @@
     <ClCompile Include="Shop.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="Chapter1.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="miniGame.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Ghost.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Skills.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -74,5 +86,25 @@
     <ClInclude Include="Shop.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="Chapter1.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="miniGame.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Ghost.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Skills.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="mylovelygame.rc">
+      <Filter>리소스 파일</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>

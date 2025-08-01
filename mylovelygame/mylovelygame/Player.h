@@ -5,163 +5,188 @@
 #include "Inventory.h"
 #include "Item.h"
 #include "Buff.h"
+#include "Skills.h"
 
-class Player {
+class Player
+{
 private:
-    std::string name;
-    std::string jobName;
+	std::string name;
+	std::string jobName;
+	int Job = 0;
 
-    int hp = 0;
-    int maxHp = 0;
-    int atk = 0;
-    int def = 0;
-    int level;
-    int karma;
-    int unlockedChapter;
-    int gold = 100000;
+	int hp = 0;
+	int maxHp = 0;
+	int atk = 0;
+	int def = 0;
+	int level;
+	int karma;
+	int unlockedChapter;
+	int gold = 100000;
+	std::vector<Skill> skillSet;
 
-    Inventory inventory;
+	Inventory inventory;
 
-    Buff currentBuff;
-    bool isFearful;
-    bool isCursed;
+	std::vector<std::string> clues;
+	std::vector<std::string> keepsakes;
+
+	Buff currentBuff;
 
 public:
-    Player()
-        : level(1), karma(0), unlockedChapter(1), isFearful(false), isCursed(false)
-    {}
+	Player()
+		: level(1), karma(0), unlockedChapter(1)
+	{
+	}
 
-    // 이름 & 직업
-    void SetName(const std::string& newName) { name = newName; }
-    std::string GetName() const { return name; }
+	// 이름 & 직업
+	void SetName(const std::string& newName) { name = newName; }
+	std::string GetName() const { return name; }
 
-    void reSetJob(int jobNumber) {
-        switch (jobNumber) {
-        case 1:
-            jobName = "무당";
-            hp = maxHp = 45; atk = 63; def = 55;
-            break;
-        case 2:
-            jobName = "풍수지리사";
-            hp = maxHp = 55; atk = 55; def = 45;
-            break;
-        case 3:
-            jobName = "신학생";
-            hp = maxHp = 65; atk = 45; def = 45;
-            break;
-        default:
-            jobName = "무당";
-            hp = maxHp = 45; atk = 63; def = 55;
-        }
-    }
-    
-    std::string GetJobName() const { return jobName; }
+	void reSetJob(int jobNumber) {
+		switch (jobNumber) {
 
-    // 능력치
-    int GetHp() const { return hp; }
-    void SetHp(int newHp) { hp = newHp; }
+			Job = jobNumber;
 
-    int GetMaxHp() const { return maxHp; }
-    void SetMaxHp(int newMaxHp) { maxHp = newMaxHp; }
+		case 1:
+			jobName = "무당";
+			hp = maxHp = 45; atk = 63; def = 55;
+			break;
+		case 2:
+			jobName = "풍수지리사";
+			hp = maxHp = 55; atk = 55; def = 45;
+			break;
+		case 3:
+			jobName = "신학생";
+			hp = maxHp = 65; atk = 45; def = 45;
+			break;
+		default:
+			jobName = "무당";
+			hp = maxHp = 45; atk = 63; def = 55;
+		}
+	}
 
-    int GetAtk() const { return atk; }
-    void SetAtk(int newAtk) { atk = newAtk; }
+	std::string GetJobName() const { return jobName; }
+	int GettJob() const { return Job; }
 
-    int GetDef() const { return def; }
-    void SetDef(int newDef) { def = newDef; }
+	void InitSkills();
+	const std::vector<Skill>& GetSkillSet() const { return skillSet; }
 
-    int GetLevel() const { return level; }
-    void SetLevel(int newLevel) { level = newLevel; }
+	// 능력치
+	int GetHp() const { return hp; }
+	void SetHp(int newHp) { hp = newHp; }
 
-    int GetKarma() const { return karma; }
-    void AddKarma(int amount) { karma += amount; }
+	int GetMaxHp() const { return maxHp; }
+	void SetMaxHp(int newMaxHp) { maxHp = newMaxHp; }
 
-    int GetUnlockedChapter() const { return unlockedChapter; }
-    void UnlockNextChapter() { ++unlockedChapter; }
+	int GetAtk() const { return atk; }
+	void SetAtk(int newAtk) { atk = newAtk; }
 
-    int GetGold() const { return gold; }
-    void AddGold(int amount) { gold += amount; }
-    bool SpendGold(int amount) {
-        if (gold >= amount) {
-            gold -= amount;
-            return true;
-        }
-        return false;
-    }
+	int GetDef() const { return def; }
+	void SetDef(int newDef) { def = newDef; }
 
-    Inventory& GetInventory() { return inventory; }
-    const Inventory& GetInventory() const { return inventory; }
+	int GetLevel() const { return level; }
+	void SetLevel(int newLevel) { level = newLevel; }
 
-    //전투 시 버프 효과 함수 
-    int GetTotalAtk() const 
-    {
-        int equipAtkBonus = 0;
-        const Item& weapon = inventory.equippedItems[0];  // 무기 슬롯
+	int GetKarma() const { return karma; }
+	void AddKarma(int amount) { karma += amount; }
 
-        // 빈 슬롯이 아니면 공격 보너스 가져오기 (EquipmentItem이면 dynamic_cast 가능하면 더 좋음)
-        if (weapon.id != -1) {
-            equipAtkBonus = weapon.GetAtkBonus();
-        }
+	int GetUnlockedChapter() const { return unlockedChapter; }
+	void UnlockNextChapter() { ++unlockedChapter; }
 
-        return atk + equipAtkBonus + currentBuff.atkBoost;
-    }
+	int GetGold() const { return gold; }
+	void AddGold(int amount) { gold += amount; }
+	bool SpendGold(int amount) {
+		if (gold >= amount) {
+			gold -= amount;
+			return true;
+		}
+		return false;
+	}
 
-    void ApplyAtkBuff(int amount, int turns)
-    {
-        currentBuff.atkBoost = (atk * amount) / 100;
-        currentBuff.atkBuffTurns = turns;
-    }
-    int GetTotalDef() const
-    {
-        int equipAtkBonus = 0;
-        const Item& Armor = inventory.equippedItems[1];  // 무기 슬롯
+	Inventory& GetInventory() { return inventory; }
+	const Inventory& GetInventory() const { return inventory; }
 
-        // 빈 슬롯이 아니면 공격 보너스 가져오기 (EquipmentItem이면 dynamic_cast 가능하면 더 좋음)
-        if (Armor.id != -1) {
-            equipAtkBonus = Armor.GetDefBonus();
-        }
+	// 단서 추가
+	void AddClue(const std::string& clue) {
+		clues.push_back(clue);
+	}
 
-        return def + equipAtkBonus + currentBuff.defBoost;
-    }
-    void ApplyDefBuff(int amount, int turns)
-    {
-        currentBuff.defBoost = (def * amount) / 100;
-        currentBuff.defBuffTurns = turns;
-    }
-    int GetTotalHp() const
-    {
-        int equipAtkBonus = 0;
-        const Item& Accessory = inventory.equippedItems[2];  // 무기 슬롯
+	// 유품 추가
+	void AddKeepsake(const std::string& Artikel) {
+		keepsakes.push_back(Artikel);
+	}
 
-        // 빈 슬롯이 아니면 공격 보너스 가져오기 (EquipmentItem이면 dynamic_cast 가능하면 더 좋음)
-        if (Accessory.id != -1) {
-            equipAtkBonus = Accessory.GetDefBonus();
-        }
+	void ShowMemoryStorage() const;
 
-        return hp + equipAtkBonus + currentBuff.hpBoost;
-    }
-    void ApplyHpBuff(int amount, int turns)
-    {
-        currentBuff.hpBoost = (hp * amount) / 100;
-        currentBuff.hpBuffTurns = turns;
-    }
-    void UpdateBuff(Buff& buff) {
-        if (buff.atkBuffTurns > 0) {
-            buff.atkBuffTurns--;
-            if (buff.atkBuffTurns == 0) buff.atkBoost = 0;
-        }
-        if (buff.defBuffTurns > 0) {
-            buff.defBuffTurns--;
-            if (buff.defBuffTurns == 0) buff.defBoost = 0;
-        }
-        if (buff.hpBuffTurns > 0) {
-            buff.hpBuffTurns--;
-            if (buff.hpBuffTurns == 0) buff.hpBoost = 0;
-        }
-    }
+	//전투 시 버프 효과 함수 
+	int GetTotalAtk() const
+	{
+		int equipAtkBonus = 0;
+		const Item& weapon = inventory.equippedItems[0];  // 무기 슬롯
+
+		// 빈 슬롯이 아니면 공격 보너스 가져오기 (EquipmentItem이면 dynamic_cast 가능하면 더 좋음)
+		if (weapon.id != -1) {
+			equipAtkBonus = weapon.GetAtkBonus();
+		}
+
+		return atk + equipAtkBonus + currentBuff.atkBoost;
+	}
+
+	void ApplyAtkBuff(int amount, int turns)
+	{
+		currentBuff.atkBoost = (atk * amount) / 100;
+		currentBuff.atkBuffTurns = turns;
+	}
+	int GetTotalDef() const
+	{
+		int equipAtkBonus = 0;
+		const Item& Armor = inventory.equippedItems[1];  // 무기 슬롯
+
+		// 빈 슬롯이 아니면 공격 보너스 가져오기 (EquipmentItem이면 dynamic_cast 가능하면 더 좋음)
+		if (Armor.id != -1) {
+			equipAtkBonus = Armor.GetDefBonus();
+		}
+
+		return def + equipAtkBonus + currentBuff.defBoost;
+	}
+	void ApplyDefBuff(int amount, int turns)
+	{
+		currentBuff.defBoost = (def * amount) / 100;
+		currentBuff.defBuffTurns = turns;
+	}
+	int GetTotalHp() const
+	{
+		int equipAtkBonus = 0;
+		const Item& Accessory = inventory.equippedItems[2];  // 무기 슬롯
+
+		// 빈 슬롯이 아니면 공격 보너스 가져오기 (EquipmentItem이면 dynamic_cast 가능하면 더 좋음)
+		if (Accessory.id != -1) {
+			equipAtkBonus = Accessory.GetDefBonus();
+		}
+
+		return hp + equipAtkBonus + currentBuff.hpBoost;
+	}
+	void ApplyHpBuff(int amount, int turns)
+	{
+		currentBuff.hpBoost = (hp * amount) / 100;
+		currentBuff.hpBuffTurns = turns;
+	}
+	void UpdateBuff(Buff& buff) {
+		if (buff.atkBuffTurns > 0) {
+			buff.atkBuffTurns--;
+			if (buff.atkBuffTurns == 0) buff.atkBoost = 0;
+		}
+		if (buff.defBuffTurns > 0) {
+			buff.defBuffTurns--;
+			if (buff.defBuffTurns == 0) buff.defBoost = 0;
+		}
+		if (buff.hpBuffTurns > 0) {
+			buff.hpBuffTurns--;
+			if (buff.hpBuffTurns == 0) buff.hpBoost = 0;
+		}
+	}
 
 
-    //파일 세이브 로드
-    bool Save(std::ofstream& ofs) const;
-    bool Load(std::ifstream& ifs);
+	//파일 세이브 로드
+	bool Save(std::ofstream& ofs) const;
+	bool Load(std::ifstream& ifs);
 };

@@ -124,26 +124,38 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Buff.cpp" />
+    <ClCompile Include="Chapter1.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="Ghost.cpp" />
     <ClCompile Include="Inventory.cpp" />
     <ClCompile Include="Item.cpp" />
     <ClCompile Include="Map.cpp" />
+    <ClCompile Include="miniGame.cpp" />
     <ClCompile Include="mylovelygame.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="GameUtils.cpp" />
     <ClCompile Include="SaveManager.cpp" />
     <ClCompile Include="Shop.cpp" />
+    <ClCompile Include="Skills.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Buff.h" />
+    <ClInclude Include="Chapter1.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="Ghost.h" />
     <ClInclude Include="Inventory.h" />
     <ClInclude Include="Item.h" />
     <ClInclude Include="Map.h" />
+    <ClInclude Include="miniGame.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="GameUtils.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="SaveManager.h" />
     <ClInclude Include="Shop.h" />
+    <ClInclude Include="Skills.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="mylovelygame.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

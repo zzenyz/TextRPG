@@ -37,3 +37,55 @@ bool Player::Load(std::ifstream& ifs) {
     return !ifs.fail();
 }
 
+void Player::ShowMemoryStorage() const 
+{
+    std::cout << "\n=== [기억 저장소] ===\n";
+
+    std::cout << "\n[단서]\n";
+    if (clues.empty()) 
+    {
+        std::cout << "아직 발견한 단서가 없습니다.\n";
+    }
+    else
+    {
+        for (size_t i = 0; i < clues.size(); ++i) {
+            std::cout << i + 1 << ". " << clues[i] << "\n";
+        }
+    }
+
+    std::cout << "\n[유품]\n";
+    if (keepsakes.empty()) 
+    {
+        std::cout << "아직 발견한 유품이 없습니다.\n";
+    }
+    else 
+    {
+        for (size_t i = 0; i < keepsakes.size(); ++i) 
+        {
+            std::cout << i + 1 << ". " << keepsakes[i] << "\n";
+        }
+    }
+
+    std::cout << "\n====================\n";
+    TypeWriter("\n--- [계속하려면 Enter] ---\n", 30);
+    std::cin.get();
+    ClearScreen();
+}
+
+void Player::InitSkills() {
+    skillSet.clear(); // 기존 스킬 비우고
+
+    if (Job == 1) {
+        skillSet.push_back({ "부적 투척", "기본 데미지" });
+        skillSet.push_back({ "강신의 춤", "중간 데미지 + 3턴 동안 지속 데미지" });
+        // 필요 시 더 추가 가능
+    }
+    else if (Job == 2) {
+        skillSet.push_back({ "지맥 붕괴", "기본 데미지" });
+        skillSet.push_back({ "풍수 봉인", "강한 데미지 + 1턴 동안 귀신 봉인" });
+    }
+    else if (Job == 3) {
+        skillSet.push_back({ "성수 투척", "기본 데미지" });
+        skillSet.push_back({ "은총의 일격", "중간 데미지 + 피해량 50% 회복" });
+    }
+}

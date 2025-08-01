@@ -179,7 +179,7 @@ void Game::ShowIntro() {
 
 	for (const auto& line : lines) {
 		TypeWriter(line, 35);
-		std::this_thread::sleep_for(std::chrono::milliseconds(300));  // 잠시 쉬면서 타자기 효과 줌
+		std::this_thread::sleep_for(std::chrono::milliseconds(300)); 
 	}
 
 	TypeWriter("\n--- [계속하려면 Enter] ---\n", 30);
@@ -196,12 +196,13 @@ void Game::ShowMainMenu() {
 	while (true)
 	{
 		ClearScreen();
-		TypeWriter("메인 메뉴\n", 40);
-		TypeWriter("1. 스토리 진행\n", 30);
-		TypeWriter("2. 인벤토리\n", 30);
-		TypeWriter("3. 상점\n", 30);
-		TypeWriter("4. 저장\n", 30);
-		TypeWriter("5. 종료\n", 30);
+		TypeWriter("메인 메뉴\n", 30);
+		TypeWriter("1. 스토리 진행\n", 20);
+		TypeWriter("2. 인벤토리\n", 20);
+		TypeWriter("3. 기억 저장소\n", 20);
+		TypeWriter("4. 상점\n", 20);
+		TypeWriter("5. 저장\n", 20);
+		TypeWriter("6. 종료\n", 20);
 		TypeWriter("> ");
 
 		int choice = 0;
@@ -225,7 +226,8 @@ void Game::ShowMainMenu() {
 
 			while (true) {
 				int inputNum = 0;
-				TypeWriter("\n착용할 아이템 번호를 입력하세요 (0: 돌아가기)", 30);
+				TypeWriter("\n메뉴로 돌아가시려면 0", 20);
+				TypeWriter("\n착용할 아이템 번호를 입력하세요:", 20);
 				TypeWriter("> ");
 
 				std::cin >> inputNum;
@@ -234,13 +236,13 @@ void Game::ShowMainMenu() {
 				if (inputNum == 0) break;  // 0 입력 시 메뉴로 돌아감
 
 				if (inputNum < 1 || inputNum >(int)inv.items.size()) {
-					TypeWriter("잘못된 번호입니다. 다시 시도하세요.\n", 30);
+					TypeWriter("잘못된 번호입니다. 다시 시도하세요.\n", 20);
 					continue;
 				}
 
 				ItemType selectedType = inv.items[inputNum - 1].type;
 				if (selectedType == ItemType::Consumable) {
-					TypeWriter("소비 아이템은 장착할 수 없습니다.\n", 30);
+					TypeWriter("소비 아이템은 장착할 수 없습니다.\n", 20);
 					continue;
 				}
 
@@ -248,17 +250,20 @@ void Game::ShowMainMenu() {
 				int itemId = inv.items[inputNum - 1].id;
 				inv.EquipItem(itemId);
 
-				TypeWriter("아이템이 장착되었습니다.\n", 30);
+				TypeWriter("아이템이 장착되었습니다.\n", 20);
 			}
 			break;
 		}
 		case 3:
-			ShowShopItems(player);
+			player.ShowMemoryStorage();
 			break;
 		case 4:
-			SaveManager::SaveGame(player);
+			ShowShopItems(player);
 			break;
 		case 5:
+			SaveManager::SaveGame(player);
+			break;
+		case 6:
 			TypeWriter("게임을 종료합니다.\n");
 			return;
 		default:
@@ -280,7 +285,7 @@ void Game::ShowStoryMenu() {
 		"낡은 카세트 테이프\n"
 	};
 
-	TypeWriter("== 기억의 조각 ==\n", 40);
+	TypeWriter("== 기억의 조각 ==\n", 30);
 
 	int unlocked = player.GetUnlockedChapter();
 	int i = 0;
@@ -297,11 +302,11 @@ void Game::ShowStoryMenu() {
 			{
 				line += "??? (잠김)\n";
 			}
-			TypeWriter(line, 30);  // 각 라인 출력
+			TypeWriter(line, 5);  // 각 라인 출력
 		}
 
-		TypeWriter("\n메뉴로 돌아가시려면 0\n", 30);
-		TypeWriter("\n진행할 챕터 번호를 입력하세요: \n", 30);
+		TypeWriter("\n메뉴로 돌아가시려면 0\n", 10);
+		TypeWriter("\n진행할 챕터 번호를 입력하세요: \n", 10);
 		TypeWriter("> ");
 		int choice;
 		std::cin >> choice;
@@ -324,12 +329,158 @@ void Game::ShowStoryMenu() {
 			continue;
 		}
 
-		//StartChapter(choice);
+		ClearScreen();
+		StartChapter(choice);
 		break;
 	}
 
 }
 
 
+void Game::StartChapter(int chapterNumber)
+{
+	switch (chapterNumber)
+	{
+	case 1:
+		chapter1.ShowIntro();
+		chapter1.Warn();
+		bool backToMenu = false;
 
+		while (!backToMenu)
+		{
+			chapter1.ExploreMap();
+			int choice;
+			std::cin >> choice;
+			std::cin.ignore();
+
+			switch (choice) {
+			case 0:
+				// 메뉴로 돌아가기 처리
+				std::cout << "\n메인 메뉴로 돌아갑니다...\n";
+				backToMenu = true;
+				break;
+			case 1:
+				// 작은 묘실 조사 함수
+				//ExploreGrave(); // 이 함수는 따로 정의해야 함
+				continue;
+			case 2:
+				ClearScreen();
+				minigame.TriggerminiGame();
+				//미니 게임 후 bool 형태로 전투할지말지 반환
+				
+				Battle();
+				
+				ClearScreen();
+				// 관리인 오두막 조사 함수
+				chapter1.ExploreHut();
+				continue;
+			case 3:
+				// 제단 조사 함수
+				//ExploreAltar();
+				continue;
+			case 4:
+				// 마당 조사 함수
+				//ExploreYard();
+				continue;
+			default:
+				std::cout << "\n잘못된 입력입니다. 다시 선택하세요.\n";
+				continue;
+			}
+		}
+		if (chapter1.GetHasFoundClue())
+		{
+			player.AddClue("관리인의 일지 - '묘지를 파헤친 여자가 저주의 시작이다.'");
+		}
+		break;
+		
+	}
+}
+
+void Game::Battle()
+{
+	//뭐라 씨부리기
+
+	int maxAttacks = 10;        // 최대 공격 횟수 제한
+	int attacksLeft = maxAttacks;
+	bool isFearful = false;
+	bool isGhostFearful = false;
+	bool isCursed = false;
+	bool isGhostCursed = false;
+
+
+	ghost = Ghost::GetRandomGhost();
+	int tempGhostHp = ghost.GetHp();
+
+	if (player.GettJob() == 1)
+	{
+		tempGhostHp = (tempGhostHp * 9) / 10;
+		TypeWriter("신령님의 힘으로 귀신의 체력이 다소 감소했습니다!\n", 5);
+	}
+
+	while (player.GetHp() > 0 && !ghost.IsDead() && attacksLeft > 0)
+	{
+		ClearScreen();
+
+		int turn = 11 - attacksLeft;
+
+		std::cout << "===========================\n";
+		std::cout << turn << "번째 턴\n";
+		std::cout << "내 체력: " << player.GetHp() << "/" << player.GetMaxHp() << "  (" << GetStatusString(isFearful, isCursed) << ")\n";
+		std::cout << "귀신 체력: " << tempGhostHp << "/" << ghost.GetHp() << "  (" << GetStatusString(isGhostFearful, isGhostCursed) << ")\n";
+		std::cout << "===========================\n\n";
+
+		std::cout << "스킬\n";
+		const std::vector<Skill>& skills = player.GetSkillSet();
+		for (size_t i = 0; i < skills.size(); ++i) {
+			std::cout << i + 1 << ". " << skills[i].name << "\n";
+		}
+
+		
+		TypeWriter("1. 공격한다\n", 5);
+		TypeWriter("2. 아이템 사용\n", 5);
+		TypeWriter(">", 5);
+
+		int choice = 0;
+		std::cin >> choice;
+
+		switch (choice) 
+		{
+		case 1:
+			std::cout << "스킬\n";
+			const std::vector<Skill>& skills = player.GetSkillSet();
+			for (size_t i = 0; i < skills.size(); ++i) {
+				std::cout << i + 1 << ". " << skills[i].name << "\n";
+			}
+
+			TypeWriter("사용할 스킬 번호를 입력하세요.");
+			std::cout << '>\n';
+
+			int skillChoice;
+			std::cin >> skillChoice;
+			skillChoice -= 1;
+
+
+			break;
+		case 2:
+			std::cout << "\n아이템\n";
+			player.GetInventory().ShowInventory();
+
+			break;
+		default:
+			TypeWriter("잘못된 선택입니다. 다시 입력하세요.\n", 5);
+			break;
+		}
+
+	}
+
+		// 플레이어 공격
+
+		int playerAtk = player.GetTotalAtk();
+		int ghostDef = ghost.GetDef();
+		int damageToGhost = CalculateDamage(playerAtk, ghostDef);
+		
+
+		ghost.SetHp(ghost.GetHp() - damageToGhost);
+
+}
 
