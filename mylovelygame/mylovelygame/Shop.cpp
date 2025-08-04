@@ -5,12 +5,7 @@ void ShowShopItems(Player& player)
 	auto consumableItems = GetConsumableItems();
 	auto equipmentItems = GetEquipmentItems();
 
-	std::string jobName = player.GetJobName();
-
-	int jobIndex = 0;
-	if (jobName == "Shaman") jobIndex = 0;
-	else if (jobName == "Geomancer") jobIndex = 1;
-	else if (jobName == "Exorcist") jobIndex = 2;
+	int jobIndex = player.GettJob() - 1;
 
 	std::vector<std::shared_ptr<Item>> availableItems;
 
@@ -48,7 +43,9 @@ void ShowShopItems(Player& player)
 	{
 
 		TypeWriter("\n현재 골드: " + std::to_string(player.GetGold()) + " 골드\n\n", 10);
-		TypeWriter("구매할 아이템 번호를 입력하세요 (0: 돌아가기): \n", 10);
+		TypeWriter("\n메뉴로 돌아가시려면 0\n", 10);
+		TypeWriter("구매할 아이템 번호를 입력하세요: \n", 10);
+		TypeWriter("> ", 10);
 
 		int choice;
 		std::cin >> choice;

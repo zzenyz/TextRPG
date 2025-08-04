@@ -15,3 +15,13 @@ Ghost Ghost::GetRandomGhost() {
     int idx = rand() % ghostPool.size();
     return ghostPool[idx];  // 복사로 반환해도 괜찮음
 }
+
+int Ghost::Attack(int JobNumber, int playerDef)
+{
+    int currentAtk = GetAtk();
+    int Damage = 0;
+    
+    Damage = currentAtk - (playerDef / 2);
+
+    return Damage;
+}

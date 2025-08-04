@@ -1,1 +1,18 @@
-﻿
+﻿  Buff.cpp
+  Chapter1.cpp
+  Game.cpp
+C:\Users\KGA\source\repos\mylovelygame\mylovelygame\Game.cpp(645,44): warning C4244: '인수': 'double'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\KGA\source\repos\mylovelygame\mylovelygame\Game.cpp(652,44): warning C4244: '인수': 'double'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  Ghost.cpp
+  Inventory.cpp
+  Item.cpp
+  Map.cpp
+  miniGame.cpp
+  mylovelygame.cpp
+  Player.cpp
+  GameUtils.cpp
+  SaveManager.cpp
+  Shop.cpp
+  Skills.cpp
+  코드를 생성하고 있습니다...
+  mylovelygame.vcxproj -> C:\Users\KGA\source\repos\mylovelygame\x64\Debug\mylovelygame.exe

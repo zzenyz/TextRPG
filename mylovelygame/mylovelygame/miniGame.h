@@ -34,7 +34,7 @@ private:
     Pos player, ghost, exitPos;
 
     int ghostCounter = 0;
-    float ghostSpeed = 5;
+    float ghostSpeed = 10;
 
     HANDLE hBuffer[2];
     int activeBuffer = 0;
@@ -220,5 +220,5 @@ public:
     }
 
     void Run();
-    void TriggerminiGame();
+    bool TriggerminiGame();
 };

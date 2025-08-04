@@ -27,7 +27,7 @@ private:
        // Map currentMap;  // 필요하면 활성화
 
     void ShowIntro();
-    void GameLoop();
+    void ShowPlayerStatus();
     void ShowMainMenu();
     void ShowStoryMenu();
     void StartChapter(int chapterNumber);

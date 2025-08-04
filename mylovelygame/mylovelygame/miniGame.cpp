@@ -1,21 +1,28 @@
 ﻿#include "miniGame.h"
-void miniGame::TriggerminiGame()
+
+bool miniGame::TriggerminiGame()
 {
 	if (rand() % 100 < 100)
 	{
 		SetConsoleColor(12);
-		TypeWriter("\n...뭔가가 갑자기 나타났다!\n", 5);
+		TypeWriter("\n...무언가가 갑자기 튀어나옵니다!\n", 5);
 		SetConsoleColor(7);
-		TypeWriter("기묘한 공간에 끌려들어갑니다...\n", 50);
+		TypeWriter("현실이 일그러지고, 당신의 시야가 뒤틀립니다...\n\n", 50);
+		TypeWriter("이상한 힘에 끌려, 낯선 공간으로 떨어졌습니다.\n", 50);
 
 		// 미로 크기 조정 가능
 		miniGame minigame(21);
 		minigame.Run();
 
-		std::cout << "\n정신을 차려보니 다시 묘실에 서 있다...\n";
-		// 성공 여부에 따라 아이템 제공 가능
-	}
-	else return;
+		if (minigame.IsGameOver())
+		{
+			return true;
+		}
+
+		TypeWriter("\n정신을 차려보니, 다시 돌아와 있었습니다...\n", 50);
+		SleepMs(1000);
+		}
+	return false;
 }
 void miniGame::Run()
 {
@@ -29,20 +36,29 @@ void miniGame::Run()
 		}
 
 		if (IsGameOver()) {
-			SetConsoleActiveScreenBuffer(GetStdHandle(STD_OUTPUT_HANDLE)); // ✅ 여기!
-			SetConsoleColor(12);
-			TypeWriter("게임 종료! 귀신에게 잡혔습니다...\n", 50);
-			SetConsoleColor(7);
+			SetConsoleActiveScreenBuffer(GetStdHandle(STD_OUTPUT_HANDLE));
 
 			ClearScreen();
-			break;
+
+			SetConsoleColor(12);
+			TypeWriter("\n악령의 눈동자와 마주쳤습니다...\n", 40);
+			TypeWriter("당신을 알아챈 악령이 다가옵니다.\n", 40);
+			SetConsoleColor(7);
+			break; // 이후 전투 로직으로 넘어가겠지?
 		}
+
 		if (HasEscaped()) {
-			SetConsoleActiveScreenBuffer(GetStdHandle(STD_OUTPUT_HANDLE)); // ✅ 여기!
-			TypeWriter("탈출 성공!출구에 도착했습니다.\n", 20);
+			SetConsoleActiveScreenBuffer(GetStdHandle(STD_OUTPUT_HANDLE));
+
 			ClearScreen();
+
+			SetConsoleColor(10);
+			TypeWriter("숨통이 트입니다... 출구에 도착했습니다!\n", 20);
+			TypeWriter("당신은 무사히 이 악몽에서 벗어났습니다.\n", 20);
+			SetConsoleColor(7);
 			break;
 		}
+
 
 		if (_kbhit()) {
 			int key = _getch();

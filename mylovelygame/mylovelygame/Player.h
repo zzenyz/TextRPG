@@ -19,6 +19,8 @@ private:
 	int atk = 0;
 	int def = 0;
 	int level;
+	int EXP = 0;
+	int MaxEXP = 100;
 	int karma;
 	int unlockedChapter;
 	int gold = 100000;
@@ -42,9 +44,10 @@ public:
 	std::string GetName() const { return name; }
 
 	void reSetJob(int jobNumber) {
-		switch (jobNumber) {
 
-			Job = jobNumber;
+		Job = jobNumber;
+
+		switch (jobNumber) {
 
 		case 1:
 			jobName = "무당";
@@ -62,6 +65,8 @@ public:
 			jobName = "무당";
 			hp = maxHp = 45; atk = 63; def = 55;
 		}
+
+		InitSkills();
 	}
 
 	std::string GetJobName() const { return jobName; }
@@ -85,6 +90,12 @@ public:
 
 	int GetLevel() const { return level; }
 	void SetLevel(int newLevel) { level = newLevel; }
+
+	int GetEXP() const { return EXP; }
+	void SetEXP(int newEXP) { EXP = newEXP; }
+
+	int GetMaxEXP() const { return MaxEXP; }
+	void SetMaxEXP(int newMaxEXP) { MaxEXP = newMaxEXP; }
 
 	int GetKarma() const { return karma; }
 	void AddKarma(int amount) { karma += amount; }
@@ -189,4 +200,9 @@ public:
 	//파일 세이브 로드
 	bool Save(std::ofstream& ofs) const;
 	bool Load(std::ifstream& ifs);
+
+	int Attack(int skillChoice, int ghostDef, int skillweight);
+	void LevelUp();
+
+	bool UseItem(int itemId);
 };

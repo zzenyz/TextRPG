@@ -1,21 +1,21 @@
-#include "Game.h"
+ï»¿#include "Game.h"
 
 void Game::Start() {
 	/*Inventory& inv = player.GetInventory();
 
-	std::cout << "[DEBUG] Àåºñ Ãß°¡ ½Ãµµ 1\n";
+	std::cout << "[DEBUG] ì¥ë¹„ ì¶”ê°€ ì‹œë„ 1\n";
 	SleepMs(1000);
-	inv.AddItem(EquipmentItem(10, "½Å¹æ¿ï", ItemType::Weapon, 1, 100,"??", 5, 0, 0));
-	std::cout << "[DEBUG] Àåºñ Ãß°¡ ¿Ï·á 1\n";
+	inv.AddItem(EquipmentItem(10, "ì‹ ë°©ìš¸", ItemType::Weapon, 1, 100,"??", 5, 0, 0));
+	std::cout << "[DEBUG] ì¥ë¹„ ì¶”ê°€ ì™„ë£Œ 1\n";
 	SleepMs(1000);
-	inv.AddItem(EquipmentItem(13, "±¸½½ ¸ñ°ÉÀÌ", ItemType::Armor, 1, 120,"??", 0, 3, 20));
-	inv.AddItem(EquipmentItem(16, "¿µÀû ºñ³à", ItemType::Accessory, 1, 150,"??", 0, 5, 30));*/
+	inv.AddItem(EquipmentItem(13, "êµ¬ìŠ¬ ëª©ê±¸ì´", ItemType::Armor, 1, 120,"??", 0, 3, 20));
+	inv.AddItem(EquipmentItem(16, "ì˜ì  ë¹„ë…€", ItemType::Accessory, 1, 150,"??", 0, 5, 30));*/
 
 	if (SaveManager::HasSavedGame()) {
 		ClearScreen();
-		TypeWriter("ÀúÀåµÈ °ÔÀÓÀÌ ÀÖ½À´Ï´Ù.\n", 40);
-		TypeWriter("1. »õ °ÔÀÓ\n", 30);
-		TypeWriter("2. ºÒ·¯¿À±â\n", 30);
+		TypeWriter("ì €ì¥ëœ ê²Œì„ì´ ìˆìŠµë‹ˆë‹¤.\n", 40);
+		TypeWriter("1. ìƒˆ ê²Œì„\n", 30);
+		TypeWriter("2. ë¶ˆëŸ¬ì˜¤ê¸°\n", 30);
 		TypeWriter("> ");
 
 		int choice;
@@ -23,14 +23,14 @@ void Game::Start() {
 		std::cin.ignore();
 
 		if (choice == 2) {
-			if (SaveManager::LoadGame(player)) {    // LoadGameÀº ÀúÀåµÈ µ¥ÀÌÅÍ ºÒ·¯¿À´Â ÇÔ¼ö, ¼º°ø½Ã true ¹İÈ¯
-				SetConsoleColor(12); // »¡°£»ö
-				TypeWriter("\n°ÔÀÓÀ» ºÒ·¯¿É´Ï´Ù...\n", 30);
+			if (SaveManager::LoadGame(player)) {    // LoadGameì€ ì €ì¥ëœ ë°ì´í„° ë¶ˆëŸ¬ì˜¤ëŠ” í•¨ìˆ˜, ì„±ê³µì‹œ true ë°˜í™˜
+				SetConsoleColor(12); // ë¹¨ê°„ìƒ‰
+				TypeWriter("\nê²Œì„ì„ ë¶ˆëŸ¬ì˜µë‹ˆë‹¤...\n", 30);
 				SetConsoleColor(7);
 			}
 			else {
-				SetConsoleColor(12); // »¡°£»ö
-				TypeWriter("ºÒ·¯¿À±â¿¡ ½ÇÆĞÇß½À´Ï´Ù... »õ °ÔÀÓÀ» ½ÃÀÛÇÕ´Ï´Ù.\n", 30);
+				SetConsoleColor(12); // ë¹¨ê°„ìƒ‰
+				TypeWriter("ë¶ˆëŸ¬ì˜¤ê¸°ì— ì‹¤íŒ¨í–ˆìŠµë‹ˆë‹¤... ìƒˆ ê²Œì„ì„ ì‹œì‘í•©ë‹ˆë‹¤.\n", 30);
 				SetConsoleColor(7);
 				ShowIntro();
 			}
@@ -43,7 +43,7 @@ void Game::Start() {
 		ShowIntro();
 	}
 
-	GameLoop();
+	ShowMainMenu();
 }
 
 void Game::ShowIntro() {
@@ -52,43 +52,43 @@ void Game::ShowIntro() {
 	int jobChoice;
 
 	ClearScreen();
-	TypeWriter("´ç½ÅÀÇ ÀÌ¸§Àº? ");
+	TypeWriter("ë‹¹ì‹ ì˜ ì´ë¦„ì€? ");
 	std::getline(std::cin, name);
 	player.SetName(name);
 
-	//ClearScreen();
-	TypeWriter("Á÷¾÷À» ¼±ÅÃÇÏ¼¼¿ä\n", 40);
-	TypeWriter("1. ¹«´ç\n", 30);
-	TypeWriter("2. Ç³¼öÁö¸®»ç\n", 30);
-	TypeWriter("3. ½ÅÇĞ»ı\n", 30);
+	ClearScreen();
+	TypeWriter("ì§ì—…ì„ ì„ íƒí•˜ì„¸ìš”\n", 40);
+	TypeWriter("1. ë¬´ë‹¹\n", 30);
+	TypeWriter("2. í’ìˆ˜ì§€ë¦¬ì‚¬\n", 30);
+	TypeWriter("3. ì‹ í•™ìƒ\n", 30);
 	TypeWriter("> ");
 	std::cin >> jobChoice;
-	std::cin.ignore(); // ÁÙ¹Ù²Ş Á¦°Å
+	std::cin.ignore(); // ì¤„ë°”ê¿ˆ ì œê±°
 
-	// À¯È¿¼º °Ë»ç
+	// ìœ íš¨ì„± ê²€ì‚¬
 	if (jobChoice < 1 || jobChoice > 3) {
-		TypeWriter("\nÀß¸øµÈ ¼±ÅÃÀÔ´Ï´Ù. ±âº»°ªÀ¸·Î ¹«´çÀÌ ¼³Á¤µË´Ï´Ù.\n\n");
+		TypeWriter("\nì˜ëª»ëœ ì„ íƒì…ë‹ˆë‹¤. ê¸°ë³¸ê°’ìœ¼ë¡œ ë¬´ë‹¹ì´ ì„¤ì •ë©ë‹ˆë‹¤.\n\n");
 		jobChoice = 1;
 	}
 
 	player.reSetJob(jobChoice);
 
 	ClearScreen();
-	SetConsoleColor(12); // »¡°£»ö
-	TypeWriter(name + "´Ô, ¹İ°©½À´Ï´Ù.\n", 40);
+	SetConsoleColor(12); // ë¹¨ê°„ìƒ‰
+	TypeWriter(name + "ë‹˜, ë°˜ê°‘ìŠµë‹ˆë‹¤.\n", 40);
 	SetConsoleColor(7);
 
-	TypeWriter("´ç½ÅÀº " + player.GetJobName() + "ÀÔ´Ï´Ù.\n\n", 35);
+	TypeWriter("ë‹¹ì‹ ì€ " + player.GetJobName() + "ì…ë‹ˆë‹¤.\n\n", 35);
 	SleepMs(1500);
 	ClearScreen();
 
 	int introchoice;
-	TypeWriter("ÀÎÆ®·Î¸¦ ½ºÅµÇÏ½Ã°Ú½À´Ï±î?\n", 40);
-	TypeWriter("1. ¿¹\n", 30);
-	TypeWriter("2. ¾Æ´Ï¿À\n", 30);
+	TypeWriter("ì¸íŠ¸ë¡œë¥¼ ìŠ¤í‚µí•˜ì‹œê² ìŠµë‹ˆê¹Œ?\n", 40);
+	TypeWriter("1. ì˜ˆ\n", 30);
+	TypeWriter("2. ì•„ë‹ˆì˜¤\n", 30);
 	TypeWriter("> ");
 	std::cin >> introchoice;
-	std::cin.ignore(); // ÁÙ¹Ù²Ş Á¦°Å
+	std::cin.ignore(); // ì¤„ë°”ê¿ˆ ì œê±°
 
 	if (introchoice == 1)
 	{
@@ -96,85 +96,85 @@ void Game::ShowIntro() {
 		return;
 	}
 
-	// Á÷¾÷º° ¸àÆ® ¼³Á¤
+	// ì§ì—…ë³„ ë©˜íŠ¸ ì„¤ì •
 	switch (jobChoice) {
 	case 1:
 		lines = {
-			"[¹æ¿ï ¼Ò¸®°¡ µé¸°´Ù.]\n",
-			"±×°Ç ¾î¸± Àû, Ã³À½ ±Í½ÅÀ» º» ³¯ºÎÅÍ ´Ã µû¶ó´Ù´Ï´ø ¼Ò¸®¿´´Ù.\n",
-			"´ç½ÅÀº ¿øÇÏÁö ¾Ê¾Æµµ ºÁ¾ß¸¸ Çß°í, µé¸®Áö ¾Ê¾Æµµ µé·Á¿Ô´Ù.\n",
-			"¼ö¸¹Àº È¥ÀÌ ´ç½ÅÀ» Áö³ªÃÆÁö¸¸, ÀÌ¹ø °Ç¡¦ ´Ù¸£´Ù.\n",
-			"ÀÌ°Ç ±×³É ¶°µµ´Â ¿øÈ¥ÀÌ ¾Æ´Ï´Ù.\n",
-			"¹­¿© ÀÖ°í, µÚÆ²·È°í, Ç®¾î¾ß¸¸ ÇÏ´Â »ç¿¬ÀÌ´Ù.\n",
-			"ÇÒ¸Ó´Ï²²¼­ ¸¶Áö¸· ±ÂÀ» ÇÏ¸ç ¸»Çß¾ú´Ù.\n",
-			"¡°ÀÌ°Ç ´Ï ÆÈÀÚ´Ù¡¦ ÀÌ°Å ÇÇÇÏ¸é, ´ÙÀ½Àº ´Ï°¡ µÇ°Î¾î.¡±\n",
-			"±× ¼ø°£, ´ç½ÅÀÇ ¼Õ³¡¿¡¼­ ¹æ¿ïÀÌ ¿ï·È´Ù.\n",
-			"¡°°¡¶ó¡¦ ±× È¥À» Ç®°í ¿Í¶ó.¡±\n",
-			"±×¸®°í ÀÌÁ¦, ´ç½ÅÀÇ ¹ß¹Ø¿¡ ±× Àå¼Ò°¡ ÀÖ´Ù.\n"
+			"[ë°©ìš¸ ì†Œë¦¬ê°€ ë“¤ë¦°ë‹¤.]\n",
+			"ê·¸ê±´ ì–´ë¦´ ì , ì²˜ìŒ ê·€ì‹ ì„ ë³¸ ë‚ ë¶€í„° ëŠ˜ ë”°ë¼ë‹¤ë‹ˆë˜ ì†Œë¦¬ì˜€ë‹¤.\n",
+			"ë‹¹ì‹ ì€ ì›í•˜ì§€ ì•Šì•„ë„ ë´ì•¼ë§Œ í–ˆê³ , ë“¤ë¦¬ì§€ ì•Šì•„ë„ ë“¤ë ¤ì™”ë‹¤.\n",
+			"ìˆ˜ë§ì€ í˜¼ì´ ë‹¹ì‹ ì„ ì§€ë‚˜ì³¤ì§€ë§Œ, ì´ë²ˆ ê±´â€¦ ë‹¤ë¥´ë‹¤.\n",
+			"ì´ê±´ ê·¸ëƒ¥ ë– ë„ëŠ” ì›í˜¼ì´ ì•„ë‹ˆë‹¤.\n",
+			"ë¬¶ì—¬ ìˆê³ , ë’¤í‹€ë ¸ê³ , í’€ì–´ì•¼ë§Œ í•˜ëŠ” ì‚¬ì—°ì´ë‹¤.\n",
+			"í• ë¨¸ë‹ˆê»˜ì„œ ë§ˆì§€ë§‰ êµ¿ì„ í•˜ë©° ë§í–ˆì—ˆë‹¤.\n",
+			"â€œì´ê±´ ë‹ˆ íŒ”ìë‹¤â€¦ ì´ê±° í”¼í•˜ë©´, ë‹¤ìŒì€ ë‹ˆê°€ ë˜ê²„ì–´.â€\n",
+			"ê·¸ ìˆœê°„, ë‹¹ì‹ ì˜ ì†ëì—ì„œ ë°©ìš¸ì´ ìš¸ë ¸ë‹¤.\n",
+			"â€œê°€ë¼â€¦ ê·¸ í˜¼ì„ í’€ê³  ì™€ë¼.â€\n",
+			"ê·¸ë¦¬ê³  ì´ì œ, ë‹¹ì‹ ì˜ ë°œë°‘ì— ê·¸ ì¥ì†Œê°€ ìˆë‹¤.\n"
 		};
 		break;
 	case 2:
 		lines = {
-			"[Èë³¿»õ°¡ ÁøÇÏ°Ô ¹ê ²ŞÀ» ²Ù¾ú´Ù.]\n",
-			"ÇÑ ¼Ò³à°¡ ¿À·¡µÈ Áı ¾Õ¿¡ ¼­ ÀÖ¾ú´Ù.\n",
-			"±×³à´Â ¶¥À» ÆÄ°í ÀÖ¾ú°í, ¹«¾ğ°¡¸¦ ¹¯¾ú´Ù.\n",
-			"±× À§¿¡ ÇÇ°¡ Èê·¶´Ù.\n",
-			"´ç½ÅÀº ÀÚ¸®¿¡¼­ ÀÏ¾î³ª Áöµµ¸¦ Æñ´Ù.\n",
-			"ºÓÀº ¼±ÀÌ ÇÑ °÷À» °¡¸®Å°°í ÀÖ¾ú´Ù.\n",
-			"±×°Ç ÀÌ»óÇß´Ù.\n",
-			"±× Àå¼Ò´Â ´ç½ÅÀÌ ¾Æ¹«µµ ¸»ÇÏÁö ¾Ê¾Ò´ø ¡®±İ±âÀÇ ÁöÁ¡¡¯ÀÌ¾ú´Ù.\n",
-			"Ç³¼ö¿¡¼­ ¸»ÇÑ´Ù.\n",
-			"**±â¿îÀº ¼øÈ¯µÇ¾î¾ß ÇÑ´Ù.**\n",
-			"¸·Èù °÷¿£ È¥ÀÌ ¸ÎÈ÷°í,\n",
-			"¸ÎÈù °÷¿£ ÀúÁÖ°¡ ³²´Â´Ù.\n",
-			"´ç½ÅÀº ¡®Èå¸§¡¯À» ¿­·¯ °£´Ù.\n",
-			"±×·¯³ª ±× Èå¸§ÀÇ ³¡¿¡, ¹«¾ùÀÌ ±â´Ù¸±Áö´Â ¾Æ¹«µµ ¸ğ¸¥´Ù.\n"
+			"[í™ëƒ„ìƒˆê°€ ì§„í•˜ê²Œ ë°´ ê¿ˆì„ ê¾¸ì—ˆë‹¤.]\n",
+			"í•œ ì†Œë…€ê°€ ì˜¤ë˜ëœ ì§‘ ì•ì— ì„œ ìˆì—ˆë‹¤.\n",
+			"ê·¸ë…€ëŠ” ë•…ì„ íŒŒê³  ìˆì—ˆê³ , ë¬´ì–¸ê°€ë¥¼ ë¬»ì—ˆë‹¤.\n",
+			"ê·¸ ìœ„ì— í”¼ê°€ í˜ë €ë‹¤.\n",
+			"ë‹¹ì‹ ì€ ìë¦¬ì—ì„œ ì¼ì–´ë‚˜ ì§€ë„ë¥¼ íˆë‹¤.\n",
+			"ë¶‰ì€ ì„ ì´ í•œ ê³³ì„ ê°€ë¦¬í‚¤ê³  ìˆì—ˆë‹¤.\n",
+			"ê·¸ê±´ ì´ìƒí–ˆë‹¤.\n",
+			"ê·¸ ì¥ì†ŒëŠ” ë‹¹ì‹ ì´ ì•„ë¬´ë„ ë§í•˜ì§€ ì•Šì•˜ë˜ â€˜ê¸ˆê¸°ì˜ ì§€ì â€™ì´ì—ˆë‹¤.\n",
+			"í’ìˆ˜ì—ì„œ ë§í•œë‹¤.\n",
+			"**ê¸°ìš´ì€ ìˆœí™˜ë˜ì–´ì•¼ í•œë‹¤.**\n",
+			"ë§‰íŒ ê³³ì—” í˜¼ì´ ë§ºíˆê³ ,\n",
+			"ë§ºíŒ ê³³ì—” ì €ì£¼ê°€ ë‚¨ëŠ”ë‹¤.\n",
+			"ë‹¹ì‹ ì€ â€˜íë¦„â€™ì„ ì—´ëŸ¬ ê°„ë‹¤.\n",
+			"ê·¸ëŸ¬ë‚˜ ê·¸ íë¦„ì˜ ëì—, ë¬´ì—‡ì´ ê¸°ë‹¤ë¦´ì§€ëŠ” ì•„ë¬´ë„ ëª¨ë¥¸ë‹¤.\n"
 		};
 		break;
 	case 3:
 		lines = {
-			"[´ç½ÅÀº Àáµé±â Àü, ±âµµÇÏ°í ÀÖ¾ú´Ù.]\n",
-			"ÇÏÁö¸¸ ¿À´ÃÀº ÀÌ»óÇÏ°Ô, ±âµµ ³¡¿¡ Æò¾ÈÀÌ ¿ÀÁö ¾Ê¾Ò´Ù.\n",
-			"Ã¢¹Û¿¡¼­, ´©±º°¡ ´ç½ÅÀÇ ÀÌ¸§À» ¼Ó»è¿´´Ù.\n",
-			"¼º°æÃ¥ÀÌ ÀúÀı·Î ÆîÃÄÁ³´Ù.\n",
-			"¸¶Ä¡, ´ÙÀ½ ÆäÀÌÁö¸¦ °­Á¦·Î ÀĞÈ÷µíÀÌ.\n",
-			"´ç½ÅÀº ¹Ï´Â´Ù. ½ÅÀÇ ¶æÀÌ ÀÖ±â¿¡.\n",
-			"±×·¯³ª ½ÅÀº ´ç½Å¿¡°Ô ¾ÆÁ÷ **´äÀ» ÁÖÁö ¾Ê¾Ò´Ù.**\n",
-			"Áö±İ ´ç½ÅÀÌ °¡´Â °÷Àº, ½ÅÁ¶Â÷ Ä§¹¬ÇÑ Àå¼Ò.\n",
-			"±×°÷¿£ ¿À·¡Àü ¸ñ¼ûÀ» ÀÒÀº ÀÌµéÀÇ ±âµµ°¡\n",
-			"ÀÀ´ä¹ŞÁö ¸øÇÑ Ã¤ ½×¿© ÀÖ´Ù.\n",
-			"±×¸®°í ´ç½ÅÀÌ ±× ±âµµ¸¦ µé¾î¾ß ÇÒ ¶§°¡ ¿Ô´Ù.\n"
+			"[ë‹¹ì‹ ì€ ì ë“¤ê¸° ì „, ê¸°ë„í•˜ê³  ìˆì—ˆë‹¤.]\n",
+			"í•˜ì§€ë§Œ ì˜¤ëŠ˜ì€ ì´ìƒí•˜ê²Œ, ê¸°ë„ ëì— í‰ì•ˆì´ ì˜¤ì§€ ì•Šì•˜ë‹¤.\n",
+			"ì°½ë°–ì—ì„œ, ëˆ„êµ°ê°€ ë‹¹ì‹ ì˜ ì´ë¦„ì„ ì†ì‚­ì˜€ë‹¤.\n",
+			"ì„±ê²½ì±…ì´ ì €ì ˆë¡œ í¼ì³ì¡Œë‹¤.\n",
+			"ë§ˆì¹˜, ë‹¤ìŒ í˜ì´ì§€ë¥¼ ê°•ì œë¡œ ì½íˆë“¯ì´.\n",
+			"ë‹¹ì‹ ì€ ë¯¿ëŠ”ë‹¤. ì‹ ì˜ ëœ»ì´ ìˆê¸°ì—.\n",
+			"ê·¸ëŸ¬ë‚˜ ì‹ ì€ ë‹¹ì‹ ì—ê²Œ ì•„ì§ **ë‹µì„ ì£¼ì§€ ì•Šì•˜ë‹¤.**\n",
+			"ì§€ê¸ˆ ë‹¹ì‹ ì´ ê°€ëŠ” ê³³ì€, ì‹ ì¡°ì°¨ ì¹¨ë¬µí•œ ì¥ì†Œ.\n",
+			"ê·¸ê³³ì—” ì˜¤ë˜ì „ ëª©ìˆ¨ì„ ìƒì€ ì´ë“¤ì˜ ê¸°ë„ê°€\n",
+			"ì‘ë‹µë°›ì§€ ëª»í•œ ì±„ ìŒ“ì—¬ ìˆë‹¤.\n",
+			"ê·¸ë¦¬ê³  ë‹¹ì‹ ì´ ê·¸ ê¸°ë„ë¥¼ ë“¤ì–´ì•¼ í•  ë•Œê°€ ì™”ë‹¤.\n"
 		};
 		break;
 	}
 
-	// Ãâ·Â
+	// ì¶œë ¥
 	for (const auto& line : lines) {
 		TypeWriter(line, 35);
 		std::this_thread::sleep_for(std::chrono::milliseconds(300));
 	}
 
-	TypeWriter("\n--- [°è¼ÓÇÏ·Á¸é Enter] ---\n", 30);
+	TypeWriter("\n--- [ê³„ì†í•˜ë ¤ë©´ Enter] ---\n", 30);
 	std::cin.get();
 	ClearScreen();
 
 	lines = {
-		"[³°Àº ¸¶À» ÀÔ±¸ ¾Õ]\n",
-		"´ç½ÅÀÌ µµÂøÇÏÀÚ, ¸¶À» ÀÌÀåÀÌ ÁöÄ£ ¾ó±¼·Î ´ç½ÅÀ» ¸ÂÀÌÇÑ´Ù.\"\n",
-		"\"µåµğ¾î ¿À¼Ì±º.\"\n",
-		"\"ÀÌ ¸¶À»¿¡¼­ 30³â ÀüºÎÅÍ ¼³¸íÇÒ ¼ö ¾ø´Â ÀÏÀÌ °è¼ÓµÇ°í ÀÖ¼Ò\"\n",
-		"\"Æó°¡¿¡¼± ¿ïÀ½¼Ò¸®°¡ ¸ØÃßÁú ¾Ê°í,  ¿ì¹°¿¡¼± ¹ã¸¶´Ù °ËÀº ¼ÕÀÌ ³ª¿Â´Ù´Â ¸»ÀÌ ÀüÇØÁ® ¿Ô¼Ò\"\n",
-		"\"¾ÆÀÌµéÀº ¾Ç¸ù¿¡ ½Ã´Ş¸®°í,  ¾î¸¥µéÀº ÀÌÀ¯ ¾øÀÌ º´µé°Å³ª, »ç¶óÁö±âµµ Çß¼Ò¡±\"\n",
-		"\n±×... ÀÚ... ¸ÁÃÄ...\n",
-		"\nÀÌÀåÀÌ Áß¾ó°Å·È´Ù.\n",
-		"\n\"Ã³À½¿£ ´Ùµé ¿ì¿¬ÀÌ¶ó ¿©°åÁö¸¸¡¦ ÀÌÁ¨ ´©±¸µµ ±×·¸°Ô ¹ÏÁö ¾ÊÁö¿ä.\"\n"
-		"\"±× Å¿ÀÎÁö, ÀşÀºÀÌµéÀº ÇÏ³ªµÑ¾¿ ¸¶À»À» ¶°³ª°í ÀÖ¼Ò.\n"
-		"\"ÀÌ´ë·Î¶ó¸é¡¦ ÀÌ ¸¶À»Àº Á¤¸» ³¡ÀåÀÏÁöµµ ¸ğ¸£¿À.\"\n"
-		"\"ºÎµğ¡¦ ³» ¾î¸±Àû Ãß¾ïÀÌ °¡µæÇÑ ¼ÒÁßÇÑ ¸¶À»À» ±¸ÇØÁÖ½Ã¿À.\"\n"
+		"[ë‚¡ì€ ë§ˆì„ ì…êµ¬ ì•]\n",
+		"ë‹¹ì‹ ì´ ë„ì°©í•˜ì, ë§ˆì„ ì´ì¥ì´ ì§€ì¹œ ì–¼êµ´ë¡œ ë‹¹ì‹ ì„ ë§ì´í•œë‹¤.\"\n",
+		"\"ë“œë””ì–´ ì˜¤ì…¨êµ°.\"\n",
+		"\"ì´ ë§ˆì„ì—ì„œ 30ë…„ ì „ë¶€í„° ì„¤ëª…í•  ìˆ˜ ì—†ëŠ” ì¼ì´ ê³„ì†ë˜ê³  ìˆì†Œ\"\n",
+		"\"íê°€ì—ì„  ìš¸ìŒì†Œë¦¬ê°€ ë©ˆì¶”ì§ˆ ì•Šê³ ,  ìš°ë¬¼ì—ì„  ë°¤ë§ˆë‹¤ ê²€ì€ ì†ì´ ë‚˜ì˜¨ë‹¤ëŠ” ë§ì´ ì „í•´ì ¸ ì™”ì†Œ\"\n",
+		"\"ì•„ì´ë“¤ì€ ì•…ëª½ì— ì‹œë‹¬ë¦¬ê³ ,  ì–´ë¥¸ë“¤ì€ ì´ìœ  ì—†ì´ ë³‘ë“¤ê±°ë‚˜, ì‚¬ë¼ì§€ê¸°ë„ í–ˆì†Œâ€\"\n",
+		"\nê·¸... ì... ë§ì³...\n",
+		"\nì´ì¥ì´ ì¤‘ì–¼ê±°ë ¸ë‹¤.\n",
+		"\n\"ì²˜ìŒì—” ë‹¤ë“¤ ìš°ì—°ì´ë¼ ì—¬ê²¼ì§€ë§Œâ€¦ ì´ì   ëˆ„êµ¬ë„ ê·¸ë ‡ê²Œ ë¯¿ì§€ ì•Šì§€ìš”.\"\n"
+		"\"ê·¸ íƒ“ì¸ì§€, ì Šì€ì´ë“¤ì€ í•˜ë‚˜ë‘˜ì”© ë§ˆì„ì„ ë– ë‚˜ê³  ìˆì†Œ.\n"
+		"\"ì´ëŒ€ë¡œë¼ë©´â€¦ ì´ ë§ˆì„ì€ ì •ë§ ëì¥ì¼ì§€ë„ ëª¨ë¥´ì˜¤.\"\n"
+		"\"ë¶€ë””â€¦ ë‚´ ì–´ë¦´ì  ì¶”ì–µì´ ê°€ë“í•œ ì†Œì¤‘í•œ ë§ˆì„ì„ êµ¬í•´ì£¼ì‹œì˜¤.\"\n"
 
-		"\n¿ÖÀÎÁö ¾îµò°¡ ³¸¼³¸é¼­µµ ÀÍ¼÷ÇÑ ±âºĞÀÌ µç´Ù...\n"
-		"¸¶À» »ç¶÷µéÀÇ µÎ·Á¿òÀÌ ³» ¸¶À½ ±í¼÷ÀÌ ½º¸çµå´Â °Í¸¸ °°´Ù.\n"
-		"ÀÌ°÷¿¡ ¼û°ÜÁø Áø½ÇÀ» ²À Ã£¾Æ¾ß¸¸ ÇØ.\n"
+		"\nì™œì¸ì§€ ì–´ë”˜ê°€ ë‚¯ì„¤ë©´ì„œë„ ìµìˆ™í•œ ê¸°ë¶„ì´ ë“ ë‹¤...\n"
+		"ë§ˆì„ ì‚¬ëŒë“¤ì˜ ë‘ë ¤ì›€ì´ ë‚´ ë§ˆìŒ ê¹Šìˆ™ì´ ìŠ¤ë©°ë“œëŠ” ê²ƒë§Œ ê°™ë‹¤.\n"
+		"ì´ê³³ì— ìˆ¨ê²¨ì§„ ì§„ì‹¤ì„ ê¼­ ì°¾ì•„ì•¼ë§Œ í•´.\n"
 	};
 
 	for (const auto& line : lines) {
@@ -182,27 +182,64 @@ void Game::ShowIntro() {
 		std::this_thread::sleep_for(std::chrono::milliseconds(300)); 
 	}
 
-	TypeWriter("\n--- [°è¼ÓÇÏ·Á¸é Enter] ---\n", 30);
+	TypeWriter("\n--- [ê³„ì†í•˜ë ¤ë©´ Enter] ---\n", 30);
 	std::cin.get();
 	ClearScreen();
 }
 
+void Game::ShowPlayerStatus() {
+	const int hpBarWidth = 30;
+	const int expBarWidth = 30;
 
-void Game::GameLoop() {
-	ShowMainMenu();
+	std::string playerName = player.GetName();
+	std::string jobName = player.GetJobName();
+	int currentHp = player.GetHp();
+	int maxHp = player.GetMaxHp();
+	int currentExp = player.GetEXP();
+	int maxEXP = player.GetMaxEXP();
+	int level = player.GetLevel();
+
+	float hpRatio = static_cast<float>(currentHp) / maxHp;
+	int hpFill = static_cast<int>(hpRatio * hpBarWidth);
+
+	float expRatio = static_cast<float>(currentExp) / maxEXP;
+	int expFill = static_cast<int>(expRatio * expBarWidth);
+
+	std::cout << "===========================\n";
+	std::cout << "ì´ë¦„: " << playerName
+		<< "    ì§ì—…: " << jobName << "\n";
+	std::cout << "ë ˆë²¨: " << level << "\n";
+
+	std::cout << "ê²½í—˜ì¹˜: " << currentExp << " / " << maxEXP << "\n    [";
+	for (int i = 0; i < expBarWidth; ++i) {
+		if (i < expFill) std::cout << "=";
+		else std::cout << "â”€";
+	}
+	std::cout << "]\n";
+
+	std::cout << "ì²´ë ¥: " << currentHp << " / " << maxHp << "\n    [";
+	for (int i = 0; i < hpBarWidth; ++i) {
+		if (i < hpFill) std::cout << "=";
+		else std::cout << "â”€";
+	}
+	std::cout << "]\n";
+
+	std::cout << "===========================\n\n";
 }
+
 
 void Game::ShowMainMenu() {
 	while (true)
 	{
 		ClearScreen();
-		TypeWriter("¸ŞÀÎ ¸Ş´º\n", 30);
-		TypeWriter("1. ½ºÅä¸® ÁøÇà\n", 20);
-		TypeWriter("2. ÀÎº¥Åä¸®\n", 20);
-		TypeWriter("3. ±â¾ï ÀúÀå¼Ò\n", 20);
-		TypeWriter("4. »óÁ¡\n", 20);
-		TypeWriter("5. ÀúÀå\n", 20);
-		TypeWriter("6. Á¾·á\n", 20);
+		ShowPlayerStatus();
+		TypeWriter("ë©”ì¸ ë©”ë‰´\n", 30);
+		TypeWriter("1. ìŠ¤í† ë¦¬ ì§„í–‰\n", 20);
+		TypeWriter("2. ì¸ë²¤í† ë¦¬\n", 20);
+		TypeWriter("3. ê¸°ì–µ ì €ì¥ì†Œ\n", 20);
+		TypeWriter("4. ìƒì \n", 20);
+		TypeWriter("5. ì €ì¥\n", 20);
+		TypeWriter("6. ì¢…ë£Œ\n", 20);
 		TypeWriter("> ");
 
 		int choice = 0;
@@ -210,6 +247,7 @@ void Game::ShowMainMenu() {
 		std::cin.ignore();
 
 		ClearScreen();
+		ShowPlayerStatus();
 
 		switch (choice) {
 		case 1:
@@ -219,38 +257,78 @@ void Game::ShowMainMenu() {
 		{
 			Inventory& inv = player.GetInventory();
 
-
-			ClearScreen();
-			inv.ShowInventory();         // ¹øÈ£ Æ÷ÇÔÇØ¼­ Ãâ·Â
+			inv.ShowInventory();         // ë²ˆí˜¸ í¬í•¨í•´ì„œ ì¶œë ¥
 			inv.ShowEquippedItems();
 
 			while (true) {
-				int inputNum = 0;
-				TypeWriter("\n¸Ş´º·Î µ¹¾Æ°¡½Ã·Á¸é 0", 20);
-				TypeWriter("\nÂø¿ëÇÒ ¾ÆÀÌÅÛ ¹øÈ£¸¦ ÀÔ·ÂÇÏ¼¼¿ä:", 20);
+				TypeWriter("\n1. ì•„ì´í…œ ì‚¬ìš©\n 2. ì•„ì´í…œ ì°©ìš©\n", 20);
+				TypeWriter("\në©”ë‰´ë¡œ ëŒì•„ê°€ì‹œë ¤ë©´ 0", 20);
 				TypeWriter("> ");
-
-				std::cin >> inputNum;
+				
+				int menuChoice = 0;
+				std::cin >> menuChoice;
 				std::cin.ignore();
 
-				if (inputNum == 0) break;  // 0 ÀÔ·Â ½Ã ¸Ş´º·Î µ¹¾Æ°¨
+				if (menuChoice == 0) break;
 
-				if (inputNum < 1 || inputNum >(int)inv.items.size()) {
-					TypeWriter("Àß¸øµÈ ¹øÈ£ÀÔ´Ï´Ù. ´Ù½Ã ½ÃµµÇÏ¼¼¿ä.\n", 20);
-					continue;
+				if (menuChoice == 1) 
+				{
+					TypeWriter("\nì‚¬ìš©í•  ì•„ì´í…œ ë²ˆí˜¸ë¥¼ ì…ë ¥í•˜ì„¸ìš”: \n", 20);
+					TypeWriter("> ");
+
+					int useNum = 0;
+					std::cin >> useNum;
+					std::cin.ignore();
+
+					if (useNum == 0) continue;
+					if (useNum < 1 || useNum >(int)inv.items.size()) {
+						TypeWriter("ì˜ëª»ëœ ë²ˆí˜¸ì…ë‹ˆë‹¤.\n", 20);
+						continue;
+					}
+
+					Item& selectedItem = inv.items[useNum - 1];
+					if (selectedItem.type != ItemType::Consumable) {
+						TypeWriter("ì´ ì•„ì´í…œì€ ì‚¬ìš©í•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤.\n", 20);
+						continue;
+					}
+
+					bool used = player.UseItem(selectedItem.id);
+					if (used) {
+						TypeWriter("ì•„ì´í…œì„ ì‚¬ìš©í–ˆìŠµë‹ˆë‹¤.\n", 20);
+					}
+					else {
+						TypeWriter("ì•„ì´í…œ ì‚¬ìš©ì— ì‹¤íŒ¨í–ˆìŠµë‹ˆë‹¤.\n", 20);
+					}
 				}
 
-				ItemType selectedType = inv.items[inputNum - 1].type;
-				if (selectedType == ItemType::Consumable) {
-					TypeWriter("¼Òºñ ¾ÆÀÌÅÛÀº ÀåÂøÇÒ ¼ö ¾ø½À´Ï´Ù.\n", 20);
-					continue;
+				else if (menuChoice == 2)
+				{
+
+					TypeWriter("\nì°©ìš©í•  ì•„ì´í…œ ë²ˆí˜¸ë¥¼ ì…ë ¥í•˜ì„¸ìš”: \n", 20);
+					TypeWriter("> ");
+
+					int equipNum = 0;
+					std::cin >> equipNum;
+					std::cin.ignore();
+
+					if (equipNum == 0) continue;
+					if (equipNum < 1 || equipNum >(int)inv.items.size()) {
+						TypeWriter("ì˜ëª»ëœ ë²ˆí˜¸ì…ë‹ˆë‹¤.\n", 20);
+						continue;
+					}
+
+					ItemType selectedType = inv.items[equipNum - 1].type;
+					if (selectedType == ItemType::Consumable) {
+						TypeWriter("ì†Œë¹„ ì•„ì´í…œì€ ì¥ì°©í•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤.\n", 20);
+						continue;
+					}
+
+					// ë²ˆí˜¸ë¡œ ì•„ì´í…œ ì°¾ì•„ì„œ ì°©ìš©
+					int itemId = inv.items[equipNum - 1].id;
+					inv.EquipItem(itemId);
+
+					TypeWriter("ì•„ì´í…œì´ ì¥ì°©ë˜ì—ˆìŠµë‹ˆë‹¤.\n", 20);
 				}
-
-				// ¹øÈ£·Î ¾ÆÀÌÅÛ Ã£¾Æ¼­ Âø¿ë
-				int itemId = inv.items[inputNum - 1].id;
-				inv.EquipItem(itemId);
-
-				TypeWriter("¾ÆÀÌÅÛÀÌ ÀåÂøµÇ¾ú½À´Ï´Ù.\n", 20);
 			}
 			break;
 		}
@@ -262,12 +340,14 @@ void Game::ShowMainMenu() {
 			break;
 		case 5:
 			SaveManager::SaveGame(player);
+			ClearScreen();
+			TypeWriter("ì €ì¥ ì™„ë£Œ!!\n", 40);
 			break;
 		case 6:
-			TypeWriter("°ÔÀÓÀ» Á¾·áÇÕ´Ï´Ù.\n");
+			TypeWriter("ê²Œì„ì„ ì¢…ë£Œí•©ë‹ˆë‹¤.\n");
 			return;
 		default:
-			TypeWriter("Àß¸øµÈ ¼±ÅÃÀÔ´Ï´Ù. ´Ù½Ã ½ÃµµÇÏ¼¼¿ä.\n");
+			TypeWriter("ì˜ëª»ëœ ì„ íƒì…ë‹ˆë‹¤. ë‹¤ì‹œ ì‹œë„í•˜ì„¸ìš”.\n");
 			std::this_thread::sleep_for(std::chrono::seconds(1));
 			break;
 		}
@@ -277,15 +357,15 @@ void Game::ShowMainMenu() {
 void Game::ShowStoryMenu() {
 	std::vector<std::string> chapterTitles =
 	{
-		"ºÎ¼­Áø ¹¦ºñ Á¶°¢\n",
-		"³ì½¼ Á·¼â\n",
-		"³°Àº ¼Õ¸ñ½Ã°è\n",
-		"ºĞÈ«»ö ¸Ó¸®ÇÉ\n",
-		"¾î¸Ó´ÏÀÇ ÀÏ±âÀå\n",
-		"³°Àº Ä«¼¼Æ® Å×ÀÌÇÁ\n"
+		"ë¶€ì„œì§„ ë¬˜ë¹„ ì¡°ê°\n",
+		"ë…¹ìŠ¨ ì¡±ì‡„\n",
+		"ë‚¡ì€ ì†ëª©ì‹œê³„\n",
+		"ë¶„í™ìƒ‰ ë¨¸ë¦¬í•€\n",
+		"ì–´ë¨¸ë‹ˆì˜ ì¼ê¸°ì¥\n",
+		"ë‚¡ì€ ì¹´ì„¸íŠ¸ í…Œì´í”„\n"
 	};
 
-	TypeWriter("== ±â¾ïÀÇ Á¶°¢ ==\n", 30);
+	TypeWriter("== ê¸°ì–µì˜ ì¡°ê° ==\n", 30);
 
 	int unlocked = player.GetUnlockedChapter();
 	int i = 0;
@@ -300,13 +380,13 @@ void Game::ShowStoryMenu() {
 			}
 			else
 			{
-				line += "??? (Àá±è)\n";
+				line += "??? (ì ê¹€)\n";
 			}
-			TypeWriter(line, 5);  // °¢ ¶óÀÎ Ãâ·Â
+			TypeWriter(line, 5);  // ê° ë¼ì¸ ì¶œë ¥
 		}
 
-		TypeWriter("\n¸Ş´º·Î µ¹¾Æ°¡½Ã·Á¸é 0\n", 10);
-		TypeWriter("\nÁøÇàÇÒ Ã©ÅÍ ¹øÈ£¸¦ ÀÔ·ÂÇÏ¼¼¿ä: \n", 10);
+		TypeWriter("\në©”ë‰´ë¡œ ëŒì•„ê°€ì‹œë ¤ë©´ 0\n", 10);
+		TypeWriter("\nì§„í–‰í•  ì±•í„° ë²ˆí˜¸ë¥¼ ì…ë ¥í•˜ì„¸ìš”: \n", 10);
 		TypeWriter("> ");
 		int choice;
 		std::cin >> choice;
@@ -318,13 +398,13 @@ void Game::ShowStoryMenu() {
 		}
 
 		if (choice < 1 || choice > 6) {
-			TypeWriter("Àß¸øµÈ ¹øÈ£ÀÔ´Ï´Ù.\n", 40);
+			TypeWriter("ì˜ëª»ëœ ë²ˆí˜¸ì…ë‹ˆë‹¤.\n", 40);
 			ClearScreen();
 			continue;
 		}
 
 		if (player.GetUnlockedChapter() < choice) {
-			TypeWriter("¾ÆÁ÷ Àá±ä Ã©ÅÍÀÔ´Ï´Ù.\n", 40);
+			TypeWriter("ì•„ì§ ì ê¸´ ì±•í„°ì…ë‹ˆë‹¤.\n", 40);
 			ClearScreen();
 			continue;
 		}
@@ -339,6 +419,7 @@ void Game::ShowStoryMenu() {
 
 void Game::StartChapter(int chapterNumber)
 {
+	bool Wahl = false;
 	switch (chapterNumber)
 	{
 	case 1:
@@ -355,41 +436,79 @@ void Game::StartChapter(int chapterNumber)
 
 			switch (choice) {
 			case 0:
-				// ¸Ş´º·Î µ¹¾Æ°¡±â Ã³¸®
-				std::cout << "\n¸ŞÀÎ ¸Ş´º·Î µ¹¾Æ°©´Ï´Ù...\n";
+				// ë©”ë‰´ë¡œ ëŒì•„ê°€ê¸° ì²˜ë¦¬
+				std::cout << "\në©”ì¸ ë©”ë‰´ë¡œ ëŒì•„ê°‘ë‹ˆë‹¤...\n";
 				backToMenu = true;
 				break;
 			case 1:
-				// ÀÛÀº ¹¦½Ç Á¶»ç ÇÔ¼ö
-				//ExploreGrave(); // ÀÌ ÇÔ¼ö´Â µû·Î Á¤ÀÇÇØ¾ß ÇÔ
+				ClearScreen();
+				Wahl = minigame.TriggerminiGame();
+				//ë¯¸ë‹ˆ ê²Œì„ í›„ bool í˜•íƒœë¡œ ì „íˆ¬í• ì§€ë§ì§€ ë°˜í™˜
+
+				if (Wahl == true)
+				{
+					Battle();
+				}
+				ClearScreen();
+				// ê´€ë¦¬ì¸ ì˜¤ë‘ë§‰ ì¡°ì‚¬ í•¨ìˆ˜
+				// ì‘ì€ ë¬˜ì‹¤ ì¡°ì‚¬ í•¨ìˆ˜
+				chapter1.ExploreGrave(); 
 				continue;
 			case 2:
+			{
 				ClearScreen();
-				minigame.TriggerminiGame();
-				//¹Ì´Ï °ÔÀÓ ÈÄ bool ÇüÅÂ·Î ÀüÅõÇÒÁö¸»Áö ¹İÈ¯
-				
-				Battle();
-				
+				Wahl = minigame.TriggerminiGame();
+				//ë¯¸ë‹ˆ ê²Œì„ í›„ bool í˜•íƒœë¡œ ì „íˆ¬í• ì§€ë§ì§€ ë°˜í™˜
+
+				if (Wahl == true)
+				{
+					Battle();
+				}
 				ClearScreen();
-				// °ü¸®ÀÎ ¿ÀµÎ¸· Á¶»ç ÇÔ¼ö
+				// ê´€ë¦¬ì¸ ì˜¤ë‘ë§‰ ì¡°ì‚¬ í•¨ìˆ˜
 				chapter1.ExploreHut();
 				continue;
+			}
 			case 3:
-				// Á¦´Ü Á¶»ç ÇÔ¼ö
-				//ExploreAltar();
+				ClearScreen();
+				Wahl = minigame.TriggerminiGame();
+				//ë¯¸ë‹ˆ ê²Œì„ í›„ bool í˜•íƒœë¡œ ì „íˆ¬í• ì§€ë§ì§€ ë°˜í™˜
+
+				if (Wahl == true)
+				{
+					Battle();
+				}
+				ClearScreen();
+				// ê´€ë¦¬ì¸ ì˜¤ë‘ë§‰ ì¡°ì‚¬ í•¨ìˆ˜
+				// ì œë‹¨ ì¡°ì‚¬ í•¨ìˆ˜
+				chapter1.ExploreAltar();
 				continue;
 			case 4:
-				// ¸¶´ç Á¶»ç ÇÔ¼ö
-				//ExploreYard();
+				ClearScreen();
+				Wahl = minigame.TriggerminiGame();
+				//ë¯¸ë‹ˆ ê²Œì„ í›„ bool í˜•íƒœë¡œ ì „íˆ¬í• ì§€ë§ì§€ ë°˜í™˜
+
+				if (Wahl == true)
+				{
+					Battle();
+				}
+				ClearScreen();
+				// ê´€ë¦¬ì¸ ì˜¤ë‘ë§‰ ì¡°ì‚¬ í•¨ìˆ˜
+				// ë§ˆë‹¹ ì¡°ì‚¬ í•¨ìˆ˜
+				chapter1.ExploreYard();
 				continue;
 			default:
-				std::cout << "\nÀß¸øµÈ ÀÔ·ÂÀÔ´Ï´Ù. ´Ù½Ã ¼±ÅÃÇÏ¼¼¿ä.\n";
+				std::cout << "\nì˜ëª»ëœ ì…ë ¥ì…ë‹ˆë‹¤. ë‹¤ì‹œ ì„ íƒí•˜ì„¸ìš”.\n";
 				continue;
 			}
 		}
 		if (chapter1.GetHasFoundClue())
 		{
-			player.AddClue("°ü¸®ÀÎÀÇ ÀÏÁö - '¹¦Áö¸¦ ÆÄÇìÄ£ ¿©ÀÚ°¡ ÀúÁÖÀÇ ½ÃÀÛÀÌ´Ù.'");
+			player.AddClue("ê´€ë¦¬ì¸ì˜ ì¼ì§€ - 'ë¬˜ì§€ë¥¼ íŒŒí—¤ì¹œ ì—¬ìê°€ ì €ì£¼ì˜ ì‹œì‘ì´ë‹¤.'");
+		}
+		if (chapter1.GetHasFoundKeepsake())
+		{
+			player.AddKeepsake("ë¶€ì„œì§„ ì˜¥ íŒ”ì°Œ - ì˜¥ íŒ”ì°Œ ì¡°ê°ì—ì„œ í¬ë¯¸í•˜ê²Œ ëŠê»´ì§€ëŠ” ì›í•œê³¼ ì €ì£¼ì˜ ê¸°ìš´.");
 		}
 		break;
 		
@@ -398,89 +517,323 @@ void Game::StartChapter(int chapterNumber)
 
 void Game::Battle()
 {
-	//¹¹¶ó ¾¾ºÎ¸®±â
-
-	int maxAttacks = 10;        // ÃÖ´ë °ø°İ È½¼ö Á¦ÇÑ
+	int JobNumber = player.GettJob();
+	int maxAttacks = 10;        // ìµœëŒ€ ê³µê²© íšŸìˆ˜ ì œí•œ
 	int attacksLeft = maxAttacks;
+
 	bool isFearful = false;
 	bool isGhostFearful = false;
 	bool isCursed = false;
 	bool isGhostCursed = false;
+	int isCursedTurns = 0;      // 3í„´ ì§€ì† ì €ì£¼ìš©
+	int isghostCursedTurns = 0; // ê·€ì‹  ì €ì£¼ í”¼í•´ìš©
+	int isFearedTurns = 0;      // 1í„´ ë´‰ì¸ìš© (í”Œë ˆì´ì–´ ê³µí¬)
+	int isghostFearedTurns = 0; // ê·€ì‹  ë´‰ì¸ìš©
 
+	int secSkillMaxUse = 2;
+	int secSkillUsed = 2;
 
 	ghost = Ghost::GetRandomGhost();
 	int tempGhostHp = ghost.GetHp();
 
-	if (player.GettJob() == 1)
+	ClearScreen();
+	ShowPlayerStatus();
+
+	if (JobNumber == 1)
 	{
 		tempGhostHp = (tempGhostHp * 9) / 10;
-		TypeWriter("½Å·É´ÔÀÇ ÈûÀ¸·Î ±Í½ÅÀÇ Ã¼·ÂÀÌ ´Ù¼Ò °¨¼ÒÇß½À´Ï´Ù!\n", 5);
+		TypeWriter("ì‹ ë ¹ë‹˜ì˜ í˜ìœ¼ë¡œ ê·€ì‹ ì˜ ì²´ë ¥ì´ ë‹¤ì†Œ ê°ì†Œí–ˆìŠµë‹ˆë‹¤!\n", 5);
+		SleepMs(500);
 	}
+
+	int totalExp = 0;
+	int totalGold = 0;
 
 	while (player.GetHp() > 0 && !ghost.IsDead() && attacksLeft > 0)
 	{
 		ClearScreen();
 
-		int turn = 11 - attacksLeft;
+		int turn = maxAttacks - attacksLeft + 1;
+		ShowPlayerStatus();
 
 		std::cout << "===========================\n";
-		std::cout << turn << "¹øÂ° ÅÏ\n";
-		std::cout << "³» Ã¼·Â: " << player.GetHp() << "/" << player.GetMaxHp() << "  (" << GetStatusString(isFearful, isCursed) << ")\n";
-		std::cout << "±Í½Å Ã¼·Â: " << tempGhostHp << "/" << ghost.GetHp() << "  (" << GetStatusString(isGhostFearful, isGhostCursed) << ")\n";
+		std::cout << "[" << turn << "ë²ˆì§¸ í„´]\n\n";
+		std::cout << "ê·€ì‹  ì²´ë ¥: " << tempGhostHp << "/" << ghost.GetHp() << "  (" << GetStatusString(isGhostFearful, isGhostCursed) << ")\n";
 		std::cout << "===========================\n\n";
 
-		std::cout << "½ºÅ³\n";
-		const std::vector<Skill>& skills = player.GetSkillSet();
-		for (size_t i = 0; i < skills.size(); ++i) {
-			std::cout << i + 1 << ". " << skills[i].name << "\n";
+		// í”Œë ˆì´ì–´ ìƒíƒœ íš¨ê³¼ ì²˜ë¦¬ (ê³µí¬, ì €ì£¼)
+		if (isFearedTurns > 0) {
+			TypeWriter("ë‹¹ì‹ ì€ ê³µí¬ì— ì‚¬ë¡œì¡í˜€ 1í„´ ë™ì•ˆ í–‰ë™í•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤!\n", 5);
+			isFearedTurns--;
+			attacksLeft--;
+		}
+		else
+		{
+			TypeWriter("1. ê³µê²©í•œë‹¤\n", 5);
+			TypeWriter("2. ì•„ì´í…œ ì‚¬ìš©\n", 5);
+			TypeWriter(">", 5);
+
+			int choice = 0;
+			std::cin >> choice;
+
+			if (choice == 1)
+			{
+				std::cout << "\nìŠ¤í‚¬ ëª©ë¡:\n";
+				const std::vector<Skill>& skills = player.GetSkillSet();
+
+				for (size_t i = 0; i < skills.size(); ++i) {
+					std::cout << i + 1 << ". " << skills[i].name;
+					if (i == 1) {
+						std::cout << " [" << secSkillUsed << "/" << secSkillMaxUse << "]";
+					}
+					std::cout << "\n";  // ê¼­ ì¤„ë°”ê¿ˆ
+				}
+				std::cout.flush();  // ì¶œë ¥ ë²„í¼ ë¹„ìš°ê¸°
+
+				TypeWriter("ì‚¬ìš©í•  ìŠ¤í‚¬ ë²ˆí˜¸ë¥¼ ì…ë ¥í•˜ì„¸ìš”: \n", 5);
+				TypeWriter("> ", 5);
+				std::cout.flush();  // í•„ìš”í•˜ë©´ í”ŒëŸ¬ì‹œ
+
+				int skillChoice;
+				std::cin >> skillChoice;
+				skillChoice -= 1;
+
+				if (skillChoice < 0 || skillChoice >= (int)skills.size()) {
+					TypeWriter("\nì˜ëª»ëœ ìŠ¤í‚¬ ë²ˆí˜¸ì…ë‹ˆë‹¤.\n", 5);
+					continue;
+				}
+
+				if (skillChoice == 1 && secSkillUsed <= 0) {
+					TypeWriter("\nì´ ìŠ¤í‚¬ì€ ë” ì´ìƒ ì‚¬ìš©í•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤.\n", 5);
+					continue;
+				}
+
+				bool skillFailed = false;
+				bool criticalHit = false;
+				int Damage = 0;
+				int ghostDef = ghost.GetDef();
+
+				if (JobNumber == 3)
+				{
+					int randVal = std::rand() % 100;
+
+					if (randVal < 15)
+					{
+						skillFailed = true;
+						Damage = 0;
+						TypeWriter("\n[ë¯¸ìˆ™í•¨]\n ìŠ¤í‚¬ ì‚¬ìš©ì— ì‹¤íŒ¨í–ˆìŠµë‹ˆë‹¤!\n", 5);
+					}
+					else
+					{
+						randVal = std::rand() % 100;
+						if (randVal < 5)
+						{
+							criticalHit = true;
+							Damage += 999;
+							TypeWriter("\n[ì‹ ì˜ ê°€í˜¸]\n ì—„ì²­ë‚œ í”¼í•´ë¥¼ ì…í˜”ìŠµë‹ˆë‹¤!\n", 5);
+						}
+					}
+				}
+
+				if (!skillFailed)
+				{
+					switch (skillChoice)
+					{
+					case 0:
+					{
+						const std::string& skillName = player.GetSkillSet()[0].name;
+						Damage += player.Attack(0, ghostDef, 1.0);
+						TypeWriter("\n" + skillName + "ì„ ì‚¬ìš©í–ˆìŠµë‹ˆë‹¤! (" + std::to_string(Damage) + " ë°ë¯¸ì§€)\n", 5);
+						break;
+					}
+					case 1:
+					{
+						const std::string& skillName = player.GetSkillSet()[1].name;
+						Damage += player.Attack(0, ghostDef, 0.8);
+						TypeWriter("\n" + skillName + "ì„ ì‚¬ìš©í–ˆìŠµë‹ˆë‹¤! (" + std::to_string(Damage) + " ë°ë¯¸ì§€)\n", 5);
+					}
+						if (JobNumber == 1)
+						{
+							isghostCursedTurns = 3;
+							TypeWriter("ê·€ì‹ ì´ ì‹ ë ¹ë‹˜ì˜ ì‹ ì„±í•œ í˜ì— ì˜í•´ 3í„´ ë™ì•ˆ í”¼í•´ë¥¼ ì…ìŠµë‹ˆë‹¤!\n", 5);
+						}
+						else if (JobNumber == 2)
+						{
+							isghostFearedTurns = 1;
+							TypeWriter("ê·€ì‹ ì´ ë´‰ì¸ë˜ì–´ 1í„´ ë™ì•ˆ í–‰ë™í•˜ì§€ ëª»í•©ë‹ˆë‹¤!\n", 5);
+						}
+						else if (JobNumber == 3)
+						{
+							int healAmount = Damage / 2;
+							int newHp = player.GetHp() + healAmount;
+							if (newHp > player.GetMaxHp()) newHp = player.GetMaxHp();
+							player.SetHp(newHp);
+							TypeWriter("ì²´ë ¥ì„ " + std::to_string(healAmount) + " íšŒë³µí–ˆìŠµë‹ˆë‹¤!\n", 5);
+						}
+						secSkillUsed--;
+						break;
+
+					default:
+						TypeWriter("\ní•´ë‹¹ ìŠ¤í‚¬ì€ ì•„ì§ êµ¬í˜„ë˜ì§€ ì•Šì•˜ìŠµë‹ˆë‹¤.\n", 5);
+						break;
+					}
+				}
+
+				tempGhostHp -= Damage;
+				if (tempGhostHp < 0) tempGhostHp = 0;
+
+				totalExp += Damage;
+				
+				attacksLeft--;
+			}
+			else if (choice == 2)
+			{
+				std::cout << "\n[ì•„ì´í…œ ëª©ë¡]\n";
+				Inventory& inv = player.GetInventory();
+				inv.ShowInventory();
+
+				while (true) 
+				{
+					TypeWriter("\në©”ë‰´ë¡œ ëŒì•„ê°€ì‹œë ¤ë©´ 0\n", 10);
+					TypeWriter("\nì‚¬ìš©í•  ì•„ì´í…œ ë²ˆí˜¸ë¥¼ ì…ë ¥í•˜ì„¸ìš”: ", 10);
+					TypeWriter("> ", 10);
+					int itemNum = 0;
+					std::cin >> itemNum;
+					std::cin.ignore();
+
+					if (itemNum == 0) continue;
+
+					if (itemNum < 1 || itemNum >(int)inv.items.size()) {
+						TypeWriter("ì˜ëª»ëœ ë²ˆí˜¸ì…ë‹ˆë‹¤.\n", 20);
+						continue;
+					}
+
+					Item& selected = inv.items[itemNum - 1];
+
+					if (selected.type != ItemType::Consumable) {
+						TypeWriter("ì´ ì•„ì´í…œì€ ì‚¬ìš©í•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤.\n", 20);
+						continue;
+					}
+
+					bool used = player.UseItem(selected.id);
+
+					if (used) {
+						TypeWriter("ì•„ì´í…œì„ ì‚¬ìš©í–ˆìŠµë‹ˆë‹¤.\n", 20);
+					}
+					else {
+						TypeWriter("ì•„ì´í…œ ì‚¬ìš©ì— ì‹¤íŒ¨í–ˆìŠµë‹ˆë‹¤.\n", 20);
+					}
+
+					break;
+				}
+
+			}
+			else
+			{
+				TypeWriter("\nì˜ëª»ëœ ì„ íƒì…ë‹ˆë‹¤. ë‹¤ì‹œ ì…ë ¥í•˜ì„¸ìš”.\n", 5);
+				continue;
+			}
 		}
 
-		
-		TypeWriter("1. °ø°İÇÑ´Ù\n", 5);
-		TypeWriter("2. ¾ÆÀÌÅÛ »ç¿ë\n", 5);
-		TypeWriter(">", 5);
+		// ì €ì£¼ í”¼í•´ ì²˜ë¦¬ (3í„´ ì§€ì†)
+		if (isCursedTurns > 0) {
+			int curseDamage = player.GetAtk() / 10;  // í”Œë ˆì´ì–´ ê³µê²©ë ¥ì˜ 10%
+			if (curseDamage < 1) curseDamage = 1;
 
-		int choice = 0;
-		std::cin >> choice;
+			player.SetHp(player.GetHp() - curseDamage);
+			TypeWriter("\nì €ì£¼ í”¼í•´ë¡œ " + std::to_string(curseDamage) + "ì˜ í”¼í•´ë¥¼ ì…ì—ˆìŠµë‹ˆë‹¤!\n", 5);
+			isCursedTurns--;
+		}
 
-		switch (choice) 
+		// ê·€ì‹  ì €ì£¼ í”¼í•´ ì²˜ë¦¬
+		if (isghostCursedTurns > 0)
 		{
-		case 1:
-			std::cout << "½ºÅ³\n";
-			const std::vector<Skill>& skills = player.GetSkillSet();
-			for (size_t i = 0; i < skills.size(); ++i) {
-				std::cout << i + 1 << ". " << skills[i].name << "\n";
+			int curseDamage = player.GetAtk() / 10;
+			if (curseDamage < 1) curseDamage = 1;
+
+			tempGhostHp -= curseDamage;
+			if (tempGhostHp < 0) tempGhostHp = 0;
+
+			TypeWriter("\nê·€ì‹ ì´ ì €ì£¼ë¡œ ì¸í•´ " + std::to_string(curseDamage) + "ì˜ í”¼í•´ë¥¼ ì…ì—ˆìŠµë‹ˆë‹¤!\n", 5);
+			isghostCursedTurns--;
+	
+		}
+
+		int DamageTaken = 0;
+		int playerDef = player.GetTotalDef();
+
+		if (isghostFearedTurns > 0)
+		{
+			TypeWriter("\nê·€ì‹ ì€ ë´‰ì¸ë˜ì–´ ì•„ë¬´ í–‰ë™ë„ í•˜ì§€ ëª»í–ˆìŠµë‹ˆë‹¤!\n", 5);
+			isghostFearedTurns--;
+		}
+		else
+		{
+			DamageTaken = ghost.Attack(JobNumber, playerDef);
+
+			TypeWriter("\nê·€ì‹ ì˜ ê³µê²©! ë‹¹ì‹ ì€ " + std::to_string(DamageTaken) + "ì˜ í”¼í•´ë¥¼ ì…ì—ˆìŠµë‹ˆë‹¤!\n", 5);
+
+			// ê·€ì‹  ê³µê²© í›„ í™•ë¥ ë¡œ í”Œë ˆì´ì–´ ìƒíƒœ ì´ìƒ ì ìš©
+			int curseChance = std::rand() % 100;
+			int fearChance = std::rand() % 100;
+
+			if (fearChance < 10 && isFearedTurns == 0)
+			{
+				isFearedTurns = 1;
+				TypeWriter("\nê·€ì‹ ì˜ ê³µí¬ ê³µê²©! ë‹¹ì‹ ì€ 1í„´ ë™ì•ˆ í–‰ë™í•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤!\n", 5);
 			}
 
-			TypeWriter("»ç¿ëÇÒ ½ºÅ³ ¹øÈ£¸¦ ÀÔ·ÂÇÏ¼¼¿ä.");
-			std::cout << '>\n';
-
-			int skillChoice;
-			std::cin >> skillChoice;
-			skillChoice -= 1;
-
-
-			break;
-		case 2:
-			std::cout << "\n¾ÆÀÌÅÛ\n";
-			player.GetInventory().ShowInventory();
-
-			break;
-		default:
-			TypeWriter("Àß¸øµÈ ¼±ÅÃÀÔ´Ï´Ù. ´Ù½Ã ÀÔ·ÂÇÏ¼¼¿ä.\n", 5);
-			break;
+			if (curseChance < 15 && isCursedTurns == 0)
+			{
+				isCursedTurns = 3;
+				TypeWriter("\nê·€ì‹ ì˜ ì €ì£¼! ë‹¹ì‹ ì€ 3í„´ ë™ì•ˆ í”¼í•´ë¥¼ ì…ìŠµë‹ˆë‹¤!\n", 5);
+			}
 		}
 
+		if (DamageTaken > 0)
+		{
+			int newHp = player.GetHp() - DamageTaken;
+			player.SetHp(newHp);
+		}
+
+		SleepMs(1000);
+		if (tempGhostHp <= 0) break;  // ìŠ¹ë¦¬
+		if (player.GetHp() <= 0) break;  // íŒ¨ë°°
 	}
 
-		// ÇÃ·¹ÀÌ¾î °ø°İ
+	player.SetEXP(player.GetEXP() + totalExp);
+	totalGold = (totalExp / 2);
 
-		int playerAtk = player.GetTotalAtk();
-		int ghostDef = ghost.GetDef();
-		int damageToGhost = CalculateDamage(playerAtk, ghostDef);
-		
+	if (tempGhostHp <= 0)
+	{
+		TypeWriter("\nê·€ì‹ ì„ ë¬¼ë¦¬ì³¤ìŠµë‹ˆë‹¤! ìŠ¹ë¦¬í–ˆìŠµë‹ˆë‹¤!\n", 5);  // âœ… ìŠ¹ë¦¬ ë©”ì‹œì§€
+		player.AddGold(player.GetGold() + totalGold);
+		TypeWriter("\nì´ ê²½í—˜ì¹˜ " + std::to_string(totalExp) + " íšë“í–ˆìŠµë‹ˆë‹¤!\n", 5);
+		TypeWriter("ì´ ê³¨ë“œ " + std::to_string(totalGold) + " íšë“í–ˆìŠµë‹ˆë‹¤!!\n", 5);
+		if (player.GetEXP() >= player.GetMaxEXP()) 
+		{
+			player.LevelUp();
+		}
+	}
+	else if (player.GetHp() <= 0 || (attacksLeft == 0 && tempGhostHp > 0))
+	{
+		TypeWriter("\në‹¹ì‹ ì€ ì“°ëŸ¬ì¡ŒìŠµë‹ˆë‹¤... íŒ¨ë°°í–ˆìŠµë‹ˆë‹¤.\n", 5); 
 
-		ghost.SetHp(ghost.GetHp() - damageToGhost);
+		TypeWriter("\nì´ ê²½í—˜ì¹˜ " + std::to_string(totalExp) + " íšë“í–ˆìŠµë‹ˆë‹¤!\n", 5);
+		int goldLost = player.GetGold() / 10;
+		player.SpendGold(goldLost);
+		TypeWriter("ê³¨ë“œ " + std::to_string(goldLost) + "ë¥¼ ìƒì—ˆìŠµë‹ˆë‹¤.\n", 5);
 
+		if (player.GetEXP() >= player.GetMaxEXP())
+		{
+			player.LevelUp();
+		}
+
+		int hpRestore = player.GetMaxHp() / 10;
+		if (hpRestore < 1) hpRestore = 1;  // ìµœì†Œ 1ì€ íšŒë³µ
+		player.SetHp(hpRestore);
+		TypeWriter("\në‹¹ì‹ ì€ ê°€ê¹ŒìŠ¤ë¡œ ì •ì‹ ì„ ì°¨ë¦¬ê³  ëŒì•„ì™”ìŠµë‹ˆë‹¤.", 5);
+	}
+
+	SleepMs(1000);
 }
-
