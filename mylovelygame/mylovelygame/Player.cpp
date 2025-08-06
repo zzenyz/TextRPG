@@ -120,16 +120,13 @@ void Player::InitSkills() {
 
 	if (Job == 1) {
 		skillSet.push_back({ "부적 투척", "기본 데미지" });
-		skillSet.push_back({ "강신의 춤", "중간 데미지 + 3턴 동안 지속 데미지" });
 		// 필요 시 더 추가 가능
 	}
 	else if (Job == 2) {
 		skillSet.push_back({ "지맥 붕괴", "기본 데미지" });
-		skillSet.push_back({ "풍수 봉인", "강한 데미지 + 1턴 동안 귀신 봉인" });
 	}
 	else if (Job == 3) {
 		skillSet.push_back({ "성수 투척", "기본 데미지" });
-		skillSet.push_back({ "은총의 일격", "중간 데미지 + 피해량 50% 회복" });
 	}
 }
 
@@ -138,7 +135,7 @@ int Player::Attack(int skillChoice, int ghostDef, int skillweight)
 	int currentAtk = GetAtk();
 	int Damage = 0;
 
-	Damage = (currentAtk - (ghostDef / 2)) * skillweight;
+	Damage = (currentAtk - (ghostDef / 2)) * skillweight / 100;
 
 	return Damage;
 }
@@ -157,9 +154,25 @@ void Player::LevelUp()
 	std::cout << "레벨 업! 현재 레벨: " << level << "\n";
 	std::cout << "체력, 공격력, 방어력이 증가했습니다!\n";
 
+	if (level == 3)
+	{
+		if (Job == 1) {
+			skillSet.push_back({ "강신의 춤", "약한 데미지 + 3턴 동안 지속 데미지" });
+			// 필요 시 더 추가 가능
+		}
+		else if (Job == 2) {
+			skillSet.push_back({ "풍수 봉인", "약한 데미지 + 1턴 동안 귀신 봉인" });
+		}
+		else if (Job == 3) {
+			skillSet.push_back({ "은총의 일격", "약한 데미지 + 피해량 50% 회복" });
+		}
+		TypeWriter("새로운 스킬을 배웠습니다!\n", 30);
+	}
+
+	
 	if (level == 3 || level == 6 || level == 10)
 	{
-		TypeWriter("새로운 스킬을 배웠습니다!\n", 30);
+		
 	}
 
 	if (level == 4 || level == 7 || level == 9)
@@ -179,9 +192,11 @@ bool Player::UseItem(int itemId)
 	// 아이템 효과 처리
 	switch (itemId) {
 	case 0:
-		ApplyHpBuff(10, 0);
-		TypeWriter("생명초로 체력을 회복했습니다.\n", 20);
+	{
+		int healAmount = 10; // 중괄호로 감싸서 초기화 문제 해결
+		hp += healAmount;
 		break;
+	}
 	case 1:
 		ApplyAtkBuff(10, 3);
 		TypeWriter("신묘한 힘으로 공격력이 상승했습니다.\n", 20);

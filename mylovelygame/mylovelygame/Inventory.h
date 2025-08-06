@@ -13,6 +13,7 @@ struct Inventory {
 
     int maxSlots = 5;
 
+    int GetTotalQuantity() const;
     bool AddItem(const Item& newItem);
     bool RemoveItem(int itemId, int quantity);
     void SortItems();

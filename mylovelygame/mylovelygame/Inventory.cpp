@@ -1,25 +1,34 @@
 #include "Inventory.h"
 
+int Inventory::GetTotalQuantity() const {
+    int total = 0;
+    for (const auto& item : items)
+        total += item.quantity;
+    return total;
+}
+
 // 아이템 추가
 bool Inventory::AddItem(const Item& newItem) {
-    //std::cout << "[DEBUG] AddItem 시도: " << newItem.name << " (ID: " << newItem.id << ")\n";
+    int totalCurrentQuantity = GetTotalQuantity();
 
+    // 이미 있는 아이템에 수량만 추가
     for (auto& item : items) {
         if (item.id == newItem.id) {
+            if (totalCurrentQuantity + newItem.quantity > maxSlots) {
+                return false; // 초과하면 추가 불가
+            }
             item.quantity += newItem.quantity;
-            //std::cout << "[DEBUG] 기존 아이템 수량 증가됨. 총 수량: " << item.quantity << "\n";
             return true;
         }
     }
 
-    if ((int)items.size() < maxSlots) {
-        items.push_back(newItem);
-        //std::cout << "[DEBUG] 새 아이템 추가됨. 현재 인벤토리 크기: " << items.size() << "\n";
-        return true;
+    // 새로운 아이템이면 슬롯 공간 + 수량 체크
+    if (totalCurrentQuantity + newItem.quantity > maxSlots) {
+        return false; // 초과 시 실패
     }
 
-    //std::cout << "[DEBUG] 아이템 추가 실패: 인벤토리가 가득 찼습니다.\n";
-    return false;
+    items.push_back(newItem);
+    return true;
 }
 // 아이템 제거
 bool Inventory::RemoveItem(int itemId, int quantity) {

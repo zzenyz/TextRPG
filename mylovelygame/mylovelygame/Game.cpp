@@ -179,7 +179,7 @@ void Game::ShowIntro() {
 
 	for (const auto& line : lines) {
 		TypeWriter(line, 35);
-		std::this_thread::sleep_for(std::chrono::milliseconds(300)); 
+		std::this_thread::sleep_for(std::chrono::milliseconds(300));
 	}
 
 	TypeWriter("\n--- [계속하려면 Enter] ---\n", 30);
@@ -261,17 +261,17 @@ void Game::ShowMainMenu() {
 			inv.ShowEquippedItems();
 
 			while (true) {
-				TypeWriter("\n1. 아이템 사용\n 2. 아이템 착용\n", 20);
-				TypeWriter("\n메뉴로 돌아가시려면 0", 20);
+				TypeWriter("\n1. 아이템 사용\n2. 아이템 착용\n", 20);
+				TypeWriter("\n메뉴로 돌아가시려면 0\n", 20);
 				TypeWriter("> ");
-				
+
 				int menuChoice = 0;
 				std::cin >> menuChoice;
 				std::cin.ignore();
 
 				if (menuChoice == 0) break;
 
-				if (menuChoice == 1) 
+				if (menuChoice == 1)
 				{
 					TypeWriter("\n사용할 아이템 번호를 입력하세요: \n", 20);
 					TypeWriter("> ");
@@ -420,12 +420,13 @@ void Game::ShowStoryMenu() {
 void Game::StartChapter(int chapterNumber)
 {
 	bool Wahl = false;
+	bool backToMenu = false;
+
 	switch (chapterNumber)
 	{
 	case 1:
 		chapter1.ShowIntro();
 		chapter1.Warn();
-		bool backToMenu = false;
 
 		while (!backToMenu)
 		{
@@ -442,28 +443,34 @@ void Game::StartChapter(int chapterNumber)
 				break;
 			case 1:
 				ClearScreen();
-				Wahl = minigame.TriggerminiGame();
-				//미니 게임 후 bool 형태로 전투할지말지 반환
-
-				if (Wahl == true)
-				{
-					Battle();
-				}
+				PlayMiniGameAndBattle(chapterNumber);
 				ClearScreen();
-				// 관리인 오두막 조사 함수
-				// 작은 묘실 조사 함수
-				chapter1.ExploreGrave(); 
+				chapter1.ExploreGrave();
+				if (chapter1.GetbossAwakened())
+				{
+					Ghost boss = ghost.GetBossGhost(chapterNumber);
+					bool playerWon = Battle(boss);
+
+					if (playerWon) 
+					{
+						chapter1.Outtro();
+						player.UnlockNextChapter();  // 2챕터 언락
+						if (chapter1.GetHasFoundClue())
+						{
+							player.AddKarma();
+						}
+						if (chapter1.GetHasFoundKeepsake())
+						{
+							player.AddKarma();
+						}
+					}
+					return;
+				}
 				continue;
 			case 2:
 			{
 				ClearScreen();
-				Wahl = minigame.TriggerminiGame();
-				//미니 게임 후 bool 형태로 전투할지말지 반환
-
-				if (Wahl == true)
-				{
-					Battle();
-				}
+				PlayMiniGameAndBattle(chapterNumber);
 				ClearScreen();
 				// 관리인 오두막 조사 함수
 				chapter1.ExploreHut();
@@ -471,13 +478,7 @@ void Game::StartChapter(int chapterNumber)
 			}
 			case 3:
 				ClearScreen();
-				Wahl = minigame.TriggerminiGame();
-				//미니 게임 후 bool 형태로 전투할지말지 반환
-
-				if (Wahl == true)
-				{
-					Battle();
-				}
+				PlayMiniGameAndBattle(chapterNumber);
 				ClearScreen();
 				// 관리인 오두막 조사 함수
 				// 제단 조사 함수
@@ -485,13 +486,7 @@ void Game::StartChapter(int chapterNumber)
 				continue;
 			case 4:
 				ClearScreen();
-				Wahl = minigame.TriggerminiGame();
-				//미니 게임 후 bool 형태로 전투할지말지 반환
-
-				if (Wahl == true)
-				{
-					Battle();
-				}
+				PlayMiniGameAndBattle(chapterNumber);
 				ClearScreen();
 				// 관리인 오두막 조사 함수
 				// 마당 조사 함수
@@ -511,11 +506,288 @@ void Game::StartChapter(int chapterNumber)
 			player.AddKeepsake("부서진 옥 팔찌 - 옥 팔찌 조각에서 희미하게 느껴지는 원한과 저주의 기운.");
 		}
 		break;
-		
+
+	case 2:
+	{
+		chapter2.ShowIntro();
+		chapter2.Warn();
+
+		while (!backToMenu)
+		{
+			chapter2.ExploreMap();
+			int choice;
+			std::cin >> choice;
+			std::cin.ignore();
+
+			switch (choice) {
+			case 0:
+				std::cout << "\n메인 메뉴로 돌아갑니다...\n";
+				backToMenu = true;
+				break;
+
+			case 1:
+				ClearScreen();
+				PlayMiniGameAndBattle(chapterNumber);
+				ClearScreen();
+				chapter2.ExploreCell();
+				continue;
+
+			case 2:
+				ClearScreen();
+				PlayMiniGameAndBattle(chapterNumber);
+				ClearScreen();
+				chapter2.ExploreTortureRoom();
+				if (chapter1.GetbossAwakened())
+				{
+					Ghost boss = ghost.GetBossGhost(chapterNumber);
+					Battle(boss);
+					if (chapter2.GetHasFoundClue1())
+					{
+						player.AddKarma();
+					}
+
+					if (chapter2.GetHasFoundClue2())
+					{
+						player.AddKarma();
+					}
+
+					if (chapter2.GetHasFoundKeepsake())
+					{
+						player.AddKarma();
+					}
+					return;
+				}
+				continue;
+
+			case 3:
+				ClearScreen();
+				PlayMiniGameAndBattle(chapterNumber);
+				ClearScreen();
+				chapter2.ExploreWardenOffice();
+				continue;
+
+			case 4:
+				ClearScreen();
+				PlayMiniGameAndBattle(chapterNumber);
+				ClearScreen();
+				chapter2.ExploreWatchtower();
+				continue;
+
+			default:
+				std::cout << "\n잘못된 입력입니다. 다시 선택하세요.\n";
+				continue;
+			}
+
+		}
+
+		if (chapter2.GetHasFoundClue1())
+		{
+			player.AddClue("책상 위 문서 조각 - '죄수번호 2719가 조건에 부합한다...'");
+		}
+
+		if (chapter2.GetHasFoundClue2())
+		{
+			player.AddClue("감시일지 - '매일 같은 꿈을 꾸다 갑자기 사라진 2179, 자세한 내용은 알 수 없었다...''");
+		}
+
+		if (chapter2.GetHasFoundKeepsake())
+		{
+			player.AddKeepsake("녹슨 수갑 - 벽 틈에 감춰진 수갑. 말라붙은 피가 굳어 있다.");
+		}
+		break;
+	}
+
+	case 3:
+	{
+		chapter3.ShowIntro();
+
+		while (!backToMenu)
+		{
+			chapter3.ExploreMap();
+			int choice;
+			std::cin >> choice;
+			std::cin.ignore();
+
+			switch (choice) {
+			case 0:
+				std::cout << "\n메인 메뉴로 돌아갑니다...\n";
+				backToMenu = true;
+				break;
+
+			case 1:
+				ClearScreen();
+				PlayMiniGameAndBattle(chapterNumber);
+				ClearScreen();
+				chapter3.ExploreStorage();
+				continue;
+
+			case 2:
+				ClearScreen();
+				PlayMiniGameAndBattle(chapterNumber);
+				ClearScreen();
+				chapter3.ExploreBoat();
+				continue;
+
+			case 3:
+				ClearScreen();
+				PlayMiniGameAndBattle(chapterNumber);
+				ClearScreen();
+				chapter3.ExploreDockEdge();
+				if (chapter3.GetbossAwakened())
+				{
+					Ghost boss = ghost.GetBossGhost(chapterNumber);
+					Battle(boss);
+
+					
+
+					chapter3.Outtro();
+					return;
+				}
+				continue;
+
+			case 4:
+				ClearScreen();
+				PlayMiniGameAndBattle(chapterNumber);
+				ClearScreen();
+				chapter3.ExploreLighthouse();
+				continue;
+
+			default:
+				std::cout << "\n잘못된 입력입니다. 다시 선택하세요.\n";
+				continue;
+			}
+		}
+
+		// 회수된 단서와 유품 정리
+		if (chapter3.GetHasFoundClue())
+		{
+			player.AddClue("등대지기 메모 - '그가 왜 그녀를 돕는지 이해할 수 없다...'");
+		}
+
+		if (chapter3.GetHasFoundKeepsake())
+		{
+			player.AddKeepsake("깨진 조타 손잡이 - 피가 스며든 고장난 조타 장치.");
+		}
+
+		if (chapter3.GetHasFoundKeepsake4())
+		{
+			player.AddKeepsake("어린아이의 단추 - 오래된 상자에서 발견한 작은 흔적.");
+		}
+
+		break;
+
+	}
+	case 4:
+	{
+		chapter4.ShowIntro();
+
+		while (!backToMenu)
+		{
+			chapter4.ExploreMap();
+			int choice;
+			std::cin >> choice;
+			std::cin.ignore();
+
+			switch (choice) {
+			case 0:
+				std::cout << "\n메인 메뉴로 돌아갑니다...\n";
+				backToMenu = true;
+				break;
+
+			case 1:
+				ClearScreen();
+				PlayMiniGameAndBattle(chapterNumber);
+				ClearScreen();
+				chapter4.ExploreStaffRoom();
+				continue;
+
+			case 2:
+				ClearScreen();
+				PlayMiniGameAndBattle(chapterNumber);
+				ClearScreen();
+				chapter4.ExploreClassroom();
+				continue;
+
+			case 3:
+				ClearScreen();
+				PlayMiniGameAndBattle(chapterNumber);
+				ClearScreen();
+				chapter4.ExploreMusicRoom();
+
+				if (chapter4.GetbossAwakened())
+				{
+					Ghost boss = ghost.GetBossGhost(chapterNumber);
+					Battle(boss);
+
+					if (chapter3.GetHasFoundKeepsake4())
+					{
+						player.AddKarma();
+					}
+					if (chapter4.GetHasFoundClue1())
+					{
+						player.AddKarma();
+					}
+					if (chapter4.GetHasFoundClue2())
+					{
+						player.AddKarma();
+					}
+
+					chapter4.Outtro();
+					return;
+				}
+				continue;
+
+			case 4:
+				ClearScreen();
+				PlayMiniGameAndBattle(chapterNumber);
+				ClearScreen();
+				chapter4.ExploreInfirmary();
+				continue;
+
+			default:
+				std::cout << "\n잘못된 입력입니다. 다시 선택하세요.\n";
+				continue;
+			}
+		}
+
+		// 회수된 단서와 유품 정리
+		if (chapter4.GetHasFoundClue1())
+		{
+			player.AddClue("상담 기록 - 예림이 어머니가 자주 찾아왔다는 메모.");
+		}
+
+		if (chapter4.GetHasFoundClue2())
+		{
+			player.AddKeepsake("어린아이의 일기장 - 붉은 옷을 입은 여자를 목격한 기록.");
+		}
+
+		if (chapter4.GetHasFoundClue5())
+		{
+			player.AddKeepsake("작은 수첩 - 예림 어머니에게 무슨일이 생길 것만 같아...");
+		}
+
+		break;
+	}
 	}
 }
 
-void Game::Battle()
+void Game::PlayMiniGameAndBattle(int chapterNumber)
+{
+	if (minigame.TriggerminiGame()) {
+		Ghost enemy = Ghost::GetRandomGhost(chapterNumber);
+		GhostRank rank = enemy.GetRank();
+
+		// 디버깅 출력
+		std::cout << "[DEBUG] GhostRank enum value: " << static_cast<int>(rank) << std::endl;
+		SleepMs(2000);
+
+		ShowGhost(static_cast<int>(rank));
+		Battle(enemy);
+	}
+}
+
+
+bool Game::Battle(const Ghost& enemy)
 {
 	int JobNumber = player.GettJob();
 	int maxAttacks = 10;        // 최대 공격 횟수 제한
@@ -533,7 +805,7 @@ void Game::Battle()
 	int secSkillMaxUse = 2;
 	int secSkillUsed = 2;
 
-	ghost = Ghost::GetRandomGhost();
+	ghost = enemy;
 	int tempGhostHp = ghost.GetHp();
 
 	ClearScreen();
@@ -642,36 +914,36 @@ void Game::Battle()
 					case 0:
 					{
 						const std::string& skillName = player.GetSkillSet()[0].name;
-						Damage += player.Attack(0, ghostDef, 1.0);
+						Damage += player.Attack(0, ghostDef, 100);
 						TypeWriter("\n" + skillName + "을 사용했습니다! (" + std::to_string(Damage) + " 데미지)\n", 5);
 						break;
 					}
 					case 1:
 					{
 						const std::string& skillName = player.GetSkillSet()[1].name;
-						Damage += player.Attack(0, ghostDef, 0.8);
+						Damage += player.Attack(0, ghostDef, 80);
 						TypeWriter("\n" + skillName + "을 사용했습니다! (" + std::to_string(Damage) + " 데미지)\n", 5);
 					}
-						if (JobNumber == 1)
-						{
-							isghostCursedTurns = 3;
-							TypeWriter("귀신이 신령님의 신성한 힘에 의해 3턴 동안 피해를 입습니다!\n", 5);
-						}
-						else if (JobNumber == 2)
-						{
-							isghostFearedTurns = 1;
-							TypeWriter("귀신이 봉인되어 1턴 동안 행동하지 못합니다!\n", 5);
-						}
-						else if (JobNumber == 3)
-						{
-							int healAmount = Damage / 2;
-							int newHp = player.GetHp() + healAmount;
-							if (newHp > player.GetMaxHp()) newHp = player.GetMaxHp();
-							player.SetHp(newHp);
-							TypeWriter("체력을 " + std::to_string(healAmount) + " 회복했습니다!\n", 5);
-						}
-						secSkillUsed--;
-						break;
+					if (JobNumber == 1)
+					{
+						isghostCursedTurns = 3;
+						TypeWriter("귀신이 신령님의 신성한 힘에 의해 3턴 동안 피해를 입습니다!\n", 5);
+					}
+					else if (JobNumber == 2)
+					{
+						isghostFearedTurns = 1;
+						TypeWriter("귀신이 봉인되어 1턴 동안 행동하지 못합니다!\n", 5);
+					}
+					else if (JobNumber == 3)
+					{
+						int healAmount = Damage / 2;
+						int newHp = player.GetHp() + healAmount;
+						if (newHp > player.GetMaxHp()) newHp = player.GetMaxHp();
+						player.SetHp(newHp);
+						TypeWriter("체력을 " + std::to_string(healAmount) + " 회복했습니다!\n", 5);
+					}
+					secSkillUsed--;
+					break;
 
 					default:
 						TypeWriter("\n해당 스킬은 아직 구현되지 않았습니다.\n", 5);
@@ -683,7 +955,7 @@ void Game::Battle()
 				if (tempGhostHp < 0) tempGhostHp = 0;
 
 				totalExp += Damage;
-				
+
 				attacksLeft--;
 			}
 			else if (choice == 2)
@@ -692,7 +964,7 @@ void Game::Battle()
 				Inventory& inv = player.GetInventory();
 				inv.ShowInventory();
 
-				while (true) 
+				while (true)
 				{
 					TypeWriter("\n메뉴로 돌아가시려면 0\n", 10);
 					TypeWriter("\n사용할 아이템 번호를 입력하세요: ", 10);
@@ -756,7 +1028,7 @@ void Game::Battle()
 
 			TypeWriter("\n귀신이 저주로 인해 " + std::to_string(curseDamage) + "의 피해를 입었습니다!\n", 5);
 			isghostCursedTurns--;
-	
+
 		}
 
 		int DamageTaken = 0;
@@ -806,18 +1078,20 @@ void Game::Battle()
 
 	if (tempGhostHp <= 0)
 	{
-		TypeWriter("\n귀신을 물리쳤습니다! 승리했습니다!\n", 5);  // ✅ 승리 메시지
-		player.AddGold(player.GetGold() + totalGold);
+		TypeWriter("\n귀신을 물리쳤습니다! 승리했습니다!\n", 5);  
+		player.AddGold(totalGold); 
+
 		TypeWriter("\n총 경험치 " + std::to_string(totalExp) + " 획득했습니다!\n", 5);
 		TypeWriter("총 골드 " + std::to_string(totalGold) + " 획득했습니다!!\n", 5);
-		if (player.GetEXP() >= player.GetMaxEXP()) 
+		if (player.GetEXP() >= player.GetMaxEXP())
 		{
 			player.LevelUp();
 		}
+		return true;
 	}
 	else if (player.GetHp() <= 0 || (attacksLeft == 0 && tempGhostHp > 0))
 	{
-		TypeWriter("\n당신은 쓰러졌습니다... 패배했습니다.\n", 5); 
+		TypeWriter("\n당신은 쓰러졌습니다... 패배했습니다.\n", 5);
 
 		TypeWriter("\n총 경험치 " + std::to_string(totalExp) + " 획득했습니다!\n", 5);
 		int goldLost = player.GetGold() / 10;
@@ -833,6 +1107,7 @@ void Game::Battle()
 		if (hpRestore < 1) hpRestore = 1;  // 최소 1은 회복
 		player.SetHp(hpRestore);
 		TypeWriter("\n당신은 가까스로 정신을 차리고 돌아왔습니다.", 5);
+		return false;
 	}
 
 	SleepMs(1000);

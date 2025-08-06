@@ -11,6 +11,9 @@
 #include "Inventory.h"
 #include "Shop.h"
 #include "Chapter1.h"
+#include "Chapter2.h"
+#include "Chapter3.h"
+#include "Chapter4.h"
 #include "miniGame.h"
 #include "Ghost.h"
 
@@ -21,17 +24,19 @@ public:
 private:
     Player player;
     Chapter1 chapter1;
+    Chapter2 chapter2;
+    Chapter3 chapter3;
+    Chapter4 chapter4;
     miniGame minigame;
     Ghost ghost;
-
-       // Map currentMap;  // 필요하면 활성화
 
     void ShowIntro();
     void ShowPlayerStatus();
     void ShowMainMenu();
     void ShowStoryMenu();
     void StartChapter(int chapterNumber);
-    void Battle();
+    void PlayMiniGameAndBattle(int chapterNumber);
+    bool Battle(const Ghost& enemy);
     std::string GetStatusString(bool isFearful, bool isCursed) {
         std::string status;
 
@@ -59,3 +64,4 @@ private:
     bool HasSavedGame();*/
 
 };
+

@@ -101,77 +101,79 @@ void Chapter1::ExploreMap()
 
 void Chapter1::ExploreGrave() {
     int choice;
-    bool bossAwakened = false;
     while (true) {
         ClearScreen();
-        std::vector<std::string> intro = {
-            "[작은 묘실]\n\n",
-            "좁고 어두운 공간에 촛불 몇 개가 깜빡인다.\n",
-            "벽에는 낙서 같은 글씨들이 새겨져 있다.\n\n",
-            "조사 가능한 곳:\n",
-            "  1. 봉인된 관\n",
-            "  2. 묘실 한편의 벽면\n",
-            "  3. 바닥의 흙더미\n",
-            "\n메뉴로 돌아가시려면 0\n",
-            "조사할 장소를 선택하세요: \n",
-            "> "
-        };
-        for (const auto& line : intro) TypeWriter(line, 10);
+
+        // 인트로 출력
+        TypeWriter("[작은 묘실]\n\n", 10);
+        TypeWriter("좁고 어두운 공간에 촛불 몇 개가 깜빡인다.\n", 10);
+        TypeWriter("벽에는 낙서 같은 글씨들이 새겨져 있다.\n\n", 10);
+        TypeWriter("조사 가능한 곳:\n", 10);
+        TypeWriter("  1. 봉인된 관\n", 10);
+        TypeWriter("  2. 묘실 한편의 벽면\n", 10);
+        TypeWriter("  3. 바닥의 흙더미\n\n", 10);
+        TypeWriter("메뉴로 돌아가시려면 0\n", 10);
+        TypeWriter("조사할 장소를 선택하세요:\n> ", 10);
 
         std::cin >> choice;
-        system("cls");
-
-        std::vector<std::string> lines;
+        std::cin.ignore();
+        ClearScreen();
 
         switch (choice) {
         case 1:
-            lines = {
-               "[부서진 석관]\n\n",
-                bossAwakened ?
-                "이미 열려 있는 석관 안은 텅 비어 있다.\n누군가 무언가를 꺼낸 듯, 안쪽은 핏자국과 흙먼지로 가득하다.\n" :
-                "석관의 뚜껑을 밀자, 싸늘한 기운이 퍼져나온다.\n표면엔 부러진 손톱 자국이 선명히 남아 있다.\n",
-                bossAwakened ? "" : "잠들어 있던 무언가가 깨어난다...!\n전투가 시작된다!\n"
-            };
-            bossAwakened = true;
-            // 추후 전투 트리거
+            TypeWriter("[부서진 석관]\n\n", 10);
+            if (bossAwakened) {
+                TypeWriter("이미 열려 있는 석관 안은 텅 비어 있다.\n", 10);
+                TypeWriter("무언가 빠져나온 듯, 안쪽은 핏자국과 흙먼지로 가득하다.\n", 10);
+            }
+            else {
+                TypeWriter("석관의 뚜껑을 밀자, 싸늘한 기운이 퍼져나온다.\n", 10);
+                TypeWriter("표면엔 부러진 손톱 자국이 선명히 남아 있다.\n", 10);
+
+                SetConsoleColor(12); // 빨간색
+                TypeWriter("잠들어 있던 무언가가 깨어난다...!\n", 10);
+                SetConsoleColor(7); // 기본색 복구
+                TypeWriter("전투가 시작된다!\n", 10);
+
+                bossAwakened = true;
+                system("pause");
+                return; // 보스 등장 후 함수 종료
+            }
             break;
 
         case 2:
-            lines = {
-                 "[묘실 한편의 벽면]\n\n",
-                "벽에 붉은 잉크로 적힌 낙서가 희미하게 남아 있다.\n",
-                "\"파낸 자, 죗값을 치러라...\"\n",
-                "당신의 등골이 오싹해진다.\n"
-            };
+            TypeWriter("[묘실 한편의 벽면]\n\n", 10);
+            TypeWriter("벽에 붉은 잉크로 적힌 낙서가 희미하게 남아 있다.\n", 10);
+
+            SetConsoleColor(12); // 빨간색
+            TypeWriter("\"파낸 자, 죗값을 치러라...\"\n", 10);
+            SetConsoleColor(7);
+
+            TypeWriter("당신의 등골이 오싹해진다.\n", 10);
             break;
 
         case 3:
-            lines = {
-                "[바닥의 흙더미]\n\n",
-                "촉촉한 흙 아래에서 타다 남은 향과 초의 흔적이 발견된다.\n",
-                "누군가 오래전 이곳에서 은밀한 의식을 행했던 것 같다.\n",
-                "무의식적으로 당신의 손이 익숙하게 움직인다...\n",
-                "하지만 그 기억은 아직 명확히 떠오르지 않는다.\n"
-            };
+            TypeWriter("[바닥의 흙더미]\n\n", 10);
+            TypeWriter("촉촉한 흙 아래에서 타다 남은 향과 초의 흔적이 발견된다.\n", 10);
+            TypeWriter("누군가 오래전 이곳에서 은밀한 의식을 행했던 것 같다.\n", 10);
+            TypeWriter("무의식적으로 당신의 손이 익숙하게 움직인다...\n", 10);
+            TypeWriter("하지만 그 기억은 아직 명확히 떠오르지 않는다.\n", 10);
             break;
 
         case 0:
             return;
 
         default:
-            lines = { "잘못된 입력입니다.\n" };
+            TypeWriter("잘못된 입력입니다.\n", 10);
             break;
         }
 
-        for (const auto& line : lines) {
-            TypeWriter(line, 10);
-            std::this_thread::sleep_for(std::chrono::milliseconds(200));
-        }
         TypeWriter("\n", 5);
         system("pause");
         ClearScreen();
     }
 }
+
 
 void Chapter1::ExploreHut() 
 {
@@ -408,4 +410,50 @@ void Chapter1::ExploreYard()
         system("pause");
         ClearScreen();
     }
+}
+
+void Chapter1::Outtro()
+{
+    ClearScreen();
+
+    TypeWriter("형체를 잃은 원혼은 사그라들며 폐사당 바닥에 흩어진다.\n", 30);
+    TypeWriter("차가운 기운이 여전히 사방을 감싸고 있다.\n", 30);
+
+    TypeWriter("주머니 속에서 미세한 진동이 느껴진다.\n", 30);
+    TypeWriter("…옥팔찌다.\n", 40);
+    TypeWriter("붉은 기운이 천천히 번져나오고, 멀리서 맑고 쓸쓸한 종소리가 들려온다.\n", 40);
+    
+    TypeWriter("\n그 순간—\n", 50);
+    TypeWriter("어디선가 묘하게 익숙한 종소리가 들려온다.\n", 40);
+    TypeWriter("실제인지 환청인지, 분간되지 않는 맑고 낮은 음.\n", 30);
+    TypeWriter("그리고… 눈앞에 흐릿한 장면이 떠오른다.\n\n", 30);
+
+    TypeWriter("낡았지만 관리가 잘 되어 보이는 폐사당..\n"); 
+    TypeWriter("과거 이곳을 모습인걸까 ? \n");
+    TypeWriter("아래 무릎 꿇은 누군가가 울부짖는다.\n", 30);
+    TypeWriter("그리고 어두운 손이 무덤을 파헤친다.\n", 30);
+    TypeWriter("무릎 꿇은 존재가 떨리는 목소리로 울부짖는다.\n", 30);
+    TypeWriter("그 형체는 인간과 닮았지만, 그 기운은 오래된 무언가였다.\n", 30);
+    TypeWriter("“그만둬라… 금기를 어기면, 이 땅에 저주가 드리운다…”\n", 40);
+    TypeWriter("그 손은 서늘한 칼날을 꺼내 무언가를 자르기 시작한다.\n", 40);
+    TypeWriter("관리인 일지에 적힌 그 여자가, 바로 저 여자인 걸까?\n", 50);
+    TypeWriter("손가락 하나가 차갑게 땅에 떨어진다.\n\n", 30);
+
+
+    TypeWriter("\n--- [계속하려면 Enter] ---\n", 30);
+    std::cin.get();
+    ClearScreen();
+
+    ClearScreen();
+    TypeWriter("눈을 뜨니, 폐사당의 어둠 속.\n", 30);
+    TypeWriter("손끝에서 팔찌의 무게가 더욱 실감난다.\n", 30);
+    TypeWriter("기억은 흐릿하지만, 이 이상한 끈은 쉽게 끊어지지 않을 것 같다.\n\n", 30);
+
+    TypeWriter("조용한 폐사당에 울려 퍼지는 종소리는,\n", 30);
+    TypeWriter("아직 끝나지 않은 이야기를 속삭이고 있다...\n\n", 30);
+
+
+    TypeWriter("\n--- [계속하려면 Enter] ---\n", 30);
+    std::cin.get();
+    ClearScreen();
 }

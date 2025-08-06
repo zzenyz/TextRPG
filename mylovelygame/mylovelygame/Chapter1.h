@@ -1,7 +1,6 @@
 #pragma once
 #include <iostream>
 
-#include "Map.h"
 #include "Item.h"
 #include "GameUtils.h"
 
@@ -11,6 +10,7 @@ class Chapter1
 private:
     bool clueFound = false;
     bool KeepsakeFound = false;
+    bool bossAwakened = false;
    
 public:
     
@@ -28,6 +28,8 @@ public:
     }
     bool GetHasFoundKeepsake() const { return KeepsakeFound; }
 
+    bool GetbossAwakened() const { return bossAwakened; }
+
     void ShowIntro();
     void ExploreMap();
     void ExploreGrave();
@@ -35,6 +37,7 @@ public:
     void ExploreAltar();
     void ExploreYard();
     void Warn();
+    void Outtro();
 
 };
 

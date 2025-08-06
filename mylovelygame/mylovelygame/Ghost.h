@@ -36,8 +36,10 @@ public:
 
     bool IsDead() const { return hp <= 0; }
 
-    static Ghost GetRandomGhost();
+    static Ghost GetRandomGhost(int chapter);
 
     int Attack(int JobNumber, int playerDef);
+
+    Ghost GetBossGhost(int chapter);
 
 };

@@ -98,7 +98,7 @@ public:
 	void SetMaxEXP(int newMaxEXP) { MaxEXP = newMaxEXP; }
 
 	int GetKarma() const { return karma; }
-	void AddKarma(int amount) { karma += amount; }
+	void AddKarma() { karma += 1; }
 
 	int GetUnlockedChapter() const { return unlockedChapter; }
 	void UnlockNextChapter() { ++unlockedChapter; }
@@ -178,8 +178,16 @@ public:
 	}
 	void ApplyHpBuff(int amount, int turns)
 	{
-		currentBuff.hpBoost = (hp * amount) / 100;
+		currentBuff.hpBoost = (maxHp * amount) / 100;
 		currentBuff.hpBuffTurns = turns;
+	}
+
+	// 즉시 체력 회복 함수 추가
+	void HealHp(int amount)
+	{
+		hp += amount;
+		if (hp > maxHp)
+			hp = maxHp;
 	}
 	void UpdateBuff(Buff& buff) {
 		if (buff.atkBuffTurns > 0) {
