@@ -10,6 +10,10 @@ bool miniGame::TriggerminiGame()
 		TypeWriter("현실이 일그러지고, 당신의 시야가 뒤틀립니다...\n\n", 50);
 		TypeWriter("이상한 힘에 끌려, 낯선 공간으로 떨어졌습니다.\n", 50);
 
+		TypeWriter("\n--- [Enter를 누르면 시작됩니다...] ---\n", 30);
+		std::cin.get();
+		ClearScreen();
+
 		// 미로 크기 조정 가능
 		miniGame minigame(21);
 		minigame.Run();

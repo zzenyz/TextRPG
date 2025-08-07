@@ -33,6 +33,48 @@ bool Player::Save(std::ofstream& ofs) const {
 		ofs.write(item.c_str(), item.size() + 1);
 	}
 
+	// --- Inventory items 저장 ---
+	size_t invItemCount = inventory.items.size();
+	ofs.write(reinterpret_cast<const char*>(&invItemCount), sizeof(invItemCount));
+	for (const auto& itemPtr : inventory.items) {
+		if (itemPtr) {
+			ofs.write(reinterpret_cast<const char*>(&itemPtr->id), sizeof(itemPtr->id));
+			ofs.write(reinterpret_cast<const char*>(&itemPtr->quantity), sizeof(itemPtr->quantity));
+			// 필요하다면 atkBonus, defBonus, hpBonus 등도 저장 가능
+		}
+		else {
+			int invalidId = -1;
+			int zeroQty = 0;
+			ofs.write(reinterpret_cast<const char*>(&invalidId), sizeof(invalidId));
+			ofs.write(reinterpret_cast<const char*>(&zeroQty), sizeof(zeroQty));
+		}
+	}
+
+	// --- Equipped items 저장 ---
+	size_t equippedCount = inventory.equippedItems.size();
+	ofs.write(reinterpret_cast<const char*>(&equippedCount), sizeof(equippedCount));
+	for (const auto& eqItemPtr : inventory.equippedItems) {
+		if (eqItemPtr) {
+			ofs.write(reinterpret_cast<const char*>(&eqItemPtr->id), sizeof(eqItemPtr->id));
+			ofs.write(reinterpret_cast<const char*>(&eqItemPtr->quantity), sizeof(eqItemPtr->quantity));
+			// 필요하다면 atkBonus, defBonus, hpBonus 저장 가능
+		}
+		else {
+			int invalidId = -1;
+			int zeroQty = 0;
+			ofs.write(reinterpret_cast<const char*>(&invalidId), sizeof(invalidId));
+			ofs.write(reinterpret_cast<const char*>(&zeroQty), sizeof(zeroQty));
+		}
+	}
+
+	// --- Buff 저장 (필요시) ---
+	ofs.write(reinterpret_cast<const char*>(&currentBuff.atkBoost), sizeof(currentBuff.atkBoost));
+	ofs.write(reinterpret_cast<const char*>(&currentBuff.defBoost), sizeof(currentBuff.defBoost));
+	ofs.write(reinterpret_cast<const char*>(&currentBuff.hpBoost), sizeof(currentBuff.hpBoost));
+	ofs.write(reinterpret_cast<const char*>(&currentBuff.atkBuffTurns), sizeof(currentBuff.atkBuffTurns));
+	ofs.write(reinterpret_cast<const char*>(&currentBuff.defBuffTurns), sizeof(currentBuff.defBuffTurns));
+	ofs.write(reinterpret_cast<const char*>(&currentBuff.hpBuffTurns), sizeof(currentBuff.hpBuffTurns));
+
 	return !ofs.fail();
 }
 
@@ -73,6 +115,54 @@ bool Player::Load(std::ifstream& ifs) {
 		std::getline(ifs, item, '\0');
 		keepsakes.push_back(item);
 	}
+
+	// --- Inventory items 복원 ---
+	size_t invItemCount = 0;
+	ifs.read(reinterpret_cast<char*>(&invItemCount), sizeof(invItemCount));
+	inventory.items.clear();
+	for (size_t i = 0; i < invItemCount; ++i) {
+		int id = 0;
+		int qty = 0;
+		ifs.read(reinterpret_cast<char*>(&id), sizeof(id));
+		ifs.read(reinterpret_cast<char*>(&qty), sizeof(qty));
+
+		if (id == -1 || qty == 0) {
+			inventory.items.push_back(nullptr);
+		}
+		else {
+			// 아이템 ID에 맞는 아이템 정보를 가져와 quantity만 덮어쓰기 필요
+			// 여기선 간단히 새 Item 생성, 실제론 아이템 테이블에서 복원하는 게 좋음
+			auto newItem = std::make_shared<Item>(id, "", ItemType::Consumable, qty, 0);
+			inventory.items.push_back(newItem);
+		}
+	}
+
+	// --- Equipped items 복원 ---
+	size_t equippedCount = 0;
+	ifs.read(reinterpret_cast<char*>(&equippedCount), sizeof(equippedCount));
+	inventory.equippedItems.clear();
+	for (size_t i = 0; i < equippedCount; ++i) {
+		int id = 0;
+		int qty = 0;
+		ifs.read(reinterpret_cast<char*>(&id), sizeof(id));
+		ifs.read(reinterpret_cast<char*>(&qty), sizeof(qty));
+
+		if (id == -1 || qty == 0) {
+			inventory.equippedItems.push_back(nullptr);
+		}
+		else {
+			auto newEqItem = std::make_shared<Item>(id, "", ItemType::Consumable, qty, 0);
+			inventory.equippedItems.push_back(newEqItem);
+		}
+	}
+
+	// --- Buff 복원 ---
+	ifs.read(reinterpret_cast<char*>(&currentBuff.atkBoost), sizeof(currentBuff.atkBoost));
+	ifs.read(reinterpret_cast<char*>(&currentBuff.defBoost), sizeof(currentBuff.defBoost));
+	ifs.read(reinterpret_cast<char*>(&currentBuff.hpBoost), sizeof(currentBuff.hpBoost));
+	ifs.read(reinterpret_cast<char*>(&currentBuff.atkBuffTurns), sizeof(currentBuff.atkBuffTurns));
+	ifs.read(reinterpret_cast<char*>(&currentBuff.defBuffTurns), sizeof(currentBuff.defBuffTurns));
+	ifs.read(reinterpret_cast<char*>(&currentBuff.hpBuffTurns), sizeof(currentBuff.hpBuffTurns));
 
 	// 직업에 맞는 스킬 자동 재설정
 	InitSkills();
@@ -132,7 +222,7 @@ void Player::InitSkills() {
 
 int Player::Attack(int skillChoice, int ghostDef, int skillweight)
 {
-	int currentAtk = GetAtk();
+	int currentAtk = GetTotalAtk();
 	int Damage = 0;
 
 	Damage = (currentAtk - (ghostDef / 2)) * skillweight / 100;
@@ -142,7 +232,7 @@ int Player::Attack(int skillChoice, int ghostDef, int skillweight)
 
 void Player::LevelUp()
 {
-	EXP = 0;
+	EXP -= MaxEXP;
 	MaxEXP = static_cast<int>(MaxEXP * 1.35); // 최대 경험치 35% 증가
 	level++;
 
@@ -183,18 +273,16 @@ void Player::LevelUp()
 	}
 }
 
-// Player 클래스 내부
 bool Player::UseItem(int itemId)
 {
-	// 인벤토리 참조
 	Inventory& inv = this->inventory;
 
-	// 아이템 효과 처리
 	switch (itemId) {
 	case 0:
 	{
-		int healAmount = 10; // 중괄호로 감싸서 초기화 문제 해결
+		int healAmount = 10;
 		hp += healAmount;
+		TypeWriter("생명초를 사용해 체력을 회복했습니다.\n", 20);
 		break;
 	}
 	case 1:
@@ -202,7 +290,6 @@ bool Player::UseItem(int itemId)
 		TypeWriter("신묘한 힘으로 공격력이 상승했습니다.\n", 20);
 		break;
 	case 2:
-
 		TypeWriter("정신안정제로 이상 상태를 회복했습니다.\n", 20);
 		break;
 	case 3:
@@ -225,24 +312,24 @@ bool Player::UseItem(int itemId)
 			break;
 		}
 
-		Item& target = inventory.equippedItems[idx];
-		if (target.id == -1) {
+		auto& targetPtr = inventory.equippedItems[idx];
+		if (!targetPtr || targetPtr->id == -1) {
 			TypeWriter("해당 슬롯에 장착된 장비가 없습니다.\n", 20);
 			break;
 		}
 
-		//// 임시 강화 효과 적용
-		//target.atkBonus += 1;
-		//target.defBonus += 1;
+		// dynamic_cast 제거, Item 클래스 멤버로 바로 접근
+		targetPtr->atkBonus += 1;
+		targetPtr->defBonus += 1;
 
-		TypeWriter("[" + target.name + "] 이(가) 강화되었습니다!\n", 20);
+		TypeWriter("[" + targetPtr->name + "] 이(가) 강화되었습니다!\n", 20);
+
 		break;
 	}
 	default:
 		return false;
 	}
 
-	// 인벤토리에서 아이템 1개 제거
 	if (!inv.RemoveItem(itemId, 1)) {
 		return false;
 	}

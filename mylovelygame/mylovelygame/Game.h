@@ -14,8 +14,11 @@
 #include "Chapter2.h"
 #include "Chapter3.h"
 #include "Chapter4.h"
+#include "Chapter5.h"
+#include "Chapter6.h"
 #include "miniGame.h"
 #include "Ghost.h"
+#include "Ending.h"
 
 class Game {
 public:
@@ -27,6 +30,7 @@ private:
     Chapter2 chapter2;
     Chapter3 chapter3;
     Chapter4 chapter4;
+    Chapter5 chapter5;
     miniGame minigame;
     Ghost ghost;
 
@@ -37,6 +41,9 @@ private:
     void StartChapter(int chapterNumber);
     void PlayMiniGameAndBattle(int chapterNumber);
     bool Battle(const Ghost& enemy);
+    void CheckChapter5Ending();
+    void CheckChapter6Ending();
+
     std::string GetStatusString(bool isFearful, bool isCursed) {
         std::string status;
 
@@ -55,13 +62,5 @@ private:
         if (damage < 1) damage = 1; // 최소 1 대미지 보장
         return damage;
     }
-
-    // 앞으로 구현할 함수들
-   /* void StartStory();
-    void ShowInventory();
-    void SaveGame();
-    bool LoadGame();
-    bool HasSavedGame();*/
-
-};
+  };
 

@@ -9,38 +9,35 @@ void ShowShopItems(Player& player)
 
 	std::vector<std::shared_ptr<Item>> availableItems;
 
+	while (true)
+	{
 
-	ClearScreen();
-	TypeWriter("=== 소비 아이템 목록 ===\n", 10);
-	int displayIndex = 1;
+		ClearScreen();
 
-	for (const auto& item : consumableItems) {
-		std::string line1 = std::to_string(displayIndex) + ". " + item->name + " - " + std::to_string(item->price) + "골드\n";
-		std::string line2 = "   " + item->description + "\n";
-		TypeWriter(line1, 10);
-		TypeWriter(line2, 10);
-
-		availableItems.push_back(item);
-		displayIndex++;
-	}
-
-	TypeWriter("\n=== 장비 아이템 목록 ===\n", 10);
-
-	for (const auto& item : equipmentItems) {
-		int idMod = (item->id - 10) % 3;
-		if (idMod == jobIndex) {
-			std::string line1 = std::to_string(displayIndex) + ". " + item->name + " - " + std::to_string(item->price) + "골드\n";
-			std::string line2 = "   " + item->description + "\n";
-			TypeWriter(line1, 10);
-			TypeWriter(line2, 10);
+		// 소비 아이템 목록
+		std::cout << "=== 소비 아이템 목록 ===\n";
+		int displayIndex = 1;
+		for (const auto& item : consumableItems) {
+			std::cout << displayIndex << ". " << item->name << " - " << item->price << "골드\n";
+			std::cout << "   " << item->description << "\n";
 
 			availableItems.push_back(item);
 			displayIndex++;
 		}
-	}
 
-	while (true)
-	{
+		// 장비 아이템 목록
+		std::cout << "\n=== 장비 아이템 목록 ===\n";
+		for (const auto& item : equipmentItems) {
+			int idMod = (item->id - 10) % 3;
+			if (idMod == jobIndex) {
+				std::cout << displayIndex << ". " << item->name << " - " << item->price << "골드\n";
+				std::cout << "   " << item->description << "\n";
+
+				availableItems.push_back(item);
+				displayIndex++;
+			}
+		}
+
 
 		TypeWriter("\n현재 골드: " + std::to_string(player.GetGold()) + " 골드\n\n", 10);
 		TypeWriter("\n메뉴로 돌아가시려면 0\n", 10);
@@ -67,8 +64,8 @@ void ShowShopItems(Player& player)
 			continue;
 		}
 
-		Item newItem = *selectedItem;
-		newItem.quantity = 1;
+		auto newItem = std::make_shared<Item>(*selectedItem);
+		newItem->quantity = 1;
 
 		bool added = player.GetInventory().AddItem(newItem);
 
@@ -81,8 +78,5 @@ void ShowShopItems(Player& player)
 			continue;
 		}
 	}
-
-
-
 }
 

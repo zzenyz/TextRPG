@@ -22,6 +22,7 @@ private:
 	int EXP = 0;
 	int MaxEXP = 100;
 	int karma;
+	int cluePoints = 0;
 	int unlockedChapter;
 	int gold = 100000;
 	std::vector<Skill> skillSet;
@@ -100,6 +101,9 @@ public:
 	int GetKarma() const { return karma; }
 	void AddKarma() { karma += 1; }
 
+	int GetcluePoints() const { return cluePoints; }
+	void AddcluePoints() { cluePoints += 1; }
+
 	int GetUnlockedChapter() const { return unlockedChapter; }
 	void UnlockNextChapter() { ++unlockedChapter; }
 
@@ -128,57 +132,70 @@ public:
 
 	void ShowMemoryStorage() const;
 
-	//전투 시 버프 효과 함수 
 	int GetTotalAtk() const
 	{
-		int equipAtkBonus = 0;
-		const Item& weapon = inventory.equippedItems[0];  // 무기 슬롯
+		int equipAtkBonusPercent = 0;
 
-		// 빈 슬롯이 아니면 공격 보너스 가져오기 (EquipmentItem이면 dynamic_cast 가능하면 더 좋음)
-		if (weapon.id != -1) {
-			equipAtkBonus = weapon.GetAtkBonus();
+		if (inventory.equippedItems.size() > 0 && inventory.equippedItems[0] != nullptr && inventory.equippedItems[0]->id != -1) {
+			equipAtkBonusPercent = inventory.equippedItems[0]->GetAtkBonus();
+			std::cout << "[디버그] 장착 무기 ID: " << inventory.equippedItems[0]->id << "\n";
+			std::cout << "[디버그] 무기 공격 보너스: " << equipAtkBonusPercent << "%\n";
+		}
+		else {
+			std::cout << "[디버그] 무기 없음 또는 nullptr\n";
 		}
 
-		return atk + equipAtkBonus + currentBuff.atkBoost;
+		std::cout << "[디버그] 기본 공격력: " << atk << "\n";
+		std::cout << "[디버그] 버프 공격 보너스: " << currentBuff.atkBoost << "%\n";
+
+		int weaponBonus = (atk * equipAtkBonusPercent) / 100;
+		int buffBonus = (atk * currentBuff.atkBoost) / 100;
+		int total = atk + weaponBonus + buffBonus;
+
+		std::cout << "[디버그] 무기 보너스 적용 후: " << weaponBonus << "\n";
+		std::cout << "[디버그] 버프 보너스 적용 후: " << buffBonus << "\n";
+		std::cout << "[디버그] 최종 공격력: " << total << "\n";
+
+		return total;
 	}
 
-	void ApplyAtkBuff(int amount, int turns)
+	void ApplyAtkBuff(int amountPercent, int turns)
 	{
-		currentBuff.atkBoost = (atk * amount) / 100;
+		currentBuff.atkBoost = amountPercent;
 		currentBuff.atkBuffTurns = turns;
 	}
+
 	int GetTotalDef() const
 	{
-		int equipAtkBonus = 0;
-		const Item& Armor = inventory.equippedItems[1];  // 무기 슬롯
-
-		// 빈 슬롯이 아니면 공격 보너스 가져오기 (EquipmentItem이면 dynamic_cast 가능하면 더 좋음)
-		if (Armor.id != -1) {
-			equipAtkBonus = Armor.GetDefBonus();
+		int equipDefBonus = 0;
+		if (inventory.equippedItems.size() > 1 && inventory.equippedItems[1] != nullptr && inventory.equippedItems[1]->id != -1) {
+			equipDefBonus = inventory.equippedItems[1]->GetDefBonus();
 		}
 
-		return def + equipAtkBonus + currentBuff.defBoost;
+		int buffDefBonus = (def * currentBuff.defBoost) / 100;
+		return def + equipDefBonus + buffDefBonus;
 	}
-	void ApplyDefBuff(int amount, int turns)
+
+	void ApplyDefBuff(int amountPercent, int turns)
 	{
-		currentBuff.defBoost = (def * amount) / 100;
+		currentBuff.defBoost = amountPercent;
 		currentBuff.defBuffTurns = turns;
 	}
+
 	int GetTotalHp() const
 	{
-		int equipAtkBonus = 0;
-		const Item& Accessory = inventory.equippedItems[2];  // 무기 슬롯
-
-		// 빈 슬롯이 아니면 공격 보너스 가져오기 (EquipmentItem이면 dynamic_cast 가능하면 더 좋음)
-		if (Accessory.id != -1) {
-			equipAtkBonus = Accessory.GetDefBonus();
+		int equipHpBonus = 0;
+		if (inventory.equippedItems.size() > 2 && inventory.equippedItems[2] != nullptr && inventory.equippedItems[2]->id != -1) {
+			equipHpBonus = inventory.equippedItems[2]->GetHpBonus();
 		}
 
-		return hp + equipAtkBonus + currentBuff.hpBoost;
+		int buffHpBonus = (maxHp * currentBuff.hpBoost) / 100;
+		return hp + equipHpBonus + buffHpBonus;
 	}
-	void ApplyHpBuff(int amount, int turns)
+
+	void ApplyHpBuff(int amountPercent, int turns)
 	{
-		currentBuff.hpBoost = (maxHp * amount) / 100;
+		currentBuff.hpBoost = amountPercent;
 		currentBuff.hpBuffTurns = turns;
 	}
 

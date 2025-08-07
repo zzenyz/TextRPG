@@ -1,7 +1,8 @@
 ﻿#include "Game.h"
 
 void Game::Start() {
-	/*Inventory& inv = player.GetInventory();
+	
+		/*Inventory& inv = player.GetInventory();
 
 	std::cout << "[DEBUG] 장비 추가 시도 1\n";
 	SleepMs(1000);
@@ -257,10 +258,16 @@ void Game::ShowMainMenu() {
 		{
 			Inventory& inv = player.GetInventory();
 
+			ShowPlayerStatus();
 			inv.ShowInventory();         // 번호 포함해서 출력
 			inv.ShowEquippedItems();
 
 			while (true) {
+				ClearScreen();
+				ShowPlayerStatus();
+				inv.ShowInventory();         // 번호 포함해서 출력
+				inv.ShowEquippedItems();
+
 				TypeWriter("\n1. 아이템 사용\n2. 아이템 착용\n", 20);
 				TypeWriter("\n메뉴로 돌아가시려면 0\n", 20);
 				TypeWriter("> ");
@@ -274,6 +281,7 @@ void Game::ShowMainMenu() {
 				if (menuChoice == 1)
 				{
 					TypeWriter("\n사용할 아이템 번호를 입력하세요: \n", 20);
+					TypeWriter("\n메뉴로 돌아가시려면 0\n", 20);
 					TypeWriter("> ");
 
 					int useNum = 0;
@@ -286,11 +294,14 @@ void Game::ShowMainMenu() {
 						continue;
 					}
 
-					Item& selectedItem = inv.items[useNum - 1];
+					auto selectedPtr = inv.items[useNum - 1];
+					Item& selectedItem = *selectedPtr;
+
 					if (selectedItem.type != ItemType::Consumable) {
 						TypeWriter("이 아이템은 사용할 수 없습니다.\n", 20);
 						continue;
 					}
+
 
 					bool used = player.UseItem(selectedItem.id);
 					if (used) {
@@ -317,14 +328,16 @@ void Game::ShowMainMenu() {
 						continue;
 					}
 
-					ItemType selectedType = inv.items[equipNum - 1].type;
+					auto selectedPtr = inv.items[equipNum - 1];
+					ItemType selectedType = selectedPtr->type;
+
 					if (selectedType == ItemType::Consumable) {
 						TypeWriter("소비 아이템은 장착할 수 없습니다.\n", 20);
 						continue;
 					}
 
 					// 번호로 아이템 찾아서 착용
-					int itemId = inv.items[equipNum - 1].id;
+					int itemId = selectedPtr->id;
 					inv.EquipItem(itemId);
 
 					TypeWriter("아이템이 장착되었습니다.\n", 20);
@@ -357,11 +370,11 @@ void Game::ShowMainMenu() {
 void Game::ShowStoryMenu() {
 	std::vector<std::string> chapterTitles =
 	{
-		"부서진 묘비 조각\n",
-		"녹슨 족쇄\n",
-		"낡은 손목시계\n",
-		"분홍색 머리핀\n",
-		"어머니의 일기장\n",
+		"옥팔찌의 기억\n",         // Chapter 1: 폐사당, 유품: 옥팔찌
+	"잠긴 수갑\n",             // Chapter 2: 감옥, 유품: 수갑
+	"붉게 물든 조타 핸들\n",   // Chapter 3: 부둣가, 유품: 피 묻은 조타 손잡이
+	"떨어진 단추\n",           // Chapter 4: 폐교, 유품: 단추
+	"곰인형의 눈물\n",
 		"낡은 카세트 테이프\n"
 	};
 
@@ -451,15 +464,15 @@ void Game::StartChapter(int chapterNumber)
 					Ghost boss = ghost.GetBossGhost(chapterNumber);
 					bool playerWon = Battle(boss);
 
-					if (playerWon) 
+					if (playerWon)
 					{
 						chapter1.Outtro();
 						player.UnlockNextChapter();  // 2챕터 언락
 						if (chapter1.GetHasFoundClue())
 						{
-							player.AddKarma();
+							player.AddcluePoints();
 						}
-						if (chapter1.GetHasFoundKeepsake())
+						if (!chapter1.GetHasFoundKeepsake())
 						{
 							player.AddKarma();
 						}
@@ -472,7 +485,7 @@ void Game::StartChapter(int chapterNumber)
 				ClearScreen();
 				PlayMiniGameAndBattle(chapterNumber);
 				ClearScreen();
-				// 관리인 오두막 조사 함수
+
 				chapter1.ExploreHut();
 				continue;
 			}
@@ -480,16 +493,14 @@ void Game::StartChapter(int chapterNumber)
 				ClearScreen();
 				PlayMiniGameAndBattle(chapterNumber);
 				ClearScreen();
-				// 관리인 오두막 조사 함수
-				// 제단 조사 함수
+
 				chapter1.ExploreAltar();
 				continue;
 			case 4:
 				ClearScreen();
 				PlayMiniGameAndBattle(chapterNumber);
 				ClearScreen();
-				// 관리인 오두막 조사 함수
-				// 마당 조사 함수
+
 				chapter1.ExploreYard();
 				continue;
 			default:
@@ -540,20 +551,26 @@ void Game::StartChapter(int chapterNumber)
 				if (chapter1.GetbossAwakened())
 				{
 					Ghost boss = ghost.GetBossGhost(chapterNumber);
-					Battle(boss);
-					if (chapter2.GetHasFoundClue1())
-					{
-						player.AddKarma();
-					}
+					bool playerWon = Battle(boss);
 
-					if (chapter2.GetHasFoundClue2())
+					if (playerWon)
 					{
-						player.AddKarma();
-					}
+						chapter2.Outtro();
+						player.UnlockNextChapter();
+						if (chapter2.GetHasFoundClue1())
+						{
+							player.AddcluePoints();
+						}
 
-					if (chapter2.GetHasFoundKeepsake())
-					{
-						player.AddKarma();
+						if (chapter2.GetHasFoundClue2())
+						{
+							player.AddcluePoints();
+						}
+
+						if (!chapter2.GetHasFoundKeepsake())
+						{
+							player.AddKarma();
+						}
 					}
 					return;
 				}
@@ -636,12 +653,18 @@ void Game::StartChapter(int chapterNumber)
 				if (chapter3.GetbossAwakened())
 				{
 					Ghost boss = ghost.GetBossGhost(chapterNumber);
-					Battle(boss);
+					bool playerWon = Battle(boss);
 
-					
+					if (playerWon)
+					{
+						chapter3.Outtro();
+						player.UnlockNextChapter();
 
-					chapter3.Outtro();
-					return;
+						if (chapter3.GetHasFoundClue()) player.AddcluePoints();
+						if (!chapter3.GetHasFoundKeepsake()) player.AddKarma();
+
+						return;
+					}
 				}
 				continue;
 
@@ -717,23 +740,27 @@ void Game::StartChapter(int chapterNumber)
 				if (chapter4.GetbossAwakened())
 				{
 					Ghost boss = ghost.GetBossGhost(chapterNumber);
-					Battle(boss);
+					bool playerWon = Battle(boss);
 
-					if (chapter3.GetHasFoundKeepsake4())
+					if (playerWon)
 					{
-						player.AddKarma();
-					}
-					if (chapter4.GetHasFoundClue1())
-					{
-						player.AddKarma();
-					}
-					if (chapter4.GetHasFoundClue2())
-					{
-						player.AddKarma();
-					}
+						chapter4.Outtro();
+						player.UnlockNextChapter();
+						if (!chapter3.GetHasFoundKeepsake4())
+						{
+							player.AddKarma();
+						}
+						if (chapter4.GetHasFoundClue1())
+						{
+							player.AddcluePoints();
+						}
+						if (chapter4.GetHasFoundClue2())
+						{
+							player.AddcluePoints();
+						}
 
-					chapter4.Outtro();
-					return;
+						return;
+					}
 				}
 				continue;
 
@@ -758,16 +785,111 @@ void Game::StartChapter(int chapterNumber)
 
 		if (chapter4.GetHasFoundClue2())
 		{
-			player.AddKeepsake("어린아이의 일기장 - 붉은 옷을 입은 여자를 목격한 기록.");
+			player.AddClue("어린아이의 일기장 - 붉은 옷을 입은 여자를 목격한 기록.");
 		}
 
 		if (chapter4.GetHasFoundClue5())
 		{
-			player.AddKeepsake("작은 수첩 - 예림 어머니에게 무슨일이 생길 것만 같아...");
+			player.AddClue("작은 수첩 - 예림 어머니에게 무슨일이 생길 것만 같아...");
 		}
 
 		break;
 	}
+	case 5:
+	{
+		chapter5.ShowIntro();
+
+		while (!backToMenu)
+		{
+			chapter5.ExploreMap();
+			int choice;
+			std::cin >> choice;
+			std::cin.ignore();
+
+			switch (choice) {
+			case 0:
+				std::cout << "\n메인 메뉴로 돌아갑니다...\n";
+				backToMenu = true;
+				break;
+
+			case 1:
+				ClearScreen();
+				PlayMiniGameAndBattle(chapterNumber);
+				ClearScreen();
+				chapter5.Explorelivingroom();
+				continue;
+
+			case 2:
+				ClearScreen();
+				PlayMiniGameAndBattle(chapterNumber);
+				ClearScreen();
+				chapter5.Explorebasement();
+				continue;
+
+			case 3:
+				ClearScreen();
+				PlayMiniGameAndBattle(chapterNumber);
+				ClearScreen();
+				chapter5.Exploremasterroom();
+
+				if (chapter5.GetbossAwakened())
+				{
+					Ghost boss = ghost.GetBossGhost(chapterNumber);
+					bool playerWon = Battle(boss);
+
+					if (playerWon)
+					{
+						if (chapter4.GetHasFoundClue5()) player.AddcluePoints();
+						if (chapter5.GetHasFoundClue1()) player.AddcluePoints();
+						if (chapter5.GetHasFoundClue2()) player.AddcluePoints();
+						if (!chapter5.GetHasFoundKeepsake()) player.AddKarma();
+
+						chapter5.Outtro();
+						CheckChapter5Ending();
+						player.UnlockNextChapter();
+						return;
+					}
+				}
+				continue;
+
+			case 4:
+				ClearScreen();
+				PlayMiniGameAndBattle(chapterNumber);
+				ClearScreen();
+				chapter5.Exploreattic();
+				continue;
+
+			default:
+				std::cout << "\n잘못된 입력입니다. 다시 선택하세요.\n";
+				continue;
+			}
+		}
+
+		// 회수된 단서와 유품 정리
+		if (chapter5.GetHasFoundClue1())
+		{
+			player.AddClue("가족 사진 - 아무래도 유신이 어머니에게 무슨일이 생겼을지도...");
+		}
+
+		if (chapter5.GetHasFoundClue2())
+		{
+			player.AddClue("신문 조각 - 유신이의 어머니가 누군가를 따라가는 모습이 목격됨.");
+		}
+
+		if (chapter5.GetHasFoundKeepsake())
+		{
+			player.AddKeepsake("곰인형 - 누군가 정성스럽게 묶어놓은 리본이 인상적이다.");
+		}
+
+		break;
+	}
+	case 6:
+	{
+		Chapter6Intro();
+		Chapter6Explore();
+		CheckChapter6Ending();
+	}
+
 	}
 }
 
@@ -898,7 +1020,7 @@ bool Game::Battle(const Ghost& enemy)
 					else
 					{
 						randVal = std::rand() % 100;
-						if (randVal < 5)
+						if (randVal < 8)
 						{
 							criticalHit = true;
 							Damage += 999;
@@ -980,7 +1102,8 @@ bool Game::Battle(const Ghost& enemy)
 						continue;
 					}
 
-					Item& selected = inv.items[itemNum - 1];
+					auto selectedPtr = inv.items[itemNum - 1];
+					Item& selected = *selectedPtr;
 
 					if (selected.type != ItemType::Consumable) {
 						TypeWriter("이 아이템은 사용할 수 없습니다.\n", 20);
@@ -1078,8 +1201,8 @@ bool Game::Battle(const Ghost& enemy)
 
 	if (tempGhostHp <= 0)
 	{
-		TypeWriter("\n귀신을 물리쳤습니다! 승리했습니다!\n", 5);  
-		player.AddGold(totalGold); 
+		TypeWriter("\n귀신을 물리쳤습니다! 승리했습니다!\n", 5);
+		player.AddGold(totalGold);
 
 		TypeWriter("\n총 경험치 " + std::to_string(totalExp) + " 획득했습니다!\n", 5);
 		TypeWriter("총 골드 " + std::to_string(totalGold) + " 획득했습니다!!\n", 5);
@@ -1112,3 +1235,39 @@ bool Game::Battle(const Ghost& enemy)
 
 	SleepMs(1000);
 }
+
+void Game::CheckChapter5Ending()
+{
+	int clueScore = player.GetcluePoints();       // 모은 단서 개수
+	int karmaScore = player.GetKarma(); // 모은 유품 개수
+
+
+	if (clueScore < 4)
+	{
+		if (karmaScore > 3)
+		{
+			BadEndingSequence();
+		}
+		else
+		{
+			HappyEnding();
+		}
+	}
+	return;
+}
+
+void Game::CheckChapter6Ending()
+{
+	int karmaScore = player.GetKarma(); // 모은 유품 개수
+
+	if (karmaScore > 3)
+	{
+		BadEnding2();
+	}
+	else
+	{
+		TrueEnding();
+	}
+	return;
+}
+
