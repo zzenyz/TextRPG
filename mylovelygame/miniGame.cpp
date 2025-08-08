@@ -2,16 +2,36 @@
 
 bool miniGame::TriggerminiGame()
 {
+	
 	if (rand() % 100 < 100)
 	{
 		SetConsoleColor(12);
 		TypeWriter("\n...무언가가 갑자기 튀어나옵니다!\n", 5);
 		SetConsoleColor(7);
 		TypeWriter("현실이 일그러지고, 당신의 시야가 뒤틀립니다...\n\n", 50);
-		TypeWriter("이상한 힘에 끌려, 낯선 공간으로 떨어졌습니다.\n", 50);
+		TypeWriter("이상한 힘에 끌려, 낯선 공간으로 떨어졌습니다.\n\n", 50);
+
+		SetConsoleColor(12);
+		TypeWriter("차갑고 음산한 숨결이 등골을 타고 흘러내립니다...\n", 10);
+		TypeWriter("붉은 눈동자가 어둠 속에서 번뜩이며, 당신을 노려보고 있습니다.\n\n", 10);
+		SetConsoleColor(7);
+
+		TypeWriter("빨간 네모는 당신을 쫓는 귀신입니다.\n", 5);
+		TypeWriter("초록 네모는 탈출구, 노란 네모는 당신입니다.\n", 5);
+		TypeWriter("귀신에게 잡히기 전에 탈출구로 도망치세요!\n\n", 5);
+
+		TypeWriter("--- [Enter를 누르면 미니게임이 시작됩니다] ---\n", 5);
+		std::cin.get();
+		ClearScreen();
+		
+		PlaySound(NULL, 0, 0); // 현재 소리 멈추기
+		PlaySound(L"minigame.wav", NULL, SND_FILENAME | SND_ASYNC | SND_LOOP);
 
 		// 미로 크기 조정 가능
 		miniGame minigame(21);
+
+
+
 		minigame.Run();
 
 		if (minigame.IsGameOver())

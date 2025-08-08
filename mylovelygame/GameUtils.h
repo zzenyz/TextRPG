@@ -14,3 +14,4 @@ void SetConsoleColor(int color); // 옵션: 색상 바꾸고 싶을 때
 void SleepMs(int ms);
 void FlashInvertColors(int times, int delayMs, const std::string& art);
 void ShowGhost(int rank);
+void ShowTItle();

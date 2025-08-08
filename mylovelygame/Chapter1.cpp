@@ -18,7 +18,7 @@ void Chapter1::ShowIntro()
 
 	std::vector<std::string> lines;
 	lines = {
-		 "[마을 공동묘지 입구]\n",
+		 "[마을 폐사당 입구]\n",
 		 "\n이장의 안내를 따라 마을 깊숙한 곳에 위치한 오래된 누군가의 묘지로 향했다.\n",
 		 "\n이장이 낡은 지도를 꺼내 펼친다...\n",
 		 "\n\"이 지도를 가지고 마을 곳곳을 조사해 주게나\"\n",
@@ -38,9 +38,11 @@ void Chapter1::ShowIntro()
 		std::this_thread::sleep_for(std::chrono::milliseconds(300));
 	}
 
-	TypeWriter("\n--- [계속하려면 Enter] ---\n", 30);
-	std::cin.get();
-	ClearScreen();
+    TypeWriter("\n--- [계속하려면 Enter] ---\n", 30);
+    std::cin.get();
+    ClearScreen();
+
+    Warn();
 
 }
 
@@ -53,7 +55,7 @@ void Chapter1::Warn()
 		"========================================\n",
 		"[Chapter 1]\n\n",
 
-		"이장이 건넨 낡은 지도엔 마을 공동묘지의 네 장소가 표시돼 있다.\n\n",
+		"이장이 건넨 낡은 지도엔 폐사당의 네 장소가 표시돼 있다.\n\n",
 
 		"- 각 장소에서는 단서나 유품을 찾을 수 있습니다.\n",
 		"- 단서와 유품은 이 사건의 진실을 파악하는 데 중요한 열쇠입니다.\n",
@@ -101,7 +103,18 @@ void Chapter1::ExploreMap()
 
 void Chapter1::ExploreGrave() {
     int choice;
-    while (true) {
+    while (true) 
+    {
+        if (battleCooldown > 0) {
+            battleCooldown--;
+        }
+        if (battleCooldown == 0 && rand() % 10 < 7)
+        {
+            Setghostcomesout(true);
+            battleCooldown = 3;
+            return;
+        }
+        
         ClearScreen();
 
         // 인트로 출력
@@ -180,7 +193,18 @@ void Chapter1::ExploreHut()
 	int choice;
 	bool hasFoundClue = false;
 
-	while (true) {
+	while (true) 
+    {
+        if (battleCooldown > 0) {
+            battleCooldown--;
+        }
+        if (battleCooldown == 0 && rand() % 10 < 7)
+        {
+            Setghostcomesout(true);
+            battleCooldown = 3;
+            return;
+        }
+
 		ClearScreen();
 		std::vector<std::string> intro = {
 			"[관리인 오두막]\n\n",
@@ -261,7 +285,18 @@ void Chapter1::ExploreAltar()
 {
     int choice;
     bool hasFoundKeepsake = false;
-    while (true) {
+    while (true) 
+    {
+        if (battleCooldown > 0) {
+            battleCooldown--;
+        }
+        if (battleCooldown == 0 && rand() % 10 < 7)
+        {
+            Setghostcomesout(true);
+            battleCooldown = 3;
+            return;
+        }
+
         ClearScreen();
         std::vector<std::string> intro = {
             "[제단]\n\n",
@@ -344,7 +379,18 @@ void Chapter1::ExploreAltar()
 void Chapter1::ExploreYard() 
 {
     int choice;
-    while (true) {
+    while (true) 
+    {
+        if (battleCooldown > 0) {
+            battleCooldown--;
+        }
+        if (battleCooldown == 0 && rand() % 10 < 7)
+        {
+            Setghostcomesout(true);
+            battleCooldown = 3;
+            return;
+        }
+
         ClearScreen();
         std::vector<std::string> intro = {
             "[마당]\n\n",
@@ -410,4 +456,54 @@ void Chapter1::ExploreYard()
         system("pause");
         ClearScreen();
     }
+}
+
+void Chapter1::Outtro()
+{
+    ClearScreen();
+
+    TypeWriter("형체를 잃은 원혼은 사그라들며 폐사당 바닥에 흩어진다.\n", 30);
+    TypeWriter("차가운 기운이 여전히 사방을 감싸고 있다.\n", 30);
+
+    TypeWriter("주머니 속에서 미세한 진동이 느껴진다.\n", 30);
+    TypeWriter("…옥팔찌다.\n", 40);
+    TypeWriter("붉은 기운이 천천히 번져나오고, 멀리서 맑고 쓸쓸한 종소리가 들려온다.\n", 40);
+    
+    TypeWriter("\n그 순간-\n", 50);
+    TypeWriter("어디선가 묘하게 익숙한 종소리가 들려온다.\n", 40);
+    TypeWriter("실제인지 환청인지, 분간되지 않는 맑고 낮은 음.\n", 30);
+    TypeWriter("그리고… 눈앞에 흐릿한 장면이 떠오른다.\n\n", 30);
+
+    TypeWriter("\n--- [계속하려면 Enter] ---\n", 30);
+    std::cin.get();
+    ClearScreen();
+
+    TypeWriter("낡았지만 관리가 잘 되어 보이는 폐사당..\n"); 
+    TypeWriter("과거 이곳을 모습인걸까 ? \n");
+    TypeWriter("아래 무릎 꿇은 누군가가 울부짖는다.\n", 30);
+    TypeWriter("그리고 어두운 손이 무덤을 파헤친다.\n", 30);
+    TypeWriter("무릎 꿇은 존재가 떨리는 목소리로 울부짖는다.\n", 30);
+    TypeWriter("그 형체는 인간과 닮았지만, 그 기운은 오래된 무언가였다.\n", 30);
+    TypeWriter("“그만둬라… 금기를 어기면, 이 땅에 저주가 드리운다…”\n", 40);
+    TypeWriter("그 손은 서늘한 칼날을 꺼내 무언가를 자르기 시작한다.\n", 40);
+    TypeWriter("관리인 일지에 적힌 그 여자가, 바로 저 여자인 걸까?\n", 50);
+    TypeWriter("손가락 하나가 차갑게 땅에 떨어진다.\n\n", 30);
+
+ 
+    TypeWriter("\n--- [계속하려면 Enter] ---\n", 30);
+    std::cin.get();
+    ClearScreen();
+
+    ClearScreen();
+    TypeWriter("눈을 뜨니, 폐사당의 어둠 속.\n", 30);
+    TypeWriter("손끝에서 팔찌의 무게가 더욱 실감난다.\n", 30);
+    TypeWriter("기억은 흐릿하지만, 이 이상한 끈은 쉽게 끊어지지 않을 것 같다.\n\n", 30);
+
+    TypeWriter("내 머리속에 울려 퍼지는 종소리는,\n", 30);
+    TypeWriter("아직 끝나지 않은 이야기를 속삭이고 있다...\n\n", 30);
+
+ 
+    TypeWriter("\n--- [계속하려면 Enter] ---\n", 30);
+    std::cin.get();
+    ClearScreen();
 }

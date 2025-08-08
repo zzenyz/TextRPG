@@ -25,6 +25,8 @@ int Ghost::Attack(int JobNumber, int playerDef)
     
     Damage = currentAtk - (playerDef / 2);
 
+    if (Damage < 1) Damage = 1;
+
     return Damage;
 }
 

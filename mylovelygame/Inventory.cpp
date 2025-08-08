@@ -1,33 +1,42 @@
 #include "Inventory.h"
 
-// 아이템 추가
-bool Inventory::AddItem(const Item& newItem) {
-    //std::cout << "[DEBUG] AddItem 시도: " << newItem.name << " (ID: " << newItem.id << ")\n";
+int Inventory::GetTotalQuantity() const {
+    int total = 0;
+    for (const auto& item : items)
+        total += item->quantity;
+    return total;
+}
+
+// 아이템 추가 (shared_ptr<Item> 사용)
+bool Inventory::AddItem(std::shared_ptr<Item> newItem) 
+{
+    int totalCurrentQuantity = GetTotalQuantity();
 
     for (auto& item : items) {
-        if (item.id == newItem.id) {
-            item.quantity += newItem.quantity;
-            //std::cout << "[DEBUG] 기존 아이템 수량 증가됨. 총 수량: " << item.quantity << "\n";
+        if (item->id == newItem->id) {
+            if (totalCurrentQuantity + newItem->quantity > maxSlots) {
+                return false;
+            }
+            item->quantity += newItem->quantity;
             return true;
         }
     }
 
-    if ((int)items.size() < maxSlots) {
-        items.push_back(newItem);
-        //std::cout << "[DEBUG] 새 아이템 추가됨. 현재 인벤토리 크기: " << items.size() << "\n";
-        return true;
+    if (totalCurrentQuantity + newItem->quantity > maxSlots) {
+        return false;
     }
 
-    //std::cout << "[DEBUG] 아이템 추가 실패: 인벤토리가 가득 찼습니다.\n";
-    return false;
+    items.push_back(newItem);
+    return true;
 }
+
 // 아이템 제거
 bool Inventory::RemoveItem(int itemId, int quantity) {
     for (auto it = items.begin(); it != items.end(); ++it) {
-        if ((*it).id == itemId) {
-            if ((*it).quantity < quantity) return false;
-            (*it).quantity -= quantity;
-            if ((*it).quantity == 0) items.erase(it);
+        if ((*it)->id == itemId) {
+            if ((*it)->quantity < quantity) return false;
+            (*it)->quantity -= quantity;
+            if ((*it)->quantity == 0) items.erase(it);
             return true;
         }
     }
@@ -36,98 +45,106 @@ bool Inventory::RemoveItem(int itemId, int quantity) {
 
 // 정렬 (타입 > ID)
 void Inventory::SortItems() {
-    std::sort(items.begin(), items.end(), [](const Item& a, const Item& b) {
-        if (a.type == b.type) return a.id < b.id;
-        return static_cast<int>(a.type) < static_cast<int>(b.type);
+    std::sort(items.begin(), items.end(), [](const std::shared_ptr<Item>& a, const std::shared_ptr<Item>& b) {
+        if (a->type == b->type) return a->id < b->id;
+        return static_cast<int>(a->type) < static_cast<int>(b->type);
         });
 }
 
+// 아이템 착용
 void Inventory::EquipItem(int itemId) {
+    // equippedItems 벡터가 3 크기 아닐 경우 강제 resize
+    if (equippedItems.size() < 3) {
+        equippedItems.resize(3);
+    }
+
     for (auto it = items.begin(); it != items.end(); ++it) {
-        if (it->id == itemId) {
-            ItemType type = it->type;
-            if (type == ItemType::Weapon || type == ItemType::Armor || type == ItemType::Accessory) {
-                // 기존 장비 해제
-                UnequipItem(type);
+        if ((*it)->id == itemId) {
+            ItemType type = (*it)->type;
+            int slotIndex = static_cast<int>(type) - 1;
 
-                int slotIndex = static_cast<int>(type) - 1;  // Consumable이 0이니까 -1
-                if (slotIndex >= 0 && slotIndex < 3) {
-                    equippedItems[slotIndex] = *it;  // 복사 대입
-                }
-
-                items.erase(it);
+            if (slotIndex < 0 || slotIndex >= 3) {
+                TypeWriter("잘못된 장비 슬롯입니다.\n", 20);
                 return;
             }
+
+            UnequipItem(type);
+
+            equippedItems[slotIndex] = *it;
+            items.erase(it);
+
+            TypeWriter("아이템이 장착되었습니다.\n", 20);
+            return;
         }
     }
+
+    TypeWriter("해당 아이템을 찾을 수 없습니다.\n", 20);
 }
 
+
 void Inventory::UnequipItem(ItemType type) {
+    // 소모품은 해제할 장비가 아님
+    if (type == ItemType::Consumable) {
+        return;
+    }
+
     int slotIndex = static_cast<int>(type) - 1;
-    if (slotIndex >= 0 && slotIndex < 3) {
-        // 빈 슬롯 (기본 아이템)일 때는 아무 작업 안 함
-        if (equippedItems[slotIndex].id != -1) {
-            items.push_back(equippedItems[slotIndex]);
-            // 빈 슬롯 상태로 초기화 (id를 -1로)
-            equippedItems[slotIndex] = Item(-1, "", ItemType::Consumable, 0, 0);
+    if (slotIndex >= 0 && slotIndex < (int)equippedItems.size()) {
+        auto& equippedPtr = equippedItems[slotIndex];
+        if (equippedPtr && equippedPtr->id != -1) {
+            items.push_back(equippedPtr);
+            equippedItems[slotIndex] = nullptr;
         }
     }
 }
 
 // 인벤토리 출력
 void Inventory::ShowInventory() const {
-    TypeWriter("=== [인벤토리] ===\n", 10);
+    std::cout << "=== [인벤토리] ===\n";
+
     if (items.empty()) {
-        TypeWriter("인벤토리가 비어 있습니다.\n", 30);
+        std::cout << "인벤토리가 비어 있습니다.\n";
         return;
     }
 
     int index = 1;
-
     for (const auto& item : items) {
-        TypeWriter(std::to_string(index) + ". " + item.name + " x" + std::to_string(item.quantity) + " [", 20);
+        std::cout << index << ". " << item->name << " x" << item->quantity << " [";
 
-        switch (item.type) {
-        case ItemType::Consumable:
-            TypeWriter("소비", 10);
-            break;
-        case ItemType::Weapon:
-            TypeWriter("무기", 10);
-            break;
-        case ItemType::Armor:
-            TypeWriter("방어구", 10);
-            break;
-        case ItemType::Accessory:
-            TypeWriter("악세사리", 10);
-            break;
+        switch (item->type) {
+        case ItemType::Consumable: std::cout << "소비"; break;
+        case ItemType::Weapon: std::cout << "무기"; break;
+        case ItemType::Armor: std::cout << "방어구"; break;
+        case ItemType::Accessory: std::cout << "악세사리"; break;
         }
 
-        TypeWriter("]\n", 20);
+        std::cout << "]\n";
         ++index;
     }
 }
 
+// 장착 장비 출력
 void Inventory::ShowEquippedItems() const {
-    TypeWriter("\n=== [장착 장비] ===\n", 10);
+    std::cout << "\n=== [장착 장비] ===\n";
     bool hasEquipped = false;
 
-    for (const auto& item : equippedItems) {
-        // 장비 슬롯이 비어있지 않은 경우만 출력
-        if (item.id != -1) {
+    for (const auto& itemPtr : equippedItems) {
+        if (itemPtr && itemPtr->id != -1) {
             hasEquipped = true;
-            TypeWriter(item.name + " [", 10);
-            switch (item.type) {
-            case ItemType::Weapon: TypeWriter("무기"); break;
-            case ItemType::Armor: TypeWriter("방어구"); break;
-            case ItemType::Accessory: TypeWriter("악세사리"); break;
-            default: break;
+            std::cout << itemPtr->name << " [";
+
+            switch (itemPtr->type) {
+            case ItemType::Weapon: std::cout << "무기"; break;
+            case ItemType::Armor: std::cout << "방어구"; break;
+            case ItemType::Accessory: std::cout << "악세사리"; break;
+            default: std::cout << "알 수 없음"; break;
             }
-            TypeWriter("]\n", 10);
+
+            std::cout << "]\n";
         }
     }
 
     if (!hasEquipped) {
-        TypeWriter("장착한 장비가 없습니다.\n", 10);
+        std::cout << "장착한 장비가 없습니다.\n";
     }
 }
-

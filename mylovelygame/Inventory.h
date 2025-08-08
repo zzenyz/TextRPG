@@ -8,12 +8,14 @@
 #include "GameUtils.h"
 
 struct Inventory {
-    std::vector<Item> items;            // 일반 아이템 인벤토리
-    std::vector<Item> equippedItems = std::vector<Item>(3, Item(-1, "", ItemType::Consumable, 0, 0));
+    std::vector<std::shared_ptr<Item>> items;         // 일반 아이템 인벤토리
+    std::vector<std::shared_ptr<Item>> equippedItems = std::vector<std::shared_ptr<Item>>(3, nullptr);
+
 
     int maxSlots = 5;
 
-    bool AddItem(const Item& newItem);
+    int GetTotalQuantity() const;
+    bool AddItem(std::shared_ptr<Item> newItem);
     bool RemoveItem(int itemId, int quantity);
     void SortItems();
 

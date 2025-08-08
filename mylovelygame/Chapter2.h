@@ -8,10 +8,12 @@
 class Chapter2
 {
 private:
+    int battleCooldown = 0;
     bool clueFound1 = false;
     bool clueFound2 = false;
     bool KeepsakeFound = false;
     bool bossAwakened = false;
+    bool ghostcomesout = false;
 
 public:
 
@@ -37,6 +39,12 @@ public:
 
     bool GetbossAwakened() const { return bossAwakened; }
 
+    void Setghostcomesout(bool state)
+    {
+        ghostcomesout = state;
+    }
+    bool Getghostcomesout() const { return ghostcomesout; }
+
     void ShowIntro();
     void Warn();
     void ExploreMap();         // 장소 선택 맵 출력
@@ -45,5 +53,6 @@ public:
     void ExploreTortureRoom(); // 2. 지하 고문실 조사
     void ExploreWardenOffice();// 3. 교도소장실 조사
     void ExploreWatchtower();
+    void Outtro();
 
 };

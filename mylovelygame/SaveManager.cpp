@@ -1,6 +1,7 @@
 #include "SaveManager.h"
 
-const std::string SaveManager::SaveFileName = "savemylovelygame";
+const std::string SaveManager::SaveFileName = "savemylovelygame.dat";
+
 
 bool SaveManager::HasSavedGame() {
     std::ifstream ifs(SaveFileName, std::ios::binary);
