@@ -67,6 +67,14 @@ bool Player::Save(std::ofstream& ofs) const {
 		}
 	}
 
+	size_t skillCount = skillSet.size();
+	ofs.write(reinterpret_cast<const char*>(&skillCount), sizeof(skillCount));
+	for (const Skill& skill : skillSet) 
+	{
+		ofs.write(skill.name.c_str(), skill.name.size() + 1);
+		ofs.write(skill.description.c_str(), skill.description.size() + 1);
+	}
+
 	// --- Buff 저장 (필요시) ---
 	ofs.write(reinterpret_cast<const char*>(&currentBuff.atkBoost), sizeof(currentBuff.atkBoost));
 	ofs.write(reinterpret_cast<const char*>(&currentBuff.defBoost), sizeof(currentBuff.defBoost));
@@ -78,7 +86,8 @@ bool Player::Save(std::ofstream& ofs) const {
 	return !ofs.fail();
 }
 
-bool Player::Load(std::ifstream& ifs) {
+bool Player::Load(std::ifstream& ifs) 
+{
 	if (!ifs) return false;
 
 	std::getline(ifs, name, '\0');
@@ -178,6 +187,20 @@ bool Player::Load(std::ifstream& ifs) {
 		}
 	}
 
+	size_t skillCount = 0;
+	ifs.read(reinterpret_cast<char*>(&skillCount), sizeof(skillCount));
+	skillSet.clear();
+	for (size_t i = 0; i < skillCount; ++i) 
+	{
+		std::string name;
+		std::string description;
+
+		std::getline(ifs, name, '\0');
+		std::getline(ifs, description, '\0');
+
+		skillSet.push_back(Skill{ name, description });
+	}
+
 	// Buff 복원
 	ifs.read(reinterpret_cast<char*>(&currentBuff.atkBoost), sizeof(currentBuff.atkBoost));
 	ifs.read(reinterpret_cast<char*>(&currentBuff.defBoost), sizeof(currentBuff.defBoost));
@@ -185,9 +208,6 @@ bool Player::Load(std::ifstream& ifs) {
 	ifs.read(reinterpret_cast<char*>(&currentBuff.atkBuffTurns), sizeof(currentBuff.atkBuffTurns));
 	ifs.read(reinterpret_cast<char*>(&currentBuff.defBuffTurns), sizeof(currentBuff.defBuffTurns));
 	ifs.read(reinterpret_cast<char*>(&currentBuff.hpBuffTurns), sizeof(currentBuff.hpBuffTurns));
-
-	// 스킬 초기화
-	InitSkills();
 
 	return !ifs.fail();
 }
@@ -283,6 +303,34 @@ void Player::LevelUp()
 			TypeWriter("새로운 스킬을 배웠습니다!\n", 30);
 		}
 
+		if (level == 6)
+		{
+			if (Job == 1) {
+				skillSet.push_back({ "혼령베기", "중간 데미지 + 1턴 동안 귀신 봉인" });
+			}
+			else if (Job == 2) {
+				skillSet.push_back({ "흙의 숨결", "중간 데미지 + 피해량 50% 회복" });
+			}
+			else if (Job == 3) {
+				skillSet.push_back({ "그래고리안 성가", "중간 데미지 + 3턴 동안 지속 데미지" });
+			}
+			TypeWriter("새로운 스킬을 배웠습니다!\n", 30);
+		}
+
+		if (level == 10)
+		{
+			if (Job == 1) {
+				skillSet.push_back({ "붉은 금제", "강력한 데미지" });
+			}
+			else if (Job == 2) {
+				skillSet.push_back({ "산천의 울부짖음", "강력한 데미지" });
+			}
+			else if (Job == 3) {
+				skillSet.push_back({ "최후의 심문", "강력한 데미지" });
+			}
+			TypeWriter("새로운 스킬을 배웠습니다!\n", 30);
+		}
+
 		if (level == 4 || level == 7 || level == 9)
 		{
 			inventory.IncreaseMaxSlots(5);
@@ -358,4 +406,33 @@ bool Player::UseItem(int itemId)
 	}
 
 	return true;
+}
+
+void Player::Reset() {
+	name.clear();
+	jobName.clear();
+	Job = 0;
+
+	hp = 0;
+	maxHp = 0;
+	atk = 0;
+	def = 0;
+	level = 1;
+	EXP = 0;
+	MaxEXP = 100;
+	karma = 0;
+	cluePoints = 0;
+	unlockedChapter = 0;
+	gold = 100000;
+
+	skillSet.clear();
+	InitSkills();   // 기본 스킬 세팅 함수
+
+	inventory.items.clear();
+	inventory.equippedItems.clear();
+
+	clues.clear();
+	keepsakes.clear();
+
+	currentBuff = Buff();  // 기본 상태로 초기화
 }

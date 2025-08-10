@@ -40,6 +40,7 @@ void Chapter4::ShowIntro() {
 
     TypeWriter("\n--- [계속하려면 Enter] ---\n", 30);
     std::cin.get();
+    std::cin.ignore();
     ClearScreen();
 }
 
@@ -134,6 +135,7 @@ void Chapter4::ExploreStaffRoom() {
 
         TypeWriter("\n--- [계속하려면 Enter] ---\n", 20);
         std::cin.get();
+        std::cin.ignore();
     }
 }
 
@@ -393,6 +395,7 @@ void Chapter4::Outtro()
 
     TypeWriter("\n--- [계속하려면 Enter] ---\n", 30);
     std::cin.get();
+    std::cin.ignore();
     ClearScreen();
 
     TypeWriter("폐교의 먼지 냄새가 다시 코끝을 스친다.\n", 30);
@@ -407,5 +410,6 @@ void Chapter4::Outtro()
 
     TypeWriter("\n--- [계속하려면 Enter] ---\n", 30);
     std::cin.get();
+    std::cin.ignore();
     ClearScreen();
 }

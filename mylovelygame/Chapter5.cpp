@@ -327,6 +327,7 @@ void Chapter5::Outtro()
 
     TypeWriter("\n--- [계속하려면 Enter] ---\n", 30);
     std::cin.get();
+    std::cin.ignore();
     ClearScreen();
 
     TypeWriter("눈을 뜨자, 안방이다.\n", 30);
@@ -339,5 +340,6 @@ void Chapter5::Outtro()
    
     TypeWriter("--- [계속하려면 Enter] ---\n", 30);
     std::cin.get();
+    std::cin.ignore();
     ClearScreen();
 }

@@ -46,7 +46,7 @@ public:
     bool Getghostcomesout() const { return ghostcomesout; }
 
     void ShowIntro();
-    void Warn();
+    
     void ExploreMap();         // 장소 선택 맵 출력
 
     void ExploreCell();        // 1. 독방 조사

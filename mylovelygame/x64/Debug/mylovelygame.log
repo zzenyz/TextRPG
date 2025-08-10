@@ -1,5 +1,33 @@
-﻿  Chapter1.cpp
+﻿  Buff.cpp
+  Chapter1.cpp
+  Chapter2.cpp
+C:\Users\ZHIEZENNIZ\Downloads\TextRPG-main\TextRPG-main\mylovelygame\Chapter2.cpp(464,13): warning C4566: 유니버설 문자 이름 '\u2014'(으)로 표현되는 문자는 현재 코드 페이지(949)에서 표현할 수 없습니다.
+C:\Users\ZHIEZENNIZ\Downloads\TextRPG-main\TextRPG-main\mylovelygame\Chapter2.cpp(467,13): warning C4566: 유니버설 문자 이름 '\u2014'(으)로 표현되는 문자는 현재 코드 페이지(949)에서 표현할 수 없습니다.
+  Chapter3.cpp
+C:\Users\ZHIEZENNIZ\Downloads\TextRPG-main\TextRPG-main\mylovelygame\Chapter3.cpp(180,28): warning C4566: 유니버설 문자 이름 '\u2014'(으)로 표현되는 문자는 현재 코드 페이지(949)에서 표현할 수 없습니다.
+C:\Users\ZHIEZENNIZ\Downloads\TextRPG-main\TextRPG-main\mylovelygame\Chapter3.cpp(371,16): warning C4566: 유니버설 문자 이름 '\u2014'(으)로 표현되는 문자는 현재 코드 페이지(949)에서 표현할 수 없습니다.
+C:\Users\ZHIEZENNIZ\Downloads\TextRPG-main\TextRPG-main\mylovelygame\Chapter3.cpp(385,16): warning C4566: 유니버설 문자 이름 '\u2014'(으)로 표현되는 문자는 현재 코드 페이지(949)에서 표현할 수 없습니다.
+C:\Users\ZHIEZENNIZ\Downloads\TextRPG-main\TextRPG-main\mylovelygame\Chapter3.cpp(411,16): warning C4566: 유니버설 문자 이름 '\u2014'(으)로 표현되는 문자는 현재 코드 페이지(949)에서 표현할 수 없습니다.
+  Chapter4.cpp
+C:\Users\ZHIEZENNIZ\Downloads\TextRPG-main\TextRPG-main\mylovelygame\Chapter4.cpp(49,9): warning C4101: 'choice' :참조되지 않은 지역 변수입니다.
+C:\Users\ZHIEZENNIZ\Downloads\TextRPG-main\TextRPG-main\mylovelygame\Chapter4.cpp(331,28): warning C4566: 유니버설 문자 이름 '\u2014'(으)로 표현되는 문자는 현재 코드 페이지(949)에서 표현할 수 없습니다.
+C:\Users\ZHIEZENNIZ\Downloads\TextRPG-main\TextRPG-main\mylovelygame\Chapter4.cpp(369,16): warning C4566: 유니버설 문자 이름 '\u2014'(으)로 표현되는 문자는 현재 코드 페이지(949)에서 표현할 수 없습니다.
+C:\Users\ZHIEZENNIZ\Downloads\TextRPG-main\TextRPG-main\mylovelygame\Chapter4.cpp(371,16): warning C4566: 유니버설 문자 이름 '\u2014'(으)로 표현되는 문자는 현재 코드 페이지(949)에서 표현할 수 없습니다.
+  Chapter5.cpp
+C:\Users\ZHIEZENNIZ\Downloads\TextRPG-main\TextRPG-main\mylovelygame\Chapter5.cpp(25,9): warning C4101: 'choice' :참조되지 않은 지역 변수입니다.
+C:\Users\ZHIEZENNIZ\Downloads\TextRPG-main\TextRPG-main\mylovelygame\Chapter5.cpp(325,16): warning C4566: 유니버설 문자 이름 '\u2014'(으)로 표현되는 문자는 현재 코드 페이지(949)에서 표현할 수 없습니다.
+  Chapter6.cpp
+  Ending.cpp
   Game.cpp
+  Ghost.cpp
+  Inventory.cpp
+  Item.cpp
+  miniGame.cpp
+  mylovelygame.cpp
+  Player.cpp
+  GameUtils.cpp
+  SaveManager.cpp
+  Shop.cpp
   코드를 생성하고 있습니다...
-C:\Users\KGA\source\repos\mylovelygame\mylovelygame\Game.cpp(1447,1): warning C4715: 'Game::Battle': 모든 제어 경로에서 값을 반환하지는 않습니다.
-  mylovelygame.vcxproj -> C:\Users\KGA\source\repos\mylovelygame\x64\Debug\mylovelygame.exe
+C:\Users\ZHIEZENNIZ\Downloads\TextRPG-main\TextRPG-main\mylovelygame\Game.cpp(1542,1): warning C4715: 'Game::Battle': 모든 제어 경로에서 값을 반환하지는 않습니다.
+  mylovelygame.vcxproj -> C:\Users\ZHIEZENNIZ\Downloads\TextRPG-main\TextRPG-main\x64\Debug\mylovelygame.exe

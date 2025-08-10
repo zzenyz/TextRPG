@@ -40,6 +40,7 @@ void Chapter1::ShowIntro()
 
     TypeWriter("\n--- [계속하려면 Enter] ---\n", 30);
     std::cin.get();
+    std::cin.ignore();
     ClearScreen();
 
     Warn();
@@ -223,6 +224,7 @@ void Chapter1::ExploreHut()
 		}
 
 		std::cin >> choice;
+        std::cin.ignore();
 		system("cls");
 
 		std::vector<std::string> lines;
@@ -313,6 +315,7 @@ void Chapter1::ExploreAltar()
         for (const auto& line : intro) TypeWriter(line, 10);
 
         std::cin >> choice;
+        std::cin.ignore();
         system("cls");
 
         std::vector<std::string> lines;
@@ -407,6 +410,7 @@ void Chapter1::ExploreYard()
         for (const auto& line : intro) TypeWriter(line, 10);
 
         std::cin >> choice;
+        std::cin.ignore();
         system("cls");
 
         std::vector<std::string> lines;
@@ -476,6 +480,7 @@ void Chapter1::Outtro()
 
     TypeWriter("\n--- [계속하려면 Enter] ---\n", 30);
     std::cin.get();
+    std::cin.ignore();
     ClearScreen();
 
     TypeWriter("낡았지만 관리가 잘 되어 보이는 폐사당..\n"); 
@@ -492,6 +497,7 @@ void Chapter1::Outtro()
  
     TypeWriter("\n--- [계속하려면 Enter] ---\n", 30);
     std::cin.get();
+    std::cin.ignore();
     ClearScreen();
 
     ClearScreen();
@@ -505,5 +511,6 @@ void Chapter1::Outtro()
  
     TypeWriter("\n--- [계속하려면 Enter] ---\n", 30);
     std::cin.get();
+    std::cin.ignore();
     ClearScreen();
 }

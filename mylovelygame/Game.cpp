@@ -36,6 +36,7 @@ void Game::Start()
 				SetConsoleColor(12); // 빨간색
 				TypeWriter("불러오기에 실패했습니다... 새 게임을 시작합니다.\n", 30);
 				SetConsoleColor(7);
+				player.Reset();
 				ShowIntro();
 			}
 		}
@@ -236,7 +237,10 @@ void Game::ShowPlayerStatus() {
 }
 
 
-void Game::ShowMainMenu() {
+void Game::ShowMainMenu() 
+{
+	PlaySound(L"start-main.wav", NULL, SND_FILENAME | SND_ASYNC | SND_LOOP);
+
 	while (true)
 	{
 		ClearScreen();
@@ -577,7 +581,6 @@ void Game::StartChapter(int chapterNumber)
 
 
 		chapter2.ShowIntro();
-		chapter2.Warn();
 
 		while (!backToMenu)
 		{
@@ -622,7 +625,7 @@ void Game::StartChapter(int chapterNumber)
 					chapter2.ExploreTortureRoom();
 				}
 				
-				if (chapter1.GetbossAwakened())
+				if (chapter2.GetbossAwakened())
 				{
 					PlaySound(NULL, 0, 0); // 현재 소리 멈추기
 					PlaySound(L"boss.wav", NULL, SND_FILENAME | SND_ASYNC | SND_LOOP);
@@ -1134,6 +1137,10 @@ bool Game::Battle(const Ghost& enemy)
 
 	int secSkillMaxUse = 2;
 	int secSkillUsed = 2;
+	int thrSkillMaxUse = 2;
+	int thrSkillUsed = 2;
+	int forSkillMaxUse = 1;
+	int forSkillUsed = 1;
 
 	ghost = enemy;
 	int tempGhostHp = ghost.GetHp();
@@ -1171,8 +1178,11 @@ bool Game::Battle(const Ghost& enemy)
 		}
 		else
 		{
-			TypeWriter("1. 공격한다\n", 5);
+			bool cancelItemMenu = false;
+
+			TypeWriter("1. 공격하다\n", 5);
 			TypeWriter("2. 아이템 사용\n", 5);
+			TypeWriter("3. 도망치다\n", 5);
 			TypeWriter(">", 5);
 
 			int choice = 0;
@@ -1186,8 +1196,17 @@ bool Game::Battle(const Ghost& enemy)
 
 				for (size_t i = 0; i < skills.size(); ++i) {
 					std::cout << i + 1 << ". " << skills[i].name;
-					if (i == 1) {
+					if (i == 1) 
+					{
 						std::cout << " [" << secSkillUsed << "/" << secSkillMaxUse << "]";
+					}
+					if (i == 2) 
+					{
+						std::cout << " [" << thrSkillUsed << "/" << thrSkillMaxUse << "]";
+					}
+					if (i == 3)
+					{
+						std::cout << " [" << forSkillUsed << "/" << forSkillMaxUse << "]";
 					}
 					std::cout << "\n";  // 꼭 줄바꿈
 				}
@@ -1208,6 +1227,14 @@ bool Game::Battle(const Ghost& enemy)
 				}
 
 				if (skillChoice == 1 && secSkillUsed <= 0) {
+					TypeWriter("\n이 스킬은 더 이상 사용할 수 없습니다.\n", 5);
+					continue;
+				}
+				if (skillChoice == 2 && thrSkillUsed <= 0) {
+					TypeWriter("\n이 스킬은 더 이상 사용할 수 없습니다.\n", 5);
+					continue;
+				}
+				if (skillChoice == 3 && forSkillUsed <= 0) {
 					TypeWriter("\n이 스킬은 더 이상 사용할 수 없습니다.\n", 5);
 					continue;
 				}
@@ -1255,27 +1282,65 @@ bool Game::Battle(const Ghost& enemy)
 						const std::string& skillName = player.GetSkillSet()[1].name;
 						Damage += player.Attack(0, ghostDef, 80);
 						TypeWriter("\n" + skillName + "을 사용했습니다! (" + std::to_string(Damage) + " 데미지)\n", 5);
+
+						if (JobNumber == 1)
+						{
+							isghostCursedTurns = 3;
+							TypeWriter("귀신이 신령님의 신성한 힘에 의해 3턴 동안 피해를 입습니다!\n", 5);
+						}
+						else if (JobNumber == 2)
+						{
+							isghostFearedTurns = 1;
+							TypeWriter("귀신이 봉인되어 1턴 동안 행동하지 못합니다!\n", 5);
+						}
+						else if (JobNumber == 3)
+						{
+							int healAmount = Damage / 2;
+							int newHp = player.GetHp() + healAmount;
+							if (newHp > player.GetMaxHp()) newHp = player.GetMaxHp();
+							player.SetHp(newHp);
+							TypeWriter("체력을 " + std::to_string(healAmount) + " 회복했습니다!\n", 5);
+						}
+						secSkillUsed--;
+						break;
 					}
-					if (JobNumber == 1)
+					case 2:
 					{
-						isghostCursedTurns = 3;
-						TypeWriter("귀신이 신령님의 신성한 힘에 의해 3턴 동안 피해를 입습니다!\n", 5);
+						const std::string& skillName = player.GetSkillSet()[1].name;
+						Damage += player.Attack(0, ghostDef, 120);
+						TypeWriter("\n" + skillName + "을 사용했습니다! (" + std::to_string(Damage) + " 데미지)\n", 5);
+
+						if (JobNumber == 3)
+						{
+							isghostCursedTurns = 3;
+							TypeWriter("귀신은 거룩한 힘에 의해 3턴 동안 고통을 받게 되었습니다.!\n", 5);
+						}
+						else if (JobNumber == 1)
+						{
+							isghostFearedTurns = 1;
+							TypeWriter("귀신이 봉인되어 1턴 동안 행동하지 못합니다!\n", 5);
+						}
+						else if (JobNumber == 2)
+						{
+							int healAmount = Damage / 2;
+							int newHp = player.GetHp() + healAmount;
+							if (newHp > player.GetMaxHp()) newHp = player.GetMaxHp();
+							player.SetHp(newHp);
+							TypeWriter("체력을 " + std::to_string(healAmount) + " 회복했습니다!\n", 5);
+						}
+						thrSkillUsed--;
+						break;
 					}
-					else if (JobNumber == 2)
+					
+					case 3:
 					{
-						isghostFearedTurns = 1;
-						TypeWriter("귀신이 봉인되어 1턴 동안 행동하지 못합니다!\n", 5);
+						const std::string& skillName = player.GetSkillSet()[1].name;
+						Damage += player.Attack(0, ghostDef, 150);
+						TypeWriter("\n" + skillName + "을 사용했습니다! (" + std::to_string(Damage) + " 데미지)\n", 5);
+
+						forSkillUsed--;
+						break;
 					}
-					else if (JobNumber == 3)
-					{
-						int healAmount = Damage / 2;
-						int newHp = player.GetHp() + healAmount;
-						if (newHp > player.GetMaxHp()) newHp = player.GetMaxHp();
-						player.SetHp(newHp);
-						TypeWriter("체력을 " + std::to_string(healAmount) + " 회복했습니다!\n", 5);
-					}
-					secSkillUsed--;
-					break;
 
 					default:
 						TypeWriter("\n해당 스킬은 아직 구현되지 않았습니다.\n", 5);
@@ -1305,7 +1370,11 @@ bool Game::Battle(const Ghost& enemy)
 					std::cin >> itemNum;
 					std::cin.ignore();
 
-					if (itemNum == 0) continue;
+					if (itemNum == 0)
+					{
+						cancelItemMenu = true;
+						break;
+					}
 
 					if (itemNum < 1 || itemNum >(int)inv.items.size()) {
 						TypeWriter("잘못된 번호입니다.\n", 20);
@@ -1315,23 +1384,44 @@ bool Game::Battle(const Ghost& enemy)
 					auto selectedPtr = inv.items[itemNum - 1];
 					Item& selected = *selectedPtr;
 
-					if (selected.type != ItemType::Consumable) {
+					if (selected.type != ItemType::Consumable) 
+					{
 						TypeWriter("이 아이템은 사용할 수 없습니다.\n", 20);
 						continue;
 					}
 
 					bool used = player.UseItem(selected.id);
 
-					if (used) {
+					if (used) 
+					{
 						TypeWriter("아이템을 사용했습니다.\n", 20);
+						break;
 					}
-					else {
+					else 
+					{
 						TypeWriter("아이템 사용에 실패했습니다.\n", 20);
+						cancelItemMenu = true;
+						break;
 					}
-
-					break;
 				}
+				if (cancelItemMenu) {
+					continue; // 전투 메뉴 while 맨 처음으로 돌아감 → 메뉴 다시 출력됨
+				}
+			}
+			else if (choice == 3)
+			{
+				// 도망 처리
+				int goldLost = player.GetGold() * 5 / 100;
+				if (goldLost < 1) goldLost = 1; // 최소 1골드 손실
 
+				player.SpendGold(goldLost);
+
+				TypeWriter("\n당신은 전투에서 도망쳤습니다!\n", 20);
+				TypeWriter("골드 " + std::to_string(goldLost) + "를 잃었습니다.\n", 20);
+				TypeWriter("안전한 곳으로 도망쳤습니다...\n", 20);
+
+				SleepMs(1500);
+				return false; 
 			}
 			else
 			{
@@ -1420,6 +1510,9 @@ bool Game::Battle(const Ghost& enemy)
 		{
 			player.LevelUp();
 		}
+
+		SleepMs(2000);
+
 		return true;
 	}
 	else if (player.GetHp() <= 0 || (attacksLeft == 0 && tempGhostHp > 0))
@@ -1435,6 +1528,8 @@ bool Game::Battle(const Ghost& enemy)
 		{
 			player.LevelUp();
 		}
+
+		SleepMs(2000);
 
 		int hpRestore = player.GetMaxHp() / 10;
 		if (hpRestore < 1) hpRestore = 1;  // 최소 1은 회복

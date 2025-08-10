@@ -51,9 +51,6 @@
     <ClCompile Include="Ghost.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="Skills.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="Chapter2.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>

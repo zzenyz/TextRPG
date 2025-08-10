@@ -35,12 +35,10 @@ void Chapter2::ShowIntro()
 
 	TypeWriter("\n--- [계속하려면 Enter] ---\n", 30);
 	std::cin.get();
+	std::cin.ignore();
 	ClearScreen();
-}
 
-void Chapter2::Warn()
-{
-	std::vector<std::string> lines = {
+	std::vector<std::string> warn = {
 		"========================================\n",
 		"[Chapter 2]\n\n",
 		"이곳은 과거 수많은 죄수들이 사라졌다는 전설이 있는 장소입니다.\n\n",
@@ -52,12 +50,19 @@ void Chapter2::Warn()
 		"========================================\n"
 	};
 
-	for (const auto& line : lines)
+	for (const auto& line : warn)
 	{
 		TypeWriter(line, 10);
 		std::this_thread::sleep_for(std::chrono::milliseconds(300));
 	}
+
+	TypeWriter("\n--- [계속하려면 Enter] ---\n", 30);
+	std::cin.get();
+	std::cin.ignore();
+	ClearScreen();
+
 }
+
 
 void Chapter2::ExploreMap()
 {
@@ -85,8 +90,21 @@ void Chapter2::ExploreCell()
 {
 	bool hasKeepsake = false;
 	int choice;
-	ClearScreen();
-	while (true) {
+
+	while (true) 
+	{
+		if (battleCooldown > 0) {
+			battleCooldown--;
+		}
+		if (battleCooldown == 0 && rand() % 10 < 7)
+		{
+			Setghostcomesout(true);
+			battleCooldown = 3;
+			return;
+		}
+
+		ClearScreen();
+	
 		std::vector<std::string> intro = {
 			"[독방]\n\n",
 			"철창 안은 축축하고 어두웠다.\n",
@@ -102,6 +120,7 @@ void Chapter2::ExploreCell()
 			TypeWriter(line, 10);
 
 		std::cin >> choice;
+		std::cin.ignore();
 		system("cls");
 
 		switch (choice) {
@@ -156,8 +175,20 @@ void Chapter2::ExploreTortureRoom()
 {
 	int choice;
 	
-	ClearScreen();
 	while (true) {
+
+		if (battleCooldown > 0) {
+			battleCooldown--;
+		}
+		if (battleCooldown == 0 && rand() % 10 < 7)
+		{
+			Setghostcomesout(true);
+			battleCooldown = 3;
+			return;
+		}
+
+		ClearScreen();
+
 		std::vector<std::string> intro = {
 			"[지하 고문실]\n\n",
 			"습기와 곰팡이 냄새가 진동한다.\n",
@@ -173,6 +204,7 @@ void Chapter2::ExploreTortureRoom()
 			TypeWriter(line, 10);
 
 		std::cin >> choice;
+		std::cin.ignore();
 		system("cls");
 
 		std::vector<std::string> lines;
@@ -235,8 +267,20 @@ void Chapter2::ExploreTortureRoom()
 void Chapter2::ExploreWardenOffice()
 {
 	int choice;
-	ClearScreen();
-	while (true) {
+	while (true) 
+	{
+		if (battleCooldown > 0) {
+			battleCooldown--;
+		}
+		if (battleCooldown == 0 && rand() % 10 < 7)
+		{
+			Setghostcomesout(true);
+			battleCooldown = 3;
+			return;
+		}
+
+		ClearScreen();
+
 		std::vector<std::string> intro = {
 			"[교도소장실]\n\n",
 			"서랍과 문서들로 가득한 방. 조용히 먼지가 내려앉아 있다.\n",
@@ -252,6 +296,7 @@ void Chapter2::ExploreWardenOffice()
 			TypeWriter(line, 10);
 
 		std::cin >> choice;
+		std::cin.ignore();
 		system("cls");
 
 		std::vector<std::string> lines;
@@ -310,9 +355,20 @@ void Chapter2::ExploreWardenOffice()
 void Chapter2::ExploreWatchtower()
 {
 	int choice;
-	ClearScreen();
 	while (true)
 	{
+		if (battleCooldown > 0) {
+			battleCooldown--;
+		}
+		if (battleCooldown == 0 && rand() % 10 < 7)
+		{
+			Setghostcomesout(true);
+			battleCooldown = 3;
+			return;
+		}
+
+		ClearScreen();
+
 		std::vector<std::string> intro = {
 			"[감시탑]\n\n",
 			"낡은 계단을 오르자, 먼지가 쌓인 감시 공간이 나온다.\n",
@@ -328,6 +384,7 @@ void Chapter2::ExploreWatchtower()
 			TypeWriter(line, 10);
 
 		std::cin >> choice;
+		std::cin.ignore();
 		system("cls");
 
 		std::vector<std::string> lines;
@@ -392,7 +449,7 @@ void Chapter2::Outtro()
 	TypeWriter("…녹슨 수갑이다.\n", 40);
 	TypeWriter("붉은 기운이 퍼지며, 멀리서 맑고 쓸쓸한 종소리가 들려온다.\n", 40);
 
-	TypeWriter("\n그 순간—\n", 50);
+	TypeWriter("\n그 순간-\n", 50);
 	TypeWriter("낯설고도 익숙한 종소리가 귀를 울린다.\n", 40);
 	TypeWriter("실제인지 환청인지, 분간되지 않는 맑고 낮은 음.\n", 30);
 	TypeWriter("그리고… 시야에 어렴풋한 장면이 떠오른다.\n\n", 30);
@@ -418,6 +475,7 @@ void Chapter2::Outtro()
 
 	TypeWriter("\n--- [계속하려면 Enter] ---\n", 30);
 	std::cin.get();
+	std::cin.ignore();
 	ClearScreen();
 
 	TypeWriter("눈을 뜨니, 다시 교도소의 어둠 속.\n", 30);
@@ -426,5 +484,6 @@ void Chapter2::Outtro()
 
 	TypeWriter("\n--- [계속하려면 Enter] ---\n", 30);
 	std::cin.get();
+	std::cin.ignore();
 	ClearScreen();
 }

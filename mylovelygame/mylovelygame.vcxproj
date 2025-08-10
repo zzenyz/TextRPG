@@ -141,7 +141,6 @@
     <ClCompile Include="GameUtils.cpp" />
     <ClCompile Include="SaveManager.cpp" />
     <ClCompile Include="Shop.cpp" />
-    <ClCompile Include="Skills.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Buff.h" />

@@ -33,6 +33,7 @@ void Chapter3::ShowIntro()
 
     TypeWriter("\n--- [계속하려면 Enter] ---\n", 30);
     std::cin.get();
+    std::cin.ignore();
     ClearScreen();
 }
 
@@ -69,8 +70,20 @@ void Chapter3::ExploreStorage() {
     bool hasKeepsake = false;
     int choice;
 
-    while (true) {
+    while (true) 
+    {
+        if (battleCooldown > 0) {
+            battleCooldown--;
+        }
+        if (battleCooldown == 0 && rand() % 10 < 7)
+        {
+            Setghostcomesout(true);
+            battleCooldown = 3;
+            return;
+        }
+
         ClearScreen();
+
         TypeWriter("[유류 창고]\n\n", 10);
         TypeWriter("습하고 눅눅한 공기가 가득한 유류 창고.\n", 15);
         TypeWriter("녹슨 유조통과 부서진 배럴들이 흩어져 있어, 누군가 급히 이곳을 떠난 듯한 느낌이다.\n", 15);
@@ -133,8 +146,20 @@ void Chapter3::ExploreBoat() {
     int choice;
     bool hasKeepsake = false;
 
-    while (true) {
+    while (true) 
+    {
+        if (battleCooldown > 0) {
+            battleCooldown--;
+        }
+        if (battleCooldown == 0 && rand() % 10 < 7)
+        {
+            Setghostcomesout(true);
+            battleCooldown = 3;
+            return;
+        }
+
         ClearScreen();
+
         TypeWriter("[부서진 어선 내부]\n\n", 10);
         TypeWriter("기울어진 선실에 들어서자, 눅눅한 바닷내음이 감돈다.\n", 10);
         TypeWriter("바닥에는 해초와 부식된 나무 조각이 널려 있다.\n\n", 10);
@@ -191,8 +216,20 @@ void Chapter3::ExploreBoat() {
 void Chapter3::ExploreDockEdge() {
     int choice;
 
-    while (true) {
+    while (true) 
+    {
+        if (battleCooldown > 0) {
+            battleCooldown--;
+        }
+        if (battleCooldown == 0 && rand() % 10 < 7)
+        {
+            Setghostcomesout(true);
+            battleCooldown = 3;
+            return;
+        }
+
         ClearScreen();
+
         TypeWriter("[부두 끝]\n\n", 10);
         TypeWriter("파도가 철썩이며 부두 기둥을 때린다.\n", 10);
         TypeWriter("그 끝엔 누군가 서 있었던 듯, 깊이 파인 발자국 흔적이 보인다.\n\n", 10);
@@ -255,8 +292,20 @@ void Chapter3::ExploreDockEdge() {
 void Chapter3::ExploreLighthouse() {
     int choice;
     
-    while (true) {
+    while (true) 
+    {
+        if (battleCooldown > 0) {
+            battleCooldown--;
+        }
+        if (battleCooldown == 0 && rand() % 10 < 7)
+        {
+            Setghostcomesout(true);
+            battleCooldown = 3;
+            return;
+        }
+
         ClearScreen();
+
         TypeWriter("[버려진 등대 내부]\n\n", 10);
         TypeWriter("무너진 계단을 따라 올라가자, 오래된 등불과 거울 장치가 보인다.\n", 10);
         TypeWriter("바다를 굽어보는 등대 내부는 오래되어 삭았지만,누군가가 사용한 흔적이 남아 있다.\n", 15);
@@ -350,6 +399,7 @@ void Chapter3::Outtro()
 
     TypeWriter("\n--- [계속하려면 Enter] ---\n", 30);
     std::cin.get();
+    std::cin.ignore();
     ClearScreen();
 
     TypeWriter("짠내와 바닷바람이 다시 피부를 스친다. 부두다.\n", 30);
@@ -367,5 +417,6 @@ void Chapter3::Outtro()
 
     TypeWriter("\n--- [계속하려면 Enter] ---\n", 30);
     std::cin.get();
+    std::cin.ignore();
     ClearScreen();
 }
