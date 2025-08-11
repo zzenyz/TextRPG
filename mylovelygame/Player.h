@@ -24,7 +24,7 @@ private:
 	int karma;
 	int cluePoints = 0;
 	int unlockedChapter;
-	int gold = 100000;
+	int gold = 0;
 	std::vector<Skill> skillSet;
 
 	Inventory inventory;
@@ -40,7 +40,7 @@ public:
 	{
 	}
 
-	// ÀÌ¸§ & Á÷¾÷
+	// ì´ë¦„ & ì§ì—…
 	void SetName(const std::string& newName) { name = newName; }
 	std::string GetName() const { return name; }
 
@@ -51,19 +51,19 @@ public:
 		switch (jobNumber) {
 
 		case 1:
-			jobName = "¹«´ç";
+			jobName = "ë¬´ë‹¹";
 			hp = maxHp = 45; atk = 63; def = 55;
 			break;
 		case 2:
-			jobName = "Ç³¼öÁö¸®»ç";
+			jobName = "í’ìˆ˜ì§€ë¦¬ì‚¬";
 			hp = maxHp = 55; atk = 55; def = 45;
 			break;
 		case 3:
-			jobName = "½ÅÇĞ»ı";
+			jobName = "ì‹ í•™ìƒ";
 			hp = maxHp = 65; atk = 45; def = 45;
 			break;
 		default:
-			jobName = "¹«´ç";
+			jobName = "ë¬´ë‹¹";
 			hp = maxHp = 45; atk = 63; def = 55;
 		}
 
@@ -76,7 +76,7 @@ public:
 	void InitSkills();
 	const std::vector<Skill>& GetSkillSet() const { return skillSet; }
 
-	// ´É·ÂÄ¡
+	// ëŠ¥ë ¥ì¹˜
 	int GetHp() const { return hp; }
 	void SetHp(int newHp) { hp = newHp; }
 
@@ -120,12 +120,12 @@ public:
 	Inventory& GetInventory() { return inventory; }
 	const Inventory& GetInventory() const { return inventory; }
 
-	// ´Ü¼­ Ãß°¡
+	// ë‹¨ì„œ ì¶”ê°€
 	void AddClue(const std::string& clue) {
 		clues.push_back(clue);
 	}
 
-	// À¯Ç° Ãß°¡
+	// ìœ í’ˆ ì¶”ê°€
 	void AddKeepsake(const std::string& Artikel) {
 		keepsakes.push_back(Artikel);
 	}
@@ -141,25 +141,25 @@ public:
 			if (eqItemPtr != nullptr && eqItemPtr->id != -1)
 			{
 				int bonus = eqItemPtr->GetAtkBonus();
-				std::cout << "[µğ¹ö±×] ÀåÂø ¾ÆÀÌÅÛ ID: " << eqItemPtr->id << ", °ø°İ º¸³Ê½º: " << bonus << "%\n";
+				std::cout << "[ë””ë²„ê·¸] ì¥ì°© ì•„ì´í…œ ID: " << eqItemPtr->id << ", ê³µê²© ë³´ë„ˆìŠ¤: " << bonus << "%\n";
 				totalAtkBonusPercent += bonus;
 			}
 			else
 			{
-				std::cout << "[µğ¹ö±×] ÀåÂø ¾ÆÀÌÅÛ ¾øÀ½ ¶Ç´Â nullptr\n";
+				std::cout << "[ë””ë²„ê·¸] ì¥ì°© ì•„ì´í…œ ì—†ìŒ ë˜ëŠ” nullptr\n";
 			}
 		}
 
-		std::cout << "[µğ¹ö±×] ±âº» °ø°İ·Â: " << atk << "\n";
-		std::cout << "[µğ¹ö±×] ¹öÇÁ °ø°İ º¸³Ê½º: " << currentBuff.atkBoost << "%\n";
+		std::cout << "[ë””ë²„ê·¸] ê¸°ë³¸ ê³µê²©ë ¥: " << atk << "\n";
+		std::cout << "[ë””ë²„ê·¸] ë²„í”„ ê³µê²© ë³´ë„ˆìŠ¤: " << currentBuff.atkBoost << "%\n";
 
 		int weaponBonus = (atk * totalAtkBonusPercent) / 100;
 		int buffBonus = (atk * currentBuff.atkBoost) / 100;
 		int total = atk + weaponBonus + buffBonus;
 
-		std::cout << "[µğ¹ö±×] ¾ÆÀÌÅÛ °ø°İ º¸³Ê½º ÇÕ»ê: " << weaponBonus << "\n";
-		std::cout << "[µğ¹ö±×] ¹öÇÁ º¸³Ê½º Àû¿ë ÈÄ: " << buffBonus << "\n";
-		std::cout << "[µğ¹ö±×] ÃÖÁ¾ °ø°İ·Â: " << total << "\n";
+		std::cout << "[ë””ë²„ê·¸] ì•„ì´í…œ ê³µê²© ë³´ë„ˆìŠ¤ í•©ì‚°: " << weaponBonus << "\n";
+		std::cout << "[ë””ë²„ê·¸] ë²„í”„ ë³´ë„ˆìŠ¤ ì ìš© í›„: " << buffBonus << "\n";
+		std::cout << "[ë””ë²„ê·¸] ìµœì¢… ê³µê²©ë ¥: " << total << "\n";
 
 		return total;
 	}
@@ -205,7 +205,7 @@ public:
 		currentBuff.hpBuffTurns = turns;
 	}
 
-	// Áï½Ã Ã¼·Â È¸º¹ ÇÔ¼ö Ãß°¡
+	// ì¦‰ì‹œ ì²´ë ¥ íšŒë³µ í•¨ìˆ˜ ì¶”ê°€
 	void HealHp(int amount)
 	{
 		hp += amount;
@@ -228,7 +228,7 @@ public:
 	}
 
 
-	//ÆÄÀÏ ¼¼ÀÌºê ·Îµå
+	//íŒŒì¼ ì„¸ì´ë¸Œ ë¡œë“œ
 	bool Save(std::ofstream& ofs) const;
 	bool Load(std::ifstream& ifs);
 
@@ -239,3 +239,4 @@ public:
 
 	void Reset();
 };
+
