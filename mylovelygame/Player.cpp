@@ -19,28 +19,28 @@ bool Player::Save(std::ofstream& ofs) const {
 	ofs.write(reinterpret_cast<const char*>(&unlockedChapter), sizeof(unlockedChapter));
 	ofs.write(reinterpret_cast<const char*>(&gold), sizeof(gold));
 
-	// clues ÀúÀå
+	// clues ì €ì¥
 	size_t clueCount = clues.size();
 	ofs.write(reinterpret_cast<const char*>(&clueCount), sizeof(clueCount));
 	for (const std::string& clue : clues) {
 		ofs.write(clue.c_str(), clue.size() + 1);
 	}
 
-	// keepsakes ÀúÀå
+	// keepsakes ì €ì¥
 	size_t keepsakeCount = keepsakes.size();
 	ofs.write(reinterpret_cast<const char*>(&keepsakeCount), sizeof(keepsakeCount));
 	for (const std::string& item : keepsakes) {
 		ofs.write(item.c_str(), item.size() + 1);
 	}
 
-	// --- Inventory items ÀúÀå ---
+	// --- Inventory items ì €ì¥ ---
 	size_t invItemCount = inventory.items.size();
 	ofs.write(reinterpret_cast<const char*>(&invItemCount), sizeof(invItemCount));
 	for (const auto& itemPtr : inventory.items) {
 		if (itemPtr) {
 			ofs.write(reinterpret_cast<const char*>(&itemPtr->id), sizeof(itemPtr->id));
 			ofs.write(reinterpret_cast<const char*>(&itemPtr->quantity), sizeof(itemPtr->quantity));
-			// ÇÊ¿äÇÏ´Ù¸é atkBonus, defBonus, hpBonus µîµµ ÀúÀå °¡´É
+			// í•„ìš”í•˜ë‹¤ë©´ atkBonus, defBonus, hpBonus ë“±ë„ ì €ì¥ ê°€ëŠ¥
 		}
 		else {
 			int invalidId = -1;
@@ -50,14 +50,14 @@ bool Player::Save(std::ofstream& ofs) const {
 		}
 	}
 
-	// --- Equipped items ÀúÀå ---
+	// --- Equipped items ì €ì¥ ---
 	size_t equippedCount = inventory.equippedItems.size();
 	ofs.write(reinterpret_cast<const char*>(&equippedCount), sizeof(equippedCount));
 	for (const auto& eqItemPtr : inventory.equippedItems) {
 		if (eqItemPtr) {
 			ofs.write(reinterpret_cast<const char*>(&eqItemPtr->id), sizeof(eqItemPtr->id));
 			ofs.write(reinterpret_cast<const char*>(&eqItemPtr->quantity), sizeof(eqItemPtr->quantity));
-			// ÇÊ¿äÇÏ´Ù¸é atkBonus, defBonus, hpBonus ÀúÀå °¡´É
+			// í•„ìš”í•˜ë‹¤ë©´ atkBonus, defBonus, hpBonus ì €ì¥ ê°€ëŠ¥
 		}
 		else {
 			int invalidId = -1;
@@ -75,7 +75,7 @@ bool Player::Save(std::ofstream& ofs) const {
 		ofs.write(skill.description.c_str(), skill.description.size() + 1);
 	}
 
-	// --- Buff ÀúÀå (ÇÊ¿ä½Ã) ---
+	// --- Buff ì €ì¥ (í•„ìš”ì‹œ) ---
 	ofs.write(reinterpret_cast<const char*>(&currentBuff.atkBoost), sizeof(currentBuff.atkBoost));
 	ofs.write(reinterpret_cast<const char*>(&currentBuff.defBoost), sizeof(currentBuff.defBoost));
 	ofs.write(reinterpret_cast<const char*>(&currentBuff.hpBoost), sizeof(currentBuff.hpBoost));
@@ -105,7 +105,7 @@ bool Player::Load(std::ifstream& ifs)
 	ifs.read(reinterpret_cast<char*>(&unlockedChapter), sizeof(unlockedChapter));
 	ifs.read(reinterpret_cast<char*>(&gold), sizeof(gold));
 
-	// clues º¹¿ø
+	// clues ë³µì›
 	size_t clueCount = 0;
 	ifs.read(reinterpret_cast<char*>(&clueCount), sizeof(clueCount));
 	clues.clear();
@@ -115,7 +115,7 @@ bool Player::Load(std::ifstream& ifs)
 		clues.push_back(clue);
 	}
 
-	// keepsakes º¹¿ø
+	// keepsakes ë³µì›
 	size_t keepsakeCount = 0;
 	ifs.read(reinterpret_cast<char*>(&keepsakeCount), sizeof(keepsakeCount));
 	keepsakes.clear();
@@ -125,7 +125,7 @@ bool Player::Load(std::ifstream& ifs)
 		keepsakes.push_back(item);
 	}
 
-	// ¾ÆÀÌÅÛ º¹¿ø
+	// ì•„ì´í…œ ë³µì›
 	auto consumables = GetConsumableItems();
 	auto equipments = GetEquipmentItems();
 
@@ -201,7 +201,7 @@ bool Player::Load(std::ifstream& ifs)
 		skillSet.push_back(Skill{ name, description });
 	}
 
-	// Buff º¹¿ø
+	// Buff ë³µì›
 	ifs.read(reinterpret_cast<char*>(&currentBuff.atkBoost), sizeof(currentBuff.atkBoost));
 	ifs.read(reinterpret_cast<char*>(&currentBuff.defBoost), sizeof(currentBuff.defBoost));
 	ifs.read(reinterpret_cast<char*>(&currentBuff.hpBoost), sizeof(currentBuff.hpBoost));
@@ -214,12 +214,12 @@ bool Player::Load(std::ifstream& ifs)
 
 void Player::ShowMemoryStorage() const
 {
-	std::cout << "\n=== [±â¾ï ÀúÀå¼Ò] ===\n";
+	std::cout << "\n=== [ê¸°ì–µ ì €ì¥ì†Œ] ===\n";
 
-	std::cout << "\n[´Ü¼­]\n";
+	std::cout << "\n[ë‹¨ì„œ]\n";
 	if (clues.empty())
 	{
-		std::cout << "¾ÆÁ÷ ¹ß°ßÇÑ ´Ü¼­°¡ ¾ø½À´Ï´Ù.\n";
+		std::cout << "ì•„ì§ ë°œê²¬í•œ ë‹¨ì„œê°€ ì—†ìŠµë‹ˆë‹¤.\n";
 	}
 	else
 	{
@@ -228,10 +228,10 @@ void Player::ShowMemoryStorage() const
 		}
 	}
 
-	std::cout << "\n[À¯Ç°]\n";
+	std::cout << "\n[ìœ í’ˆ]\n";
 	if (keepsakes.empty())
 	{
-		std::cout << "¾ÆÁ÷ ¹ß°ßÇÑ À¯Ç°ÀÌ ¾ø½À´Ï´Ù.\n";
+		std::cout << "ì•„ì§ ë°œê²¬í•œ ìœ í’ˆì´ ì—†ìŠµë‹ˆë‹¤.\n";
 	}
 	else
 	{
@@ -242,23 +242,23 @@ void Player::ShowMemoryStorage() const
 	}
 
 	std::cout << "\n====================\n";
-	TypeWriter("\n--- [°è¼ÓÇÏ·Á¸é Enter] ---\n", 30);
+	TypeWriter("\n--- [ê³„ì†í•˜ë ¤ë©´ Enter] ---\n", 30);
 	std::cin.get();
 	ClearScreen();
 }
 
 void Player::InitSkills() {
-	skillSet.clear(); // ±âÁ¸ ½ºÅ³ ºñ¿ì°í
+	skillSet.clear(); // ê¸°ì¡´ ìŠ¤í‚¬ ë¹„ìš°ê³ 
 
 	if (Job == 1) {
-		skillSet.push_back({ "ºÎÀû ÅõÃ´", "±âº» µ¥¹ÌÁö" });
-		// ÇÊ¿ä ½Ã ´õ Ãß°¡ °¡´É
+		skillSet.push_back({ "ë¶€ì  íˆ¬ì²™", "ê¸°ë³¸ ë°ë¯¸ì§€" });
+		// í•„ìš” ì‹œ ë” ì¶”ê°€ ê°€ëŠ¥
 	}
 	else if (Job == 2) {
-		skillSet.push_back({ "Áö¸Æ ºØ±«", "±âº» µ¥¹ÌÁö" });
+		skillSet.push_back({ "ì§€ë§¥ ë¶•ê´´", "ê¸°ë³¸ ë°ë¯¸ì§€" });
 	}
 	else if (Job == 3) {
-		skillSet.push_back({ "¼º¼ö ÅõÃ´", "±âº» µ¥¹ÌÁö" });
+		skillSet.push_back({ "ì„±ìˆ˜ íˆ¬ì²™", "ê¸°ë³¸ ë°ë¯¸ì§€" });
 	}
 }
 
@@ -279,63 +279,63 @@ void Player::LevelUp()
 		EXP -= MaxEXP;
 		level++;
 
-		MaxEXP = static_cast<int>(MaxEXP * 1.35); // ÃÖ´ë °æÇèÄ¡ 35% Áõ°¡
+		MaxEXP = static_cast<int>(MaxEXP * 1.35); // ìµœëŒ€ ê²½í—˜ì¹˜ 35% ì¦ê°€
 
-		maxHp = static_cast<int>(maxHp * 1.10);   // Ã¼·Â 10% Áõ°¡
-		atk = static_cast<int>(atk * 1.10);       // °ø°İ·Â 10% Áõ°¡
-		def = static_cast<int>(def * 1.10);       // ¹æ¾î·Â 10% Áõ°¡
-		hp = maxHp; // Ã¼·Â È¸º¹
+		maxHp = static_cast<int>(maxHp * 1.10);   // ì²´ë ¥ 10% ì¦ê°€
+		atk = static_cast<int>(atk * 1.10);       // ê³µê²©ë ¥ 10% ì¦ê°€
+		def = static_cast<int>(def * 1.10);       // ë°©ì–´ë ¥ 10% ì¦ê°€
+		hp = maxHp; // ì²´ë ¥ íšŒë³µ
 
-		std::cout << "·¹º§ ¾÷! ÇöÀç ·¹º§: " << level << "\n";
-		std::cout << "Ã¼·Â, °ø°İ·Â, ¹æ¾î·ÂÀÌ Áõ°¡Çß½À´Ï´Ù!\n";
+		std::cout << "ë ˆë²¨ ì—…! í˜„ì¬ ë ˆë²¨: " << level << "\n";
+		std::cout << "ì²´ë ¥, ê³µê²©ë ¥, ë°©ì–´ë ¥ì´ ì¦ê°€í–ˆìŠµë‹ˆë‹¤!\n";
 
 		if (level == 3)
 		{
 			if (Job == 1) {
-				skillSet.push_back({ "°­½ÅÀÇ Ãã", "¾àÇÑ µ¥¹ÌÁö + 3ÅÏ µ¿¾È Áö¼Ó µ¥¹ÌÁö" });
+				skillSet.push_back({ "ê°•ì‹ ì˜ ì¶¤", "ì•½í•œ ë°ë¯¸ì§€ + 3í„´ ë™ì•ˆ ì§€ì† ë°ë¯¸ì§€" });
 			}
 			else if (Job == 2) {
-				skillSet.push_back({ "Ç³¼ö ºÀÀÎ", "¾àÇÑ µ¥¹ÌÁö + 1ÅÏ µ¿¾È ±Í½Å ºÀÀÎ" });
+				skillSet.push_back({ "í’ìˆ˜ ë´‰ì¸", "ì•½í•œ ë°ë¯¸ì§€ + 1í„´ ë™ì•ˆ ê·€ì‹  ë´‰ì¸" });
 			}
 			else if (Job == 3) {
-				skillSet.push_back({ "ÀºÃÑÀÇ ÀÏ°İ", "¾àÇÑ µ¥¹ÌÁö + ÇÇÇØ·® 50% È¸º¹" });
+				skillSet.push_back({ "ì€ì´ì˜ ì¼ê²©", "ì•½í•œ ë°ë¯¸ì§€ + í”¼í•´ëŸ‰ 50% íšŒë³µ" });
 			}
-			TypeWriter("»õ·Î¿î ½ºÅ³À» ¹è¿ü½À´Ï´Ù!\n", 30);
+			TypeWriter("ìƒˆë¡œìš´ ìŠ¤í‚¬ì„ ë°°ì› ìŠµë‹ˆë‹¤!\n", 30);
 		}
 
 		if (level == 6)
 		{
 			if (Job == 1) {
-				skillSet.push_back({ "È¥·Éº£±â", "Áß°£ µ¥¹ÌÁö + 1ÅÏ µ¿¾È ±Í½Å ºÀÀÎ" });
+				skillSet.push_back({ "í˜¼ë ¹ë² ê¸°", "ì¤‘ê°„ ë°ë¯¸ì§€ + 1í„´ ë™ì•ˆ ê·€ì‹  ë´‰ì¸" });
 			}
 			else if (Job == 2) {
-				skillSet.push_back({ "ÈëÀÇ ¼û°á", "Áß°£ µ¥¹ÌÁö + ÇÇÇØ·® 50% È¸º¹" });
+				skillSet.push_back({ "í™ì˜ ìˆ¨ê²°", "ì¤‘ê°„ ë°ë¯¸ì§€ + í”¼í•´ëŸ‰ 50% íšŒë³µ" });
 			}
 			else if (Job == 3) {
-				skillSet.push_back({ "±×·¡°í¸®¾È ¼º°¡", "Áß°£ µ¥¹ÌÁö + 3ÅÏ µ¿¾È Áö¼Ó µ¥¹ÌÁö" });
+				skillSet.push_back({ "ê·¸ë˜ê³ ë¦¬ì•ˆ ì„±ê°€", "ì¤‘ê°„ ë°ë¯¸ì§€ + 3í„´ ë™ì•ˆ ì§€ì† ë°ë¯¸ì§€" });
 			}
-			TypeWriter("»õ·Î¿î ½ºÅ³À» ¹è¿ü½À´Ï´Ù!\n", 30);
+			TypeWriter("ìƒˆë¡œìš´ ìŠ¤í‚¬ì„ ë°°ì› ìŠµë‹ˆë‹¤!\n", 30);
 		}
 
 		if (level == 10)
 		{
 			if (Job == 1) {
-				skillSet.push_back({ "ºÓÀº ±İÁ¦", "°­·ÂÇÑ µ¥¹ÌÁö" });
+				skillSet.push_back({ "ë¶‰ì€ ê¸ˆì œ", "ê°•ë ¥í•œ ë°ë¯¸ì§€" });
 			}
 			else if (Job == 2) {
-				skillSet.push_back({ "»êÃµÀÇ ¿ïºÎÂ¢À½", "°­·ÂÇÑ µ¥¹ÌÁö" });
+				skillSet.push_back({ "ì‚°ì²œì˜ ìš¸ë¶€ì§–ìŒ", "ê°•ë ¥í•œ ë°ë¯¸ì§€" });
 			}
 			else if (Job == 3) {
-				skillSet.push_back({ "ÃÖÈÄÀÇ ½É¹®", "°­·ÂÇÑ µ¥¹ÌÁö" });
+				skillSet.push_back({ "ìµœí›„ì˜ ì‹¬ë¬¸", "ê°•ë ¥í•œ ë°ë¯¸ì§€" });
 			}
-			TypeWriter("»õ·Î¿î ½ºÅ³À» ¹è¿ü½À´Ï´Ù!\n", 30);
+			TypeWriter("ìƒˆë¡œìš´ ìŠ¤í‚¬ì„ ë°°ì› ìŠµë‹ˆë‹¤!\n", 30);
 		}
 
 		if (level == 4 || level == 7 || level == 9)
 		{
 			inventory.IncreaseMaxSlots(5);
-			TypeWriter("·¹º§ ¾÷! ÇöÀç ·¹º§: " + std::to_string(level) + "\n", 5);
-			TypeWriter("ÀÎº¥Åä¸® ÃÖ´ë ½½·ÔÀÌ " + std::to_string(inventory.maxSlots) + "Ä­À¸·Î ´Ã¾î³µ½À´Ï´Ù!\n", 5);
+			TypeWriter("ë ˆë²¨ ì—…! í˜„ì¬ ë ˆë²¨: " + std::to_string(level) + "\n", 5);
+			TypeWriter("ì¸ë²¤í† ë¦¬ ìµœëŒ€ ìŠ¬ë¡¯ì´ " + std::to_string(inventory.maxSlots) + "ì¹¸ìœ¼ë¡œ ëŠ˜ì–´ë‚¬ìŠµë‹ˆë‹¤!\n", 5);
 		}
 	}
 }
@@ -349,24 +349,24 @@ bool Player::UseItem(int itemId)
 	{
 		int healAmount = 10;
 		hp += healAmount;
-		TypeWriter("»ı¸íÃÊ¸¦ »ç¿ëÇØ Ã¼·ÂÀ» È¸º¹Çß½À´Ï´Ù.\n", 20);
+		TypeWriter("ìƒëª…ì´ˆë¥¼ ì‚¬ìš©í•´ ì²´ë ¥ì„ íšŒë³µí–ˆìŠµë‹ˆë‹¤.\n", 20);
 		break;
 	}
 	case 1:
 		ApplyAtkBuff(10, 3);
-		TypeWriter("½Å¹¦ÇÑ ÈûÀ¸·Î °ø°İ·ÂÀÌ »ó½ÂÇß½À´Ï´Ù.\n", 20);
+		TypeWriter("ì‹ ë¬˜í•œ í˜ìœ¼ë¡œ ê³µê²©ë ¥ì´ ìƒìŠ¹í–ˆìŠµë‹ˆë‹¤.\n", 20);
 		break;
 	case 2:
-		TypeWriter("Á¤½Å¾ÈÁ¤Á¦·Î ÀÌ»ó »óÅÂ¸¦ È¸º¹Çß½À´Ï´Ù.\n", 20);
+		TypeWriter("ì •ì‹ ì•ˆì •ì œë¡œ ì´ìƒ ìƒíƒœë¥¼ íšŒë³µí–ˆìŠµë‹ˆë‹¤.\n", 20);
 		break;
 	case 3:
 	{
 		while (true) 
 		 {
-			TypeWriter("È¥·É¼­¸¦ »ç¿ëÇØ Àåºñ¸¦ °­È­ÇÕ´Ï´Ù.\n", 20);
-			TypeWriter("\n°­È­ÇÒ Àåºñ ½½·Ô ¹øÈ£¸¦ ¼±ÅÃÇÏ¼¼¿ä.\n", 20);
-			TypeWriter("\n¸Ş´º·Î µ¹¾Æ°¡½Ã·Á¸é 0\n", 10);
-			TypeWriter("1. ¹«±â  \n2. ¹æ¾î±¸  \n3. ¾Ç¼¼»ç¸®\n", 20);
+			TypeWriter("í˜¼ë ¹ì„œë¥¼ ì‚¬ìš©í•´ ì¥ë¹„ë¥¼ ê°•í™”í•©ë‹ˆë‹¤.\n", 20);
+			TypeWriter("\nê°•í™”í•  ì¥ë¹„ ìŠ¬ë¡¯ ë²ˆí˜¸ë¥¼ ì„ íƒí•˜ì„¸ìš”.\n", 20);
+			TypeWriter("\në©”ë‰´ë¡œ ëŒì•„ê°€ì‹œë ¤ë©´ 0\n", 10);
+			TypeWriter("1. ë¬´ê¸°  \n2. ë°©ì–´êµ¬  \n3. ì•…ì„¸ì‚¬ë¦¬\n", 20);
 			TypeWriter("> ");
 
 			int choice = 0;
@@ -377,23 +377,23 @@ bool Player::UseItem(int itemId)
 
 			int idx = choice - 1;
 			if (idx < 0 || idx >= 3 || idx >= (int)inv.equippedItems.size()) {
-				TypeWriter("Àß¸øµÈ ÀÔ·ÂÀÔ´Ï´Ù.\n", 20);
-				continue;  // ´Ù½Ã ÀÔ·Â¹Ş±â
+				TypeWriter("ì˜ëª»ëœ ì…ë ¥ì…ë‹ˆë‹¤.\n", 20);
+				continue;  // ë‹¤ì‹œ ì…ë ¥ë°›ê¸°
 			}
 
 			auto targetPtr = inv.equippedItems[idx];
 			if (!targetPtr || targetPtr->id == -1) {
-				TypeWriter("ÇØ´ç ½½·Ô¿¡ ÀåÂøµÈ Àåºñ°¡ ¾ø½À´Ï´Ù.\n", 20);
-				continue;  // ´Ù½Ã ÀÔ·Â¹Ş±â
+				TypeWriter("í•´ë‹¹ ìŠ¬ë¡¯ì— ì¥ì°©ëœ ì¥ë¹„ê°€ ì—†ìŠµë‹ˆë‹¤.\n", 20);
+				continue;  // ë‹¤ì‹œ ì…ë ¥ë°›ê¸°
 			}
 
 			targetPtr->atkBonus += 7;
 			targetPtr->defBonus += 7;
 			targetPtr->hpBonus += 7;
 
-			TypeWriter("[" + targetPtr->name + "] ÀÌ(°¡) °­È­µÇ¾ú½À´Ï´Ù!\n", 20);
+			TypeWriter("[" + targetPtr->name + "] ì´(ê°€) ê°•í™”ë˜ì—ˆìŠµë‹ˆë‹¤!\n", 20);
 
-			break;  // °­È­ ¿Ï·á ÈÄ Á¾·á
+			break;  // ê°•í™” ì™„ë£Œ í›„ ì¢…ë£Œ
 		}
 		break;
 	}
@@ -423,10 +423,10 @@ void Player::Reset() {
 	karma = 0;
 	cluePoints = 0;
 	unlockedChapter = 0;
-	gold = 100000;
+	gold = 0;
 
 	skillSet.clear();
-	InitSkills();   // ±âº» ½ºÅ³ ¼¼ÆÃ ÇÔ¼ö
+	InitSkills();   // ê¸°ë³¸ ìŠ¤í‚¬ ì„¸íŒ… í•¨ìˆ˜
 
 	inventory.items.clear();
 	inventory.equippedItems.clear();
@@ -434,5 +434,6 @@ void Player::Reset() {
 	clues.clear();
 	keepsakes.clear();
 
-	currentBuff = Buff();  // ±âº» »óÅÂ·Î ÃÊ±âÈ­
+	currentBuff = Buff();  // ê¸°ë³¸ ìƒíƒœë¡œ ì´ˆê¸°í™”
 }
+
