@@ -172,15 +172,35 @@ public:
 	}
 
 	int GetTotalDef() const
-	{
-		int equipDefBonus = 0;
-		if (inventory.equippedItems.size() > 1 && inventory.equippedItems[1] != nullptr && inventory.equippedItems[1]->id != -1) {
-			equipDefBonus = inventory.equippedItems[1]->GetDefBonus();
-		}
+{
+    int totalDefBonus = 0;
 
-		int buffDefBonus = (def * currentBuff.defBoost) / 100;
-		return def + equipDefBonus + buffDefBonus;
-	}
+    for (const auto& eqItemPtr : inventory.equippedItems)
+    {
+        if (eqItemPtr != nullptr && eqItemPtr->id != -1)
+        {
+            int defBonus = eqItemPtr->GetDefBonus();
+            // std::cout << "[디버그] 장착 아이템 ID: " << eqItemPtr->id << ", 방어 보너스: " << defBonus << "\n";
+            totalDefBonus += defBonus;
+        }
+        else
+        {
+            // std::cout << "[디버그] 장착 아이템 없음 또는 nullptr\n";
+        }
+    }
+
+    // std::cout << "[디버그] 기본 방어력: " << def << "\n";
+    // std::cout << "[디버그] 버프 방어 보너스: " << currentBuff.defBoost << "%\n";
+
+    int buffDefBonus = (def * currentBuff.defBoost) / 100;
+    int total = def + totalDefBonus + buffDefBonus;
+
+    // std::cout << "[디버그] 아이템 방어 보너스 합산: " << totalDefBonus << "\n";
+    // std::cout << "[디버그] 버프 보너스 적용 후: " << buffDefBonus << "\n";
+    // std::cout << "[디버그] 최종 방어력: " << total << "\n";
+
+    return total;
+}
 
 	void ApplyDefBuff(int amountPercent, int turns)
 	{
@@ -239,5 +259,6 @@ public:
 
 	void Reset();
 };
+
 
 
