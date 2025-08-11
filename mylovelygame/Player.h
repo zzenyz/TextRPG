@@ -141,25 +141,25 @@ public:
 			if (eqItemPtr != nullptr && eqItemPtr->id != -1)
 			{
 				int bonus = eqItemPtr->GetAtkBonus();
-				std::cout << "[디버그] 장착 아이템 ID: " << eqItemPtr->id << ", 공격 보너스: " << bonus << "%\n";
+				//std::cout << "[디버그] 장착 아이템 ID: " << eqItemPtr->id << ", 공격 보너스: " << bonus << "%\n";
 				totalAtkBonusPercent += bonus;
 			}
-			else
-			{
-				std::cout << "[디버그] 장착 아이템 없음 또는 nullptr\n";
-			}
+			//else
+			//{
+				//std::cout << "[디버그] 장착 아이템 없음 또는 nullptr\n";
+			//}
 		}
 
-		std::cout << "[디버그] 기본 공격력: " << atk << "\n";
-		std::cout << "[디버그] 버프 공격 보너스: " << currentBuff.atkBoost << "%\n";
+		//std::cout << "[디버그] 기본 공격력: " << atk << "\n";
+		//std::cout << "[디버그] 버프 공격 보너스: " << currentBuff.atkBoost << "%\n";
 
 		int weaponBonus = (atk * totalAtkBonusPercent) / 100;
 		int buffBonus = (atk * currentBuff.atkBoost) / 100;
 		int total = atk + weaponBonus + buffBonus;
 
-		std::cout << "[디버그] 아이템 공격 보너스 합산: " << weaponBonus << "\n";
-		std::cout << "[디버그] 버프 보너스 적용 후: " << buffBonus << "\n";
-		std::cout << "[디버그] 최종 공격력: " << total << "\n";
+		//std::cout << "[디버그] 아이템 공격 보너스 합산: " << weaponBonus << "\n";
+		//std::cout << "[디버그] 버프 보너스 적용 후: " << buffBonus << "\n";
+		//std::cout << "[디버그] 최종 공격력: " << total << "\n";
 
 		return total;
 	}
@@ -239,4 +239,5 @@ public:
 
 	void Reset();
 };
+
 
